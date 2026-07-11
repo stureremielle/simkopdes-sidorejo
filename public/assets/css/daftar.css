@@ -1,0 +1,521 @@
+/*
+========================================================================
+   SIMKOPDES DAFTAR ANGGOTA REGISTRATION PAGE STYLESHEET
+   Description: Hero banner, floating overlapping syarat card, 
+                and multi-column responsive registration form layout.
+   Design System: Emerald Green #00A86B, Forest Green #054A29, Navy #0c2340
+========================================================================
+*/
+
+/* === 1. Hero Banner Section === */
+.daftar-hero-section {
+    padding: 155px 0 145px 0;
+    /* Clear sticky header */
+    background-color: #7F1D1D;
+    /* Solid Deep Maroon matching mockup */
+    color: var(--white);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.daftar-hero-section .hero-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.daftar-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.daftar-hero-subtitle {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* === 2. Overlapping Card Custom Layout === */
+.daftar-form-card {
+    background-color: var(--white);
+    border-radius: 24px;
+    border: 1px solid #FFF1F2;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+    padding: 50px;
+    max-width: 800px;
+    margin: -60px auto 0 auto;
+    /* Overlops hero banner */
+    position: relative;
+    z-index: 10;
+}
+
+.syarat-keanggotaan-section {
+    background-color: #FFF1F2;
+    /* Clean light red tint background */
+    padding: 30px 50px;
+    margin: -50px -50px 45px -50px;
+    /* Expands to touch outer card edges */
+    border-bottom: 1px solid #FCA5A5;
+    border-top-left-radius: 23px;
+    border-top-right-radius: 23px;
+}
+
+.syarat-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #991B1B;
+    /* Deep brand red */
+    margin-top: 0;
+    margin-bottom: 18px;
+    letter-spacing: -0.3px;
+}
+
+.syarat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.syarat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.syarat-item .check-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: #DC2626;
+    /* Red */
+}
+
+.syarat-text-content {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #991B1B;
+}
+
+/* === 3. Registration Form Block === */
+.daftar-form-section {
+    background-color: #F8F9FA;
+    padding: 0 0 100px 0;
+}
+
+.form-section {
+    margin-bottom: 40px;
+}
+
+.form-section:last-of-type {
+    margin-bottom: 0;
+}
+
+.form-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 15px;
+}
+
+.form-section-icon {
+    width: 24px;
+    height: 24px;
+    color: #DC2626;
+    /* Red */
+}
+
+.form-section-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #7F1D1D;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.form-row {
+    margin-bottom: 24px;
+}
+
+.form-row:last-child {
+    margin-bottom: 0;
+}
+
+.split-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.form-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1F2937;
+    /* Clean charcoal dark color */
+}
+
+.form-input {
+    background-color: #FAFAFA;
+    /* Off-white background matching mockup */
+    border: 1.5px solid #F1F5F9;
+    /* Very thin light borders */
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 0.95rem;
+    color: #1F2937;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.form-input:focus {
+    background-color: #FFFFFF;
+    /* Pure white on focus */
+    border-color: #DC2626;
+    /* Red on focus */
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+    /* Soft glow */
+    outline: none;
+}
+
+.form-input::placeholder {
+    color: #94A3B8;
+    opacity: 1;
+}
+
+/* Custom Dropdown Input Wrapper */
+.select-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 48px;
+    /* space for arrow icon */
+    cursor: pointer;
+}
+
+.select-arrow-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #94a3b8;
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.form-select:focus+.select-arrow-icon {
+    color: #DC2626;
+}
+
+/* Custom Date Picker Wrapper */
+.date-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-date {
+    padding-right: 48px;
+    /* space for calendar icon */
+    position: relative;
+}
+
+.calendar-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #94a3b8;
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.form-date:focus+.calendar-icon {
+    color: #DC2626;
+}
+
+/* Make entire field input area click-trigger native date-picker overlay in webkit */
+.form-date::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    z-index: 2;
+}
+
+/* === Responsive Media Queries === */
+@media (max-width: 992px) {
+    .daftar-hero-title {
+        font-size: 2.75rem;
+    }
+
+    .daftar-hero-subtitle {
+        font-size: 1.05rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .daftar-hero-section {
+        padding: 130px 0 100px 0;
+    }
+
+    .daftar-hero-title {
+        font-size: 2.25rem;
+    }
+
+    .daftar-hero-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .daftar-form-card {
+        padding: 35px 25px;
+        border-radius: 20px;
+        margin-top: -50px;
+    }
+
+    .syarat-keanggotaan-section {
+        padding: 25px 25px;
+        margin: -35px -25px 30px -25px;
+        border-top-left-radius: 19px;
+        border-top-right-radius: 19px;
+    }
+
+    .split-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === 4. Additional Form Controls & Submit Button === */
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-submit-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    width: 100%;
+}
+
+.btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #DC2626;
+    /* Red */
+    color: var(--white);
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    width: auto;
+    /* Centered inline block instead of full width */
+    min-width: 280px;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.2);
+    transition: all 0.3s ease;
+    font-family: var(--font-sans);
+}
+
+.btn-submit:hover {
+    background-color: #B91C1C;
+    /* Darker Red */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit span {
+    color: var(--white);
+}
+
+.submit-btn-icon {
+    width: 18px !important;
+    height: 18px !important;
+    display: inline-block;
+    flex-shrink: 0;
+    color: var(--white);
+}
+
+/* Alert Styling Fixes */
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.4s ease;
+}
+
+.alert-success {
+    background-color: #FFF1F2;
+    border: 1px solid #FECCD3;
+    color: #9F1239;
+}
+
+.alert-danger {
+    background-color: #FEF2F2;
+    border: 1px solid #FCA5A5;
+    color: #991B1B;
+}
+
+.alert-icon {
+    width: 20px !important;
+    height: 20px !important;
+    flex-shrink: 0;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-content p {
+    margin: 0 0 6px 0;
+}
+
+.alert-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* === 5. Success Card Layout === */
+.daftar-success-card {
+    text-align: center;
+    padding: 30px 20px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #FFF1F2;
+    /* Soft pink-red background matching mockup */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3.5px solid #FCA5A5;
+    /* Red outline */
+    margin: 0 auto 30px auto;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.05);
+}
+
+.success-icon-wrapper svg {
+    width: 36px;
+    height: 36px;
+    color: #DC2626;
+    /* Deep red theme checkmark */
+}
+
+.success-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #0F172A;
+    /* Slate 900 */
+    margin: 0 0 16px 0;
+    letter-spacing: -0.5px;
+    font-family: var(--font-sans);
+}
+
+.success-description {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #64748B;
+    /* Slate 500 */
+    line-height: 1.7;
+    max-width: 580px;
+    margin: 0 auto 36px auto;
+}
+
+.btn-daftar-lagi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #DC2626;
+    color: var(--white);
+    border: none;
+    padding: 14px 44px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-daftar-lagi:hover {
+    background-color: #B91C1C;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
+    color: var(--white);
+}
+
+.btn-daftar-lagi:active {
+    transform: translateY(0);
+}

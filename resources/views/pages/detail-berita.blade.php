@@ -1,0 +1,474 @@
+@extends('layouts.app')
+
+@section('title', $berita->judul)
+
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/berita.css') }}">
+    <style>
+        /* ============================================================
+           NEWS DETAIL MODAL MODIFICATIONS
+        ============================================================ */
+
+        /* Outer page wrapper */
+        .detail-page-overlay-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #FFFFFF;
+        }
+
+        /* Ambient blurred/dimmed news list in background */
+        .ambient-news-bg {
+            filter: blur(3px) brightness(65%);
+            pointer-events: none;
+            user-select: none;
+            padding-top: 90px;
+        }
+
+        /* Solid dark modal overlay backdrop */
+        .detail-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.4);
+            z-index: 900;
+        }
+
+        /* Scrollable container that centers the modal */
+        .detail-modal-viewport {
+            position: fixed;
+            inset: 0;
+            z-index: 950;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 100px 16px 40px 16px; /* Offset for sticky navbar top */
+            overflow-y: auto;
+        }
+
+        /* Main modal card */
+        .detail-modal-card {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 680px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            pointer-events: auto;
+        }
+
+        /* Modal Banner image container */
+        .modal-hero-banner {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            overflow: hidden;
+            background-color: #F1F5F9;
+        }
+        .modal-hero-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Top-Left Category Badge */
+        .modal-category-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #EF4444; /* Coral red tag */
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        /* Top-Right Circular Close Button close-x */
+        .modal-close-x-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(15, 23, 42, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            z-index: 15;
+            transition: background-color 0.2s, transform 0.15s;
+        }
+        .modal-close-x-btn:hover {
+            background-color: rgba(15, 23, 42, 0.75);
+            transform: scale(1.05);
+        }
+        .modal-close-x-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2.8;
+            fill: none;
+        }
+
+        /* Modal Content Padding */
+        .modal-content-inner {
+            padding: 30px 36px 36px 36px;
+        }
+
+        /* News Metadata Row */
+        .modal-meta-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.82rem;
+            color: #64748B;
+            margin-bottom: 16px;
+        }
+        .modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .modal-meta-item svg {
+            width: 14px;
+            height: 14px;
+            stroke: #EF4444; /* red/coral meta icons */
+            stroke-width: 2.2;
+            fill: none;
+            flex-shrink: 0;
+        }
+
+        /* Article Title */
+        .modal-article-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0F172A;
+            line-height: 1.35;
+            margin: 0 0 16px 0;
+        }
+
+        /* Article Body Content styling */
+        .detail-body {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #334155;
+        }
+        .detail-body p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        /* Styled first/lead paragraph */
+        .detail-body p:first-of-type {
+            font-size: 1rem;
+            font-weight: 650;
+            color: #0F172A;
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        /* Styled H3 subheadings */
+        .detail-body h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0F172A;
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+
+        /* Styled red-tinted Blockquotes */
+        .detail-body blockquote {
+            background-color: #FEF2F2; /* light red tint */
+            border-left: 4px solid #EF4444; /* red left accent line */
+            padding: 16px 20px;
+            margin: 24px 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #334155;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Footer Social Share Bar */
+        .modal-share-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #F1F5F9;
+            padding-top: 20px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .modal-share-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #0F172A;
+        }
+        .modal-share-label svg {
+            width: 16px;
+            height: 16px;
+            stroke: #EF4444;
+            stroke-width: 2.2;
+            fill: none;
+        }
+        .modal-share-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .share-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .share-pill-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .share-pill-fb { background-color: #1877F2; }
+        .share-pill-tw { background-color: #1DA1F2; }
+        .share-pill-wa { background-color: #25D366; }
+
+        /* Responsive overrides */
+        @media (max-width: 768px) {
+            .detail-modal-viewport {
+                padding-top: 80px;
+            }
+            .modal-hero-banner {
+                height: 220px;
+            }
+            .modal-content-inner {
+                padding: 24px 20px;
+            }
+            .modal-article-title {
+                font-size: 1.35rem;
+            }
+        }
+    </style>
+@endsection
+
+@section('content')
+    <div class="detail-page-overlay-wrapper">
+
+        {{-- ===== BACKGROUND LIST REPLICA (Dimmed) ===== --}}
+        <div class="ambient-news-bg">
+            {{-- ===== PAGE HEADER ===== --}}
+            <section class="berita-header-section" style="padding-top: 50px;">
+                <div class="container">
+                    <h1 class="berita-page-title">Berita &amp; Informasi</h1>
+                    <p class="berita-page-subtitle">Tetap dapatkan informasi terbaru tentang kegiatan, pencapaian, dan pengumuman dari Koperasi Merah Putih.</p>
+                </div>
+            </section>
+
+            {{-- ===== FEATURED ARTICLE CARD ===== --}}
+            @if ($featured)
+            <section class="featured-section">
+                <div class="container">
+                    <div class="featured-card">
+                        <div class="featured-img-wrapper">
+                            @if ($featured->gambar_url)
+                                @php
+                                    $featImg = $featured->gambar_url;
+                                    $featImgUrl = Str::startsWith($featImg, 'http') ? $featImg : (Str::startsWith($featImg, 'uploads/') || Str::startsWith($featImg, 'storage/') || Str::startsWith($featImg, '/') ? asset(ltrim($featImg, '/')) : asset('assets/images/' . $featImg));
+                                @endphp
+                                <img src="{{ $featImgUrl }}" alt="{{ $featured->judul }}">
+                            @else
+                                <img src="https://images.unsplash.com/photo-1508962914676-134849a727f0?q=80&w=650" alt="{{ $featured->judul }}">
+                            @endif
+                            <span class="featured-badge">PILIHAN</span>
+                        </div>
+                        <div class="featured-content">
+                            <div class="post-meta">
+                                <div class="post-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                    <span>{{ \App\Helpers\Helper::formatTanggal($featured->created_at) }}</span>
+                                </div>
+                                <div class="post-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                    <span>{{ $featured->penulis }}</span>
+                                </div>
+                            </div>
+                            <h2 class="featured-title">{{ $featured->judul }}</h2>
+                            <p class="featured-desc">{{ Str::limit(strip_tags($featured->isi), 220) }}</p>
+                            <span class="featured-link" style="color: #64748B;">Baca Selengkapnya &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            @endif
+
+            {{-- ===== ARTIKEL TERBARU GRID ===== --}}
+            <section class="recent-section">
+                <div class="container">
+                    <h2 class="recent-title">Artikel Terbaru</h2>
+                    <div class="berita-grid">
+                        @foreach ($artikel as $a)
+                            <article class="berita-card">
+                                 <div class="card-img-wrapper">
+                                     @if ($a->gambar_url)
+                                         @php
+                                             $cardImg = $a->gambar_url;
+                                             $cardImgUrl = Str::startsWith($cardImg, 'http') ? $cardImg : (Str::startsWith($cardImg, 'uploads/') || Str::startsWith($cardImg, 'storage/') || Str::startsWith($cardImg, '/') ? asset(ltrim($cardImg, '/')) : asset('assets/images/' . $cardImg));
+                                         @endphp
+                                         <img src="{{ $cardImgUrl }}" alt="{{ $a->judul }}">
+                                     @else
+                                         <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&fit=crop&q=80" alt="{{ $a->judul }}">
+                                     @endif
+                                     <span class="card-badge">{{ $a->kategori }}</span>
+                                 </div>
+                                <div class="card-body">
+                                    <div class="card-meta">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                                            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                                        </svg>
+                                        <span>{{ \App\Helpers\Helper::formatTanggal($a->created_at) }}</span>
+                                    </div>
+                                    <h3 class="card-title">{{ $a->judul }}</h3>
+                                    <p class="card-desc">{{ Str::limit(strip_tags($a->isi), 130) }}</p>
+                                    <span class="card-footer-link" style="color: #64748B;">Baca selengkapnya &rarr;</span>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        {{-- ===== TRANSLUCENT OVERLAY ===== --}}
+        <div class="detail-modal-backdrop"></div>
+
+        {{-- ===== MODAL VIEWPORT CONTAINER ===== --}}
+        <div class="detail-modal-viewport">
+            <div class="detail-modal-card">
+
+                {{-- Image Banner area with overlay close button and category --}}
+                <div class="modal-hero-banner">
+                    @if ($berita->gambar_url)
+                        @php
+                            $bannerImg = $berita->gambar_url;
+                            $bannerImgUrl = Str::startsWith($bannerImg, 'http') ? $bannerImg : (Str::startsWith($bannerImg, 'uploads/') || Str::startsWith($bannerImg, 'storage/') || Str::startsWith($bannerImg, '/') ? asset(ltrim($bannerImg, '/')) : asset('assets/images/' . $bannerImg));
+                        @endphp
+                        <img src="{{ $bannerImgUrl }}" alt="{{ $berita->judul }}">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1508962914676-134849a727f0?q=80&w=1200" alt="{{ $berita->judul }}">
+                    @endif
+
+                    {{-- Coral Category Badge --}}
+                    <span class="modal-category-badge">{{ $berita->kategori }}</span>
+
+                    {{-- Circular close "X" button --}}
+                    <a href="{{ route('berita') }}" class="modal-close-x-btn" title="Tutup detail berita">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </a>
+                </div>
+
+                {{-- Modal Body Content --}}
+                <div class="modal-content-inner">
+
+                    {{-- Metadata row --}}
+                    <div class="modal-meta-row">
+                        <div class="modal-meta-item">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span>{{ \App\Helpers\Helper::formatTanggal($berita->created_at) }}</span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span>{{ $berita->penulis }}</span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            @php
+                                $wordCount = str_word_count(strip_tags($berita->isi));
+                                $readMinutes = max(1, ceil($wordCount / 200));
+                            @endphp
+                            <span>{{ $readMinutes }} menit baca</span>
+                        </div>
+                    </div>
+
+                    {{-- Article Title --}}
+                    <h1 class="modal-article-title">{{ $berita->judul }}</h1>
+
+                    {{-- HTML Body content --}}
+                    <div class="detail-body">
+                        {!! $berita->isi !!}
+                    </div>
+
+                    {{-- Social Sharing Bar --}}
+                    <div class="modal-share-bar">
+                        <div class="modal-share-label">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                            <span>Bagikan artikel ini:</span>
+                        </div>
+                        <div class="modal-share-buttons">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}"
+                               target="_blank" rel="noopener noreferrer" class="share-pill-btn share-pill-fb">
+                                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:13px;height:13px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                <span>Facebook</span>
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?text={{ urlencode($berita->judul) }}&url={{ urlencode(request()->url()) }}"
+                               target="_blank" rel="noopener noreferrer" class="share-pill-btn share-pill-tw">
+                                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:13px;height:13px;"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                                <span>Twitter</span>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($berita->judul . ' - ' . request()->url()) }}"
+                               target="_blank" rel="noopener noreferrer" class="share-pill-btn share-pill-wa">
+                                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:13px;height:13px;"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.733-1.455L0 24zm6.09-3.977c1.649.979 3.26 1.488 4.903 1.49 5.541.002 10.051-4.507 10.055-10.05.002-2.685-1.043-5.209-2.945-7.114C16.3 2.443 13.785 1.397 11.106 1.397 5.565 1.397 1.054 5.908 1.05 11.453c-.002 1.702.457 3.364 1.332 4.887L1.408 22.42l6.23-1.637z"/></svg>
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+@endsection

@@ -1,0 +1,345 @@
+/*
+========================================================================
+   SIMKOPDES BERITA & INFORMASI STYLESHEET
+   Description: Specific layout styles for the News & Blog page
+   Design System: Emerald Green #00A86B, Navy #0c2340, Charcoal Gray #4A4A4A
+========================================================================
+*/
+
+/* 1. Page Header Section */
+.berita-header-section {
+    padding: 140px 0 36px 0;
+    /* Clear sticky navbar */
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.berita-page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #111111;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.berita-page-subtitle {
+    font-size: 1rem;
+    color: #555555;
+    max-width: 580px;
+    line-height: 1.65;
+}
+
+/* 2. Featured Post Section */
+.featured-section {
+    padding: 40px 0 0 0;
+    background-color: #FFFFFF;
+}
+
+.featured-card {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    border: 1px solid #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.featured-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+    .featured-card {
+        flex-direction: row;
+    }
+}
+
+.featured-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+    .featured-img-wrapper {
+        width: 50%;
+        height: auto;
+        min-height: 360px;
+    }
+}
+
+.featured-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* "PILIHAN" badge — dark forest green capsule */
+.featured-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #7F1D1D;
+    color: #FFFFFF;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.featured-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+    .featured-content {
+        padding: 40px 44px;
+        width: 50%;
+    }
+}
+
+/* Post metadata row (calendar icon + date, user icon + author) */
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 0.83rem;
+    color: #888888;
+    margin-bottom: 14px;
+}
+
+.post-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.post-meta-item svg {
+    width: 15px;
+    height: 15px;
+}
+
+.featured-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #111111;
+    margin-bottom: 14px;
+    line-height: 1.3;
+}
+
+@media (max-width: 768px) {
+    .featured-title {
+        font-size: 1.5rem;
+    }
+}
+
+.featured-desc {
+    font-size: 0.97rem;
+    color: #555555;
+    line-height: 1.65;
+    margin-bottom: 24px;
+}
+
+.featured-link {
+    font-size: 0.925rem;
+    font-weight: 650;
+    color: #DC2626;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.featured-link:hover {
+    color: #B91C1C;
+    gap: 9px;
+}
+
+/* 3. Recent Articles Section */
+.recent-section {
+    padding: 50px 0 80px 0;
+    background-color: #FFFFFF;
+}
+
+.recent-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #111111;
+    margin-bottom: 28px;
+}
+
+.berita-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-bottom: 48px;
+}
+
+@media (min-width: 640px) {
+    .berita-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .berita-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Article cards */
+.berita-card {
+    background-color: #FFFFFF;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    border: 1px solid #E2E8F0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.berita-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-color: rgba(220, 38, 38, 0.15);
+}
+
+.card-img-wrapper {
+    position: relative;
+    height: 210px;
+    overflow: hidden;
+    background-color: #F1F5F9;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+}
+
+.berita-card:hover .card-img-wrapper img {
+    transform: scale(1.05);
+}
+
+/* Category badge — consistent white-bg + green text pill in top-left of image */
+.card-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background-color: rgba(255, 255, 255, 0.92);
+    color: #B91C1C;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.card-body {
+    padding: 22px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Card date row with small calendar icon */
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #888888;
+    margin-bottom: 10px;
+}
+
+.card-meta svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111111;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+/* On hover — article title turns green (as seen in mockup for Lokakarya card) */
+.berita-card:hover .card-title {
+    color: #DC2626;
+}
+
+.card-desc {
+    font-size: 0.9rem;
+    color: #555555;
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.card-footer-link {
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: #DC2626;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    margin-top: auto;
+    transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.card-footer-link:hover {
+    color: #B91C1C;
+    gap: 9px;
+}
+
+/* 4. Load More Button */
+.load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.btn-load-more {
+    display: inline-block;
+    padding: 13px 36px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333333;
+    background-color: transparent;
+    border: 1.5px solid #CCCCCC;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-load-more:hover {
+    border-color: #DC2626;
+    color: #DC2626;
+    background-color: #FFF1F2;
+}
