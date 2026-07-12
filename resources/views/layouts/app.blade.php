@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sistem Informasi Manajemen Koperasi Desa Merah Putih') - Simkopdes</title>
     <meta name="description" content="@yield('meta_description', 'Simkopdes - Sistem Informasi Manajemen Koperasi Desa/Kelurahan Merah Putih. Pertanian berkelanjutan dan pemberdayaan ekonomi masyarakat desa.')">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     @yield('styles')
 </head>
