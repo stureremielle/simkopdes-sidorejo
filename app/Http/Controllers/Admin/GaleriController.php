@@ -27,19 +27,14 @@ class GaleriController extends Controller
         }
 
         if ($kategoriFilter) {
-            $query->where('kategori', $kategoriFilter);
+            $matchingCat = \App\Models\KategoriGaleri::where('nama', $kategoriFilter)->first();
+            $query->where('kategori_id', $matchingCat ? $matchingCat->id : 0);
         }
 
         $galeriList = $query->orderBy('created_at', 'desc')->get();
 
         // Get unique categories for filter row
-        $kategoriList = ['Rapat & Musyawarah', 'Panen & Pertanian', 'Pelatihan', 'Kegiatan Sosial', 'Kegiatan'];
-        $dbKategori = Galeri::distinct()->whereNotNull('kategori')->pluck('kategori')->toArray();
-        foreach ($dbKategori as $kat) {
-            if (!in_array($kat, $kategoriList) && !empty($kat)) {
-                $kategoriList[] = $kat;
-            }
-        }
+        $kategoriList = \App\Models\KategoriGaleri::pluck('nama')->toArray();
 
         // Stats
         $statTotal = Galeri::count();
@@ -53,6 +48,48 @@ class GaleriController extends Controller
             'statTotal',
             'statHasFile'
         ));
+    }
+
+    /**
+     * Store a newly created category.
+     */
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'kategori' => 'required|string|max:50',
+        ]);
+
+        $newCat = trim($request->kategori);
+        
+        $exists = \App\Models\KategoriGaleri::whereRaw('LOWER(nama) = ?', [strtolower($newCat)])->exists();
+
+        if (!$exists) {
+            \App\Models\KategoriGaleri::create(['nama' => ucwords($newCat)]);
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Kategori tersebut sudah terdaftar.'], 400);
+    }
+
+    /**
+     * Remove the specified category.
+     */
+    public function destroyCategory($kategori)
+    {
+        $catToDelete = $kategori;
+
+        // Check if there are any activities using this category
+        $cat = \App\Models\KategoriGaleri::where('nama', $catToDelete)->first();
+        if ($cat) {
+            $hasActivities = Galeri::where('kategori_id', $cat->id)->count();
+            if ($hasActivities > 0) {
+                return response()->json(['success' => false, 'message' => 'Tidak dapat menghapus karena kategori ini masih digunakan pada kegiatan.'], 400);
+            }
+            $cat->delete();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Kategori tidak ditemukan.'], 400);
     }
 
     /**

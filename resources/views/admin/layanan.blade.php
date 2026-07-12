@@ -48,38 +48,147 @@
             display: block;
         }
 
-        /* 2. Baris Kontrol */
-        .category-pill {
-            background: transparent;
-            color: #64748B;
-            border: none;
-            padding: 6px 16px;
+        /* 2. New Baris Kontrol styles */
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .left-filters {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Search input wrapper with icon */
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-wrapper svg {
+            position: absolute;
+            left: 14px;
+            color: #94A3B8;
+            pointer-events: none;
+            width: 16px;
+            height: 16px;
+        }
+
+        .search-wrapper input {
+            padding: 10px 16px 10px 38px;
+            font-size: 0.88rem;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 9999px;
+            outline: none;
+            width: 240px;
+            background-color: #FFFFFF;
+            transition: all 0.2s ease;
+            color: #1E293B;
+            font-family: inherit;
+        }
+
+        .search-wrapper input:focus {
+            border-color: #DC2626;
+        }
+
+        /* Category Select Wrapper with tag/labels icon */
+        .category-select-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-select-wrapper select {
+            padding: 10px 32px 10px 38px;
             font-size: 0.88rem;
             font-weight: 600;
-            cursor: pointer;
+            color: #1E293B;
+            background-color: #FFFFFF;
+            border: 1.5px solid #E2E8F0;
             border-radius: 9999px;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            font-family: inherit;
             transition: all 0.2s ease;
         }
 
-        .category-pill.active {
-            background-color: #7F1D1D;
+        .category-select-wrapper select:focus {
+            border-color: #DC2626;
+        }
+
+        .category-select-wrapper .icon-left {
+            position: absolute;
+            left: 14px;
+            color: #64748B;
+            pointer-events: none;
+            width: 16px;
+            height: 16px;
+        }
+
+        .category-select-wrapper .icon-right {
+            position: absolute;
+            right: 14px;
+            color: #64748B;
+            pointer-events: none;
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Status filter pills */
+        .status-pills {
+            display: flex;
+            background-color: #F1F5F9;
+            padding: 4px;
+            border-radius: 9999px;
+            gap: 2px;
+        }
+
+        .status-pill {
+            padding: 6px 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #64748B;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .status-pill.active {
+            background-color: #B91C1C;
             color: #FFFFFF;
-            font-weight: 700;
         }
 
-        .search-input {
-            border: 1px solid #E2E8F0;
-            border-radius: 0.5rem; /* rounded-lg */
-            padding: 8px 12px;
+        .btn-tambah-new {
+            background-color: #B91C1C;
+            color: #FFFFFF;
+            border: none;
             font-size: 0.88rem;
-            outline: none;
-            width: 220px;
-            box-sizing: border-box;
-            background: #FFFFFF;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease;
+            font-family: inherit;
         }
 
-        .search-input:focus {
-            border-color: #7F1D1D;
+        .btn-tambah-new:hover {
+            background-color: #991B1B;
         }
 
         .btn-tambah {
@@ -115,16 +224,19 @@
         .clean-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1000px; /* WAJIB property for horizontal screen side scroll */
+        }
+
+        .clean-table th:not(:first-child), .clean-table td:not(:first-child) {
+            white-space: nowrap;
         }
 
         .clean-table th {
-            padding: 12px 18px;
+            padding: 14px 18px;
             text-align: left;
-            font-weight: 500; /* font-medium */
+            font-weight: 600;
             color: #64748B; /* Medium gray */
             font-size: 0.88rem; /* text-sm */
-            border-bottom: 2px solid #F1F5F9;
+            border-bottom: 1.5px solid #F1F5F9;
         }
 
         .clean-table td {
@@ -154,7 +266,7 @@
 
         .status-badge {
             background-color: #FFF1F2; /* light red transparan */
-            color: #BE123C;
+            color: #DC2626;
             font-size: 0.75rem; /* text-xs */
             font-weight: 600;
             padding: 4px 10px;
@@ -163,15 +275,25 @@
         }
 
         .status-badge.nonaktif {
-            background-color: #FEE2E2;
-            color: #B91C1C;
+            background-color: #F1F5F9;
+            color: #64748B;
         }
 
-        .custom-check {
-            accent-color: #DC2626; /* red check when selected */
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
+        /* Custom Unggulan Checkbox styling */
+        .unggulan-box {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 1.5px solid #CBD5E1;
+            transition: all 0.2s ease;
+            background-color: #FFFFFF;
+            vertical-align: middle;
+        }
+
+        .unggulan-box.checked {
+            background-color: #DC2626;
+            border-color: #DC2626;
         }
 
 
@@ -393,78 +515,113 @@
         <button class="tab-button active" id="btn-daftar-produk" onclick="switchBlock('daftar-produk')">Daftar Produk</button>
         <button class="tab-button" id="btn-kategori" onclick="switchBlock('kategori')">Kategori</button>
         <button class="tab-button" id="btn-produk-unggulan" onclick="switchBlock('produk-unggulan')">Produk Unggulan Beranda</button>
-        <button class="tab-button" id="btn-teks-halaman" onclick="switchBlock('teks-halaman')">Teks Halaman</button>
     </div>
 
     <!-- TAB 1: DAFTAR PRODUK -->
     <div id="block-daftar-produk" class="tab-block active">
+        @php
+            $uniqueCategories = $categories;
+        @endphp
         <!-- Baris Kontrol -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
-            <!-- Sebelah Kiri: Pill buttons filter kategori -->
-            <div style="display: flex; gap: 8px; align-items: center;">
-                <button class="category-pill active" id="pill-Semua" onclick="clickFilterPill('Semua')">Semua</button>
-                <button class="category-pill" id="pill-Pertanian" onclick="clickFilterPill('Pertanian')">Pertanian</button>
-                <button class="category-pill" id="pill-Peternakan" onclick="clickFilterPill('Peternakan')">Peternakan</button>
-            </div>
-            <!-- Sebelah Kanan: Flex gap-3 for search input and Add button -->
-            <div style="display: flex; gap: 12px; align-items: center;">
-                <input type="text" id="filterSearch" class="search-input" placeholder="Cari produk..." onkeyup="performSearch()">
-                <button onclick="openAddModal()" class="btn-tambah">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <div class="controls-row">
+            <!-- Sebelah Kiri: Search input, Category select dynamic dropdown, and Status Pills -->
+            <div class="left-filters">
+                <div class="search-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    Tambah
-                </button>
+                    <input type="text" id="filterSearch" placeholder="Cari produk..." onkeyup="performSearch()">
+                </div>
+                
+                <div class="category-select-wrapper">
+                    <svg class="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                    <select id="filterCategorySelect" onchange="performSearch()">
+                        <option value="Semua">Semua Kategori</option>
+                        @foreach($uniqueCategories as $cat)
+                            <option value="{{ $cat }}">{{ $cat }}</option>
+                        @endforeach
+                    </select>
+                    <svg class="icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+
+                <div class="status-pills">
+                    <button class="status-pill active" id="btn-status-Semua" onclick="clickStatusFilter('Semua')">Semua</button>
+                    <button class="status-pill" id="btn-status-aktif" onclick="clickStatusFilter('aktif')">Aktif</button>
+                    <button class="status-pill" id="btn-status-nonaktif" onclick="clickStatusFilter('nonaktif')">Nonaktif</button>
+                </div>
             </div>
+            
+            <!-- Sebelah Kanan: Add Product Button -->
+            <button onclick="openAddModal()" class="btn-tambah-new">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Tambah Produk
+            </button>
         </div>
 
         <!-- Horizontal Scroll Table wrapper card -->
-        <div class="table-card-wrapper">
-            <table class="clean-table">
+        <div class="table-card-wrapper" style="overflow-x: visible;">
+            <table class="clean-table" style="background-color: #FFFFFF; width: 100%; table-layout: fixed;">
                 <thead>
                     <tr>
-                        <th style="width: 45%;">Produk</th>
-                        <th>Kategori</th>
-                        <th>Harga</th>
-                        <th>Satuan</th>
-                        <th>Status</th>
-                        <th style="text-align: center;">Unggulan</th>
-                        <th style="text-align: center;">Aksi</th>
+                        <th style="width: 40%;">Produk</th>
+                        <th style="width: 15%;">Kategori</th>
+                        <th style="width: 15%;">Harga</th>
+                        <th style="width: 12%;">Satuan</th>
+                        <th style="width: 10%;">Status</th>
+                        <th style="width: 8%; text-align: center;">Unggulan</th>
+                        <th style="width: 10%; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="productTbody">
                     @forelse ($layananList as $l)
-                        <tr class="product-row" data-kategori="{{ $l->kategori }}" data-nama="{{ strtolower($l->nama) }}">
+                        <tr class="product-row" data-kategori="{{ $l->kategori }}" data-nama="{{ strtolower($l->nama) }}" data-status="{{ strtolower($l->status) }}">
                             <!-- Kolom PRODUK: NO image, langsung teks nama dan deskripsi -->
-                            <td>
-                                <div style="font-weight: 700; color: #1E293B; font-size: 1rem;">{{ $l->nama }}</div>
-                                <div style="font-size: 0.8rem; color: #64748B; margin-top: 3px; line-height: 1.35;">{{ $l->deskripsi }}</div>
+                            <td style="word-wrap: break-word; white-space: normal;">
+                                <div style="font-weight: 700; color: #1E293B; font-size: 0.95rem;">{{ $l->nama }}</div>
+                                <div style="font-size: 0.8rem; color: #64748B; margin-top: 3px; line-height: 1.35; white-space: normal; word-break: break-word;">{{ $l->deskripsi }}</div>
                             </td>
-                            <!-- Kolom KATEGORI: badge hijau muda transparan text-xs rounded-full -->
-                            <td>
-                                <span class="kategori-badge">{{ $l->kategori }}</span>
+                            <!-- Kolom KATEGORI: plain text gray bold-ish to match screenshot -->
+                            <td style="color: #475569; font-weight: 500; font-size: 0.88rem;">
+                                {{ $l->kategori }}
                             </td>
                             <!-- Kolom HARGA: teks biasa gelap align-left -->
-                            <td style="color: #1E293B; font-weight: 500;">
+                            <td style="color: #1E293B; font-weight: 500; font-size: 0.88rem;">
                                 Rp {{ number_format($l->harga, 0, ',', '.') }}
                             </td>
-                            <!-- Kolom SATUAN: teks biasa gelap align-left -->
-                            <td style="color: #1E293B; font-weight: 500;">
-                                {{ $l->satuan }}
+                            <!-- Kolom SATUAN: teks biasa gelap dengan prefix 'per ' -->
+                            <td style="color: #64748B; font-weight: 500; font-size: 0.88rem;">
+                                @php
+                                    $displaySatuan = strtolower($l->satuan);
+                                    if ($displaySatuan === 'kg') {
+                                        $displaySatuan = 'kilogram';
+                                    }
+                                    if (!str_starts_with($displaySatuan, 'per ')) {
+                                        $displaySatuan = 'per ' . $displaySatuan;
+                                    }
+                                @endphp
+                                {{ $displaySatuan }}
                             </td>
-                            <!-- Kolom STATUS: Badge hijau muda bertuliskan "Aktif" -->
+                            <!-- Kolom STATUS: Badge merah/pink bertuliskan "Aktif" atau abu-abu "Nonaktif" -->
                             <td>
                                 <span class="status-badge {{ $l->status === 'aktif' ? '' : 'nonaktif' }}">
                                     {{ $l->status === 'aktif' ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </td>
-                            <!-- Kolom UNGGULAN: Custom checkbox warna hijau jika dicentang -->
+                            <!-- Kolom UNGGULAN: Custom checkbox warna merah jika dicentang -->
                             <td style="text-align: center;">
                                 @php
                                     $isFeaturedSim = in_array($l->id, [1, 2, 3]);
                                 @endphp
-                                <input type="checkbox" class="custom-check" {{ $isFeaturedSim ? 'checked' : '' }} disabled>
+                                <span id="unggulanBox-{{ $l->id }}" class="unggulan-box {{ $isFeaturedSim ? 'checked' : '' }}" style="cursor: pointer;" onclick="toggleUnggulanFromTable({{ $l->id }})"></span>
                             </td>
                             <!-- Kolom AKSI: Pencil and trash slate icons, minimal, no colorful backgrounds -->
                             <td style="text-align: center; white-space: nowrap;">
@@ -475,10 +632,10 @@
                                             <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                                         </svg>
                                     </button>
-                                    <form method="POST" action="{{ route('admin.layanan.destroy', $l->id) }}" onsubmit="return confirm('Hapus produk ini?')" style="display: inline;">
+                                    <form id="deleteForm-{{ $l->id }}" method="POST" action="{{ route('admin.layanan.destroy', $l->id) }}" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-icon-action btn-icon-delete" title="Hapus">
+                                        <button type="button" onclick="openHapusModal({{ $l->id }}, '{{ addslashes($l->nama) }}')" class="btn-icon-action btn-icon-delete" title="Hapus">
                                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                                 <polyline points="3 6 5 6 21 6"></polyline>
                                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -503,7 +660,7 @@
     <!-- TAB 2: KATEGORI -->
     <div id="block-kategori" class="tab-block">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <span style="font-size: 0.88rem; color: #64748B; font-weight: 500;">2 kategori terdaftar</span>
+            <span style="font-size: 0.88rem; color: #64748B; font-weight: 500;">{{ count($categoriesWithStats) }} kategori terdaftar</span>
             <button onclick="openCategoryModal()" class="btn-tambah">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -514,67 +671,58 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 20px;">
-            <!-- Category 1 -->
-            <div class="category-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
-                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                            <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                        </svg>
-                        <h4 style="font-weight: 700; color: #1E293B; font-size: 1.05rem; margin: 0;">Pertanian</h4>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 0.82rem; color: #94A3B8; font-weight: 500;">4/4 aktif</span>
-                        <button onclick="alert('Tidak dapat dihapus karena kategori ini masih digunakan oleh produk.')" class="icon-action-btn" style="color: #CBD5E1; padding: 2px;" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#CBD5E1'">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            @foreach ($categoriesWithStats as $catStats)
+                <div class="category-card" data-category="{{ $catStats['nama'] }}">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
                             </svg>
-                        </button>
+                            <h4 style="font-weight: 700; color: #1E293B; font-size: 1.05rem; margin: 0;">{{ $catStats['nama'] }}</h4>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 0.82rem; color: #94A3B8; font-weight: 500;">{{ $catStats['active'] }}/{{ $catStats['total'] }} aktif</span>
+                            @if ($catStats['total'] > 0)
+                                <button onclick="alert('Tidak dapat dihapus karena kategori ini masih digunakan oleh produk.')" class="icon-action-btn" style="color: #CBD5E1; padding: 2px;" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#CBD5E1'">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            @else
+                                <form action="{{ route('admin.kategori.destroy', $catStats['nama']) }}" method="POST" style="display: inline;" onsubmit="return confirm('Hapus kategori {{ $catStats['nama'] }}?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="icon-action-btn" style="color: #CBD5E1; padding: 2px;" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#CBD5E1'">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div style="height: 5px; background: #DC2626; border-radius: 99px; margin-bottom: 14px;"></div>
-                <div style="color: #94A3B8; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #94A3B8; flex-shrink: 0;">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                        <line x1="12" y1="9" x2="12" y2="13"></line>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                    <span>Tidak dapat dihapus karena masih memiliki produk</span>
-                </div>
-            </div>
-
-            <!-- Category 2 -->
-            <div class="category-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
-                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                            <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                        </svg>
-                        <h4 style="font-weight: 700; color: #1E293B; font-size: 1.05rem; margin: 0;">Peternakan</h4>
+                    @php
+                        $pct = $catStats['total'] > 0 ? round(($catStats['active'] / $catStats['total']) * 100) : 0;
+                        $barColor = $catStats['total'] === 0 ? '#E2E8F0' : ($pct === 100 ? '#DC2626' : ($pct > 0 ? '#EF4444' : '#CBD5E1'));
+                    @endphp
+                    <div style="height: 5px; background: #F1F5F9; border-radius: 99px; margin-bottom: 14px; overflow: hidden;">
+                        <div style="height: 100%; width: {{ $pct }}%; background: {{ $barColor }}; border-radius: 99px; transition: width 0.4s ease;"></div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 0.82rem; color: #94A3B8; font-weight: 500;">4/4 aktif</span>
-                        <button onclick="alert('Tidak dapat dihapus karena kategori ini masih digunakan oleh produk.')" class="icon-action-btn" style="color: #CBD5E1; padding: 2px;" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#CBD5E1'">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    @if ($catStats['total'] > 0)
+                        <div style="color: #94A3B8; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #94A3B8; flex-shrink: 0;">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
-                        </button>
-                    </div>
+                            <span>Tidak dapat dihapus karena masih memiliki produk</span>
+                        </div>
+                    @endif
                 </div>
-                <div style="height: 5px; background: #DC2626; border-radius: 99px; margin-bottom: 14px;"></div>
-                <div style="color: #94A3B8; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #94A3B8; flex-shrink: 0;">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                        <line x1="12" y1="9" x2="12" y2="13"></line>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                    <span>Tidak dapat dihapus karena masih memiliki produk</span>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 
@@ -619,32 +767,7 @@
         </div>
     </div>
 
-    <!-- TAB 4: TEKS HALAMAN -->
-    <div id="block-teks-halaman" class="tab-block">
-        <div style="background: white; border-radius: 1rem; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 32px;">
-            <h3 style="font-weight: 700; font-size: 1.25rem; color: #1E293B; margin: 0 0 24px 0; font-family: inherit;">Teks Halaman Layanan</h3>
-            <form action="{{ route('admin.pengaturan.save') }}" method="POST">
-                @csrf
-                <div class="form-row">
-                    <label>Judul Halaman</label>
-                    <input type="text" name="judul_halaman" value="Produk & Layanan Koperasi">
-                </div>
-                <div class="form-row">
-                    <label>Deskripsi Halaman</label>
-                    <textarea name="deskripsi_halaman" style="min-height: 100px;">Temukan berbagai produk unggulan dari anggota koperasi kami.</textarea>
-                </div>
-                <div class="form-row">
-                    <label>Judul Seksi Beranda</label>
-                    <input type="text" name="judul_seksi_beranda" value="Produk Unggulan">
-                </div>
-                <div class="form-row" style="margin-bottom: 24px;">
-                    <label>Deskripsi Seksi Beranda</label>
-                    <textarea name="deskripsi_seksi_beranda" style="min-height: 100px;">Pilihan terbaik dari hasil produksi anggota koperasi.</textarea>
-                </div>
-                <button type="submit" style="background-color: #DC2626; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-size: 0.88rem; font-weight: 650; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#B91C1C'" onmouseout="this.style.backgroundColor='#DC2626'">Simpan</button>
-            </form>
-        </div>
-    </div>
+
 
     <!-- MODAL TAMBAH & EDIT PRODUCT -->
     <div class="custom-overlay" id="productModal">
@@ -685,7 +808,7 @@
                 <div class="form-row">
                     <label>Kategori</label>
                     <select name="kategori" id="formKategori" required>
-                        @foreach (['Pertanian', 'Peternakan', 'Perikanan', 'Kerajinan', 'Keuangan', 'Lainnya'] as $cat)
+                        @foreach ($categories as $cat)
                             <option value="{{ $cat }}">{{ $cat }}</option>
                         @endforeach
                     </select>
@@ -728,16 +851,43 @@
     <div class="custom-overlay" id="categoryAddModal">
         <div class="modal-body" style="max-width: 440px;">
             <h3 style="font-weight: 800; font-size: 1.2rem; color: #1E293B; margin: 0 0 16px 0;">Tambah Kategori</h3>
-            <form onsubmit="event.preventDefault(); alert('Kategori berhasil dibuat (simulasi).'); closeCategoryModal();">
+            <form method="POST" action="{{ route('admin.kategori.store') }}">
+                @csrf
                 <div class="form-row" style="margin-bottom: 24px;">
                     <label>Nama Kategori *</label>
-                    <input type="text" required placeholder="Hortikultura">
+                    <input type="text" name="kategori" required placeholder="Hortikultura">
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel-custom" onclick="closeCategoryModal()">Batal</button>
                     <button type="submit" class="btn-submit-custom">Tambah Kategori</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL: HAPUS PRODUK -->
+    <div class="custom-overlay" id="hapusModal">
+        <div style="background: white; border-radius: 20px; padding: 28px 28px 24px; width: 90%; max-width: 440px; box-sizing: border-box; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <div style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #FEE2E2; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div style="flex: 1;">
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin: 0 0 8px; font-family: inherit;">Hapus Produk?</h3>
+                    <p style="font-size: 0.9rem; color: #475569; margin: 0; line-height: 1.6; font-family: inherit;">
+                        Anda akan menghapus data anggota <strong id="hapusNama"></strong>.
+                        Tindakan ini tidak dapat dibatalkan.
+                    </p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button type="button" onclick="closeHapusModal()" style="border: 1px solid #E2E8F0; background: #FFFFFF; color: #475569; padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; font-family: inherit; transition: background 0.2s;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='#FFFFFF'">Batal</button>
+                <button type="button" onclick="submitHapus()" style="background: #DC2626; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; font-family: inherit; transition: background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">Ya, Hapus</button>
+            </div>
         </div>
     </div>
 @endsection
@@ -753,28 +903,32 @@
             document.getElementById('btn-' + tab).classList.add('active');
         }
 
-        // Pill categories selection
-        function clickFilterPill(cat) {
-            document.querySelectorAll('.category-pill').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('pill-' + cat).classList.add('active');
+        // Status filter selection
+        let activeStatusFilter = 'Semua';
 
+        function clickStatusFilter(status) {
+            activeStatusFilter = status;
+            document.querySelectorAll('.status-pill').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-status-' + status).classList.add('active');
             performSearch();
         }
 
-        // Combining search + pill category filter logic
+        // Combining search + category select dropdown + status filter logic
         function performSearch() {
-            const query = document.getElementById('filterSearch').value.toLowerCase();
-            const activePill = document.querySelector('.category-pill.active').id.replace('pill-', '');
+            const query = document.getElementById('filterSearch').value.toLowerCase().trim();
+            const selectedCategory = document.getElementById('filterCategorySelect').value;
             const rows = document.querySelectorAll('.product-row');
 
             rows.forEach(row => {
-                const rowNama = row.getAttribute('data-nama');
-                const rowKategori = row.getAttribute('data-kategori');
+                const rowNama = row.getAttribute('data-nama') || '';
+                const rowKategori = row.getAttribute('data-kategori') || '';
+                const rowStatus = row.getAttribute('data-status') || '';
 
                 const searchMatch = rowNama.includes(query);
-                const categoryMatch = (activePill === 'Semua' || rowKategori === activePill);
+                const categoryMatch = (selectedCategory === 'Semua' || rowKategori === selectedCategory);
+                const statusMatch = (activeStatusFilter === 'Semua' || rowStatus === activeStatusFilter);
 
-                if (searchMatch && categoryMatch) {
+                if (searchMatch && categoryMatch && statusMatch) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -868,9 +1022,30 @@
             document.getElementById('categoryAddModal').classList.remove('active');
         }
 
+        // Hapus Modal controller
+        let _hapusTargetId = null;
+        function openHapusModal(id, nama) {
+            _hapusTargetId = id;
+            document.getElementById('hapusNama').textContent = nama;
+            document.getElementById('hapusModal').classList.add('active');
+        }
+
+        function closeHapusModal() {
+            document.getElementById('hapusModal').classList.remove('active');
+            _hapusTargetId = null;
+        }
+
+        function submitHapus() {
+            if (_hapusTargetId !== null) {
+                document.getElementById('deleteForm-' + _hapusTargetId).submit();
+            }
+        }
+
         // Featured card checklist toggle
         function clickFeaturedCard(card) {
             const isActive = card.classList.contains('active');
+            const targetId = card.getAttribute('data-id');
+            const box = document.getElementById('unggulanBox-' + targetId);
             let total = document.querySelectorAll('.featured-item-card.active').length;
 
             if (!isActive) {
@@ -879,13 +1054,23 @@
                     return;
                 }
                 card.classList.add('active');
+                if (box) box.classList.add('checked');
                 total++;
             } else {
                 card.classList.remove('active');
+                if (box) box.classList.remove('checked');
                 total--;
             }
 
             document.getElementById('activeFeaturedLabel').textContent = total + '/3';
+        }
+
+        // Table checkbox clicked toggle handler
+        function toggleUnggulanFromTable(id) {
+            const card = document.querySelector(`.featured-item-card[data-id="${id}"]`);
+            if (card) {
+                clickFeaturedCard(card);
+            }
         }
 
         // Close when clicking outside modal body
@@ -894,6 +1079,9 @@
         });
         document.getElementById('categoryAddModal').addEventListener('click', e => {
             if (e.target === document.getElementById('categoryAddModal')) closeCategoryModal();
+        });
+        document.getElementById('hapusModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('hapusModal')) closeHapusModal();
         });
     </script>
 @endsection

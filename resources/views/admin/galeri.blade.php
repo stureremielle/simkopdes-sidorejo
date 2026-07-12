@@ -683,15 +683,13 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                         Edit
                     </button>
-                    <form action="{{ route('admin.galeri.destroy', $item->id) }}" method="POST"
-                          onsubmit="return confirm('Hapus kegiatan ini?')" style="flex:1;margin:0;display:flex;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-card btn-hapus" style="width:100%;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            Hapus
-                        </button>
-                    </form>
+                    <button type="button" class="btn-card btn-hapus" style="width:100%;" 
+                            data-id="{{ $item->id }}" 
+                            data-judul="{{ $item->judul }}" 
+                            onclick="triggerConfirmDelete(this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        Hapus
+                    </button>
                 </div>
             </div>
         </div>
@@ -803,9 +801,9 @@
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn-cancel" onclick="closeTambahModal()">Batal</button>
-                <button type="submit" class="btn-submit" style="background:#B91C1C;">Tambah Foto</button>
+            <div class="modal-footer" style="display: flex; gap: 12px; margin-top: 16px; border-top: 1px solid #F1F5F9; padding-top: 16px; justify-content: space-between; align-items: center; width: 100%;">
+                <button type="button" class="btn-cancel" onclick="closeTambahModal()" style="flex: 1; padding: 11px 24px; font-size: 0.9rem; border-radius: 8px; border: 1.5px solid #E2E8F0; background: #FFFFFF; color: #475569; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='#FFFFFF'">Batal</button>
+                <button type="submit" class="btn-submit" style="flex: 1; padding: 11px 24px; font-size: 0.9rem; border-radius: 8px; background-color: #B91C1C; border: none; color: white; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#991B1B'" onmouseout="this.style.background='#B91C1C'">Tambah Foto</button>
             </div>
         </form>
     </div>
@@ -898,23 +896,45 @@
         </form>
     </div>
 </div>
+
+{{-- ===== MODAL: KONFIRMASI HAPUS ===== --}}
+<div class="custom-overlay" id="confirmDeleteModal">
+    <div class="modal-box" style="max-width: 440px; padding: 24px;">
+        <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #FEE2E2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <div style="flex: 1;">
+                <h3 style="font-size: 1.12rem; font-weight: 700; color: #0F172A; margin: 0 0 6px 0; font-family: inherit;">Hapus Foto?</h3>
+                <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.5; font-family: inherit;">
+                    Anda akan menghapus data anggota <strong id="deleteTargetTitle" style="color: #0F172A;"></strong>.
+                </p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button type="button" class="btn-cancel" onclick="closeConfirmDeleteModal()" style="flex: 1; padding: 10px 16px; font-weight: 600; text-align: center; border: 1.5px solid #E2E8F0; border-radius: 8px; font-family: inherit; font-size: 0.9rem; background: #fff; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='#fff'">
+                Batal
+            </button>
+            <form id="confirmDeleteForm" method="POST" action="" style="flex: 1; margin: 0; display: flex;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-submit" style="width: 100%; padding: 10px 16px; font-weight: 700; text-align: center; background: #DC2626; color: white; border: none; border-radius: 8px; font-family: inherit; font-size: 0.9rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">
+                    Ya, Hapus
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script>
     /* ===== CATEGORY STATE ===== */
-    const defaultCategories = ['Rapat & Musyawarah', 'Panen & Pertanian', 'Pelatihan', 'Kegiatan Sosial'];
-    let categories = JSON.parse(localStorage.getItem('galeri_categories')) || [...defaultCategories];
-
-    const dbCats = @json($kategoriList);
-    dbCats.forEach(c => { if (c && !categories.includes(c)) categories.push(c); });
-    localStorage.setItem('galeri_categories', JSON.stringify(categories));
-
-    function saveCategories() {
-        localStorage.setItem('galeri_categories', JSON.stringify(categories));
-        renderCategories();
-        updateSelects();
-    }
+    let categories = @json($kategoriList);
 
     function renderCategories() {
         const c = document.getElementById('categoriesListContainer');
@@ -931,7 +951,7 @@
             btn.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`;
             btn.onmouseover = () => btn.style.color = '#EF4444';
             btn.onmouseout  = () => btn.style.color = '#94A3B8';
-            btn.onclick = () => { if (confirm('Hapus kategori ini?')) { categories.splice(i,1); saveCategories(); }};
+            btn.onclick = () => deleteCategory(cat);
             row.appendChild(lbl);
             row.appendChild(btn);
             c.appendChild(row);
@@ -941,10 +961,59 @@
     function addNewCategory() {
         const input = document.getElementById('newCategoryInput');
         const val = input.value.trim();
-        if (val && !categories.includes(val)) {
-            categories.push(val);
-            input.value = '';
-            saveCategories();
+        if (!val) return;
+        if (categories.includes(val)) {
+            alert('Kategori tersebut sudah terdaftar.');
+            return;
+        }
+
+        fetch("{{ route('admin.galeri.kategori.store') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({ kategori: val })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                categories.push(val);
+                input.value = '';
+                renderCategories();
+                updateSelects();
+            } else {
+                alert(data.message || 'Gagal menambahkan kategori.');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Terjadi kesalahan jaringan.');
+        });
+    }
+
+    function deleteCategory(catName) {
+        if (confirm(`Hapus kategori "${catName}"?`)) {
+            fetch("{{ url('/admin/galeri/kategori') }}/" + encodeURIComponent(catName), {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    categories = categories.filter(c => c !== catName);
+                    renderCategories();
+                    updateSelects();
+                } else {
+                    alert(data.message || 'Gagal menghapus kategori.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Terjadi kesalahan jaringan.');
+            });
         }
     }
 
@@ -1199,6 +1268,26 @@
         document.getElementById('editModal').classList.add('active');
     }
     function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
+
+    function triggerConfirmDelete(button) {
+        const id = button.getAttribute('data-id');
+        const judul = button.getAttribute('data-judul');
+        
+        const modal = document.getElementById('confirmDeleteModal');
+        const titleSpan = document.getElementById('deleteTargetTitle');
+        const form = document.getElementById('confirmDeleteForm');
+        
+        if (modal && titleSpan && form) {
+            titleSpan.textContent = judul;
+            form.action = `{{ url('/admin/galeri') }}/${id}`;
+            modal.classList.add('active');
+        }
+    }
+
+    function closeConfirmDeleteModal() {
+        const modal = document.getElementById('confirmDeleteModal');
+        if (modal) modal.classList.remove('active');
+    }
 
     // Close on overlay click
     window.addEventListener('click', e => {

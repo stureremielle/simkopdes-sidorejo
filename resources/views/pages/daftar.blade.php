@@ -17,7 +17,7 @@
     <section class="daftar-form-section">
         <div class="container">
             <div class="daftar-form-card">
-                
+
                 @if (session('success'))
                 <div class="daftar-success-card">
                     <div class="success-icon-wrapper">
@@ -33,16 +33,7 @@
                 </div>
                 @else
 
-                @if ($errors->any())
-                <div class="alert alert-danger animate-fade-in">
-                    <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                    <div class="alert-content">
-                        @foreach ($errors->all() as $error)
-                            <p>{{ $error }}</p>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
+
 
                 <!-- Syarat Keanggotaan Section -->
                 <div class="syarat-keanggotaan-section">
@@ -79,8 +70,9 @@
                     </ul>
                 </div>
 
-                <form method="POST" action="{{ route('daftar.store') }}" class="custom-form grid-layout">
+                <form method="POST" action="{{ route('daftar.store') }}" class="custom-form grid-layout" id="daftarForm" novalidate>
                     @csrf
+
                     <!-- Data Diri -->
                     <div class="form-section">
                         <div class="form-section-header">
@@ -91,12 +83,14 @@
                             <div class="form-group full-width">
                                 <label for="namaLengkap" class="form-label">Nama Lengkap <span class="required">*</span></label>
                                 <input type="text" id="namaLengkap" name="namaLengkap" class="form-input" placeholder="Sesuai KTP" required value="{{ old('namaLengkap') }}">
+                                <span class="field-hint" id="hint-namaLengkap">Wajib diisi</span>
                             </div>
                         </div>
                         <div class="form-row split-row">
                             <div class="form-group">
                                 <label for="nikKtp" class="form-label">NIK (KTP) <span class="required">*</span></label>
                                 <input type="text" id="nikKtp" name="nikKtp" class="form-input" placeholder="16 digit" maxlength="16" required value="{{ old('nikKtp') }}">
+                                <span class="field-hint" id="hint-nikKtp">Wajib diisi / harus 16 digit</span>
                             </div>
                             <div class="form-group">
                                 <label for="jenisKelamin" class="form-label">Jenis Kelamin <span class="required">*</span></label>
@@ -108,12 +102,14 @@
                                     </select>
                                     <svg class="select-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </div>
+                                <span class="field-hint" id="hint-jenisKelamin">Wajib dipilih</span>
                             </div>
                         </div>
                         <div class="form-row split-row">
                             <div class="form-group">
                                 <label for="tempatLahir" class="form-label">Tempat Lahir <span class="required">*</span></label>
                                 <input type="text" id="tempatLahir" name="tempatLahir" class="form-input" placeholder="Kota/Kabupaten" required value="{{ old('tempatLahir') }}">
+                                <span class="field-hint" id="hint-tempatLahir">Wajib diisi</span>
                             </div>
                             <div class="form-group">
                                 <label for="tanggalLahir" class="form-label">Tanggal Lahir <span class="required">*</span></label>
@@ -121,6 +117,7 @@
                                     <input type="date" id="tanggalLahir" name="tanggalLahir" class="form-input form-date" required value="{{ old('tanggalLahir') }}">
                                     <svg class="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                                 </div>
+                                <span class="field-hint" id="hint-tanggalLahir">Wajib diisi</span>
                             </div>
                         </div>
                     </div>
@@ -135,6 +132,7 @@
                             <div class="form-group full-width">
                                 <label for="alamatLengkap" class="form-label">Alamat Lengkap <span class="required">*</span></label>
                                 <input type="text" id="alamatLengkap" name="alamatLengkap" class="form-input" placeholder="Nama jalan / blok / nomor rumah" required value="{{ old('alamatLengkap') }}">
+                                <span class="field-hint" id="hint-alamatLengkap">Wajib diisi</span>
                             </div>
                         </div>
                         <div class="form-row split-row">
@@ -150,6 +148,7 @@
                                     </select>
                                     <svg class="select-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </div>
+                                <span class="field-hint" id="hint-rtSelect">Wajib dipilih</span>
                             </div>
                             <div class="form-group">
                                 <label for="dusunSelect" class="form-label">Dusun <span class="required">*</span></label>
@@ -161,6 +160,7 @@
                                     </select>
                                     <svg class="select-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </div>
+                                <span class="field-hint" id="hint-dusunSelect">Wajib dipilih</span>
                             </div>
                         </div>
                     </div>
@@ -175,6 +175,7 @@
                             <div class="form-group">
                                 <label for="noHp" class="form-label">No. HP / WhatsApp <span class="required">*</span></label>
                                 <input type="tel" id="noHp" name="noHp" class="form-input" placeholder="08xxxxxxxxxx" required value="{{ old('noHp') }}">
+                                <span class="field-hint" id="hint-noHp">Wajib diisi</span>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="form-label">Email (opsional)</label>
@@ -192,16 +193,16 @@
                         <div class="form-row split-row">
                             <div class="form-group">
                                 <label for="pekerjaan" class="form-label">Pekerjaan</label>
-                                <input type="text" id="pekerjaan" name="pekerjaan" class="form-input" placeholder="Petani, Pedagang, dll." required value="{{ old('pekerjaan') }}">
+                                <input type="text" id="pekerjaan" name="pekerjaan" class="form-input" placeholder="Petani, Pedagang, dll." value="{{ old('pekerjaan') }}">
                             </div>
                             <div class="form-group">
                                 <label for="pendidikan" class="form-label">Pendidikan Terakhir</label>
                                 <div class="select-input-wrapper">
-                                    <select id="pendidikan" name="pendidikan" class="form-input form-select" required>
+                                    <select id="pendidikan" name="pendidikan" class="form-input form-select">
                                         <option value="" disabled {{ empty(old('pendidikan')) ? 'selected' : '' }}>— Pilih —</option>
                                         @foreach (['SD','SMP','SMA/SMK','D3','S1','S2/S3'] as $p)
                                             <option value="{{ $p }}" {{ old('pendidikan') === $p ? 'selected' : '' }}>{{ $p }}</option>
-                                    @endforeach
+                                        @endforeach
                                     </select>
                                     <svg class="select-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </div>
@@ -218,7 +219,7 @@
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label for="motivasi" class="form-label">Motivasi Bergabung</label>
-                                <textarea id="motivasi" name="motivasi" class="form-input form-textarea" rows="4" placeholder="Ceritakan alasan Anda ingin bergabung dengan koperasi..." required>{{ old('motivasi') }}</textarea>
+                                <textarea id="motivasi" name="motivasi" class="form-input form-textarea" rows="4" placeholder="Ceritakan alasan Anda ingin bergabung dengan koperasi...">{{ old('motivasi') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -231,7 +232,58 @@
                     </div>
                 </form>
                 @endif
+
             </div>
         </div>
     </section>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('daftarForm');
+    if (!form) return;
+
+    const requiredFields = [
+        ['namaLengkap',  'hint-namaLengkap'],
+        ['nikKtp',       'hint-nikKtp'],
+        ['jenisKelamin', 'hint-jenisKelamin'],
+        ['tempatLahir',  'hint-tempatLahir'],
+        ['tanggalLahir', 'hint-tanggalLahir'],
+        ['alamatLengkap','hint-alamatLengkap'],
+        ['rtSelect',     'hint-rtSelect'],
+        ['dusunSelect',  'hint-dusunSelect'],
+        ['noHp',         'hint-noHp'],
+    ];
+
+    function validate(fieldId, hintId) {
+        const el   = document.getElementById(fieldId);
+        const hint = document.getElementById(hintId);
+        if (!el || !hint) return true;
+        let invalid = el.value.trim() === '';
+        // NIK khusus: harus tepat 16 karakter
+        if (fieldId === 'nikKtp' && !invalid && el.value.trim().length !== 16) {
+            invalid = true;
+        }
+        hint.classList.toggle('field-hint-visible', invalid);
+        el.classList.toggle('form-input-error', invalid);
+        return !invalid;
+    }
+
+    requiredFields.forEach(([fId, hId]) => {
+        const el = document.getElementById(fId);
+        if (!el) return;
+        el.addEventListener('input',  () => validate(fId, hId));
+        el.addEventListener('change', () => validate(fId, hId));
+    });
+
+    form.addEventListener('submit', function (e) {
+        let valid = true;
+        requiredFields.forEach(([fId, hId]) => {
+            if (!validate(fId, hId)) valid = false;
+        });
+        if (!valid) e.preventDefault();
+    });
+});
+</script>
 @endsection

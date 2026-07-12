@@ -519,3 +519,28 @@
 .btn-daftar-lagi:active {
     transform: translateY(0);
 }
+
+/* === 6. Inline Field Validation Hints === */
+.field-hint {
+    display: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #DC2626;
+    margin-top: 4px;
+}
+
+.field-hint-visible {
+    display: block;
+}
+
+.form-input-error {
+    border-color: #DC2626 !important;
+    background-color: #FFF5F5;
+}
+
+/* Teks petunjuk abu-abu statis (selalu tampil) */
+.field-helper {
+    font-size: 0.8rem;
+    color: #94A3B8;
+    margin-top: 4px;
+}

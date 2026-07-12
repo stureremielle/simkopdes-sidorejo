@@ -12,7 +12,6 @@
 @section('content')
     @php
     $displayCards = [];
-    $defaultKategori = ['Rapat & Musyawarah', 'Panen & Pertanian', 'Pelatihan', 'Kegiatan Sosial'];
     foreach ($galeriList as $g) {
         $displayCards[] = [
             'judul' => $g->judul,
@@ -24,7 +23,7 @@
             'tanggal' => \App\Helpers\Helper::formatBulanTahun($g->created_at)
         ];
     }
-    $allKategori = array_values(array_unique(array_merge($defaultKategori, $kategoriList->toArray())));
+    $allKategori = $kategoriList->toArray();
     @endphp
 
     <section class="gallery-hero-section">

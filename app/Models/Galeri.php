@@ -10,6 +10,7 @@ class Galeri extends Model
 
     protected $fillable = [
         'judul',
+        'kategori_id',
         'kategori',
         'gambar_url',
         'materi_url',
@@ -19,4 +20,29 @@ class Galeri extends Model
     ];
 
     public $timestamps = false;
+
+    public function kategoriRelation()
+    {
+        return $this->belongsTo(KategoriGaleri::class, 'kategori_id');
+    }
+
+    public function getKategoriAttribute()
+    {
+        return $this->kategoriRelation?->nama ?? '';
+    }
+
+    public function setKategoriAttribute($value)
+    {
+        if (empty($value)) {
+            $this->attributes['kategori_id'] = null;
+            return;
+        }
+        $cat = KategoriGaleri::whereRaw('LOWER(nama) = ?', [strtolower($value)])->first();
+        if ($cat) {
+            $this->attributes['kategori_id'] = $cat->id;
+        } else {
+            $newCat = KategoriGaleri::create(['nama' => ucwords($value)]);
+            $this->attributes['kategori_id'] = $newCat->id;
+        }
+    }
 }

@@ -1,9 +1,12 @@
 @php
-    $footerLayanan = \App\Models\Layanan::where('status', 'aktif')
-        ->select('kategori')
+    $activeKategoriIds = \App\Models\Layanan::where('status', 'aktif')
         ->distinct()
-        ->orderBy('kategori')
-        ->pluck('kategori');
+        ->pluck('kategori_id')
+        ->filter();
+
+    $footerLayanan = \App\Models\KategoriLayanan::whereIn('id', $activeKategoriIds)
+        ->orderBy('nama')
+        ->pluck('nama');
 
     $namaKoperasi = \App\Models\Pengaturan::getValue('nama_koperasi', 'Koperasi Desa Merah Putih Sidorejo');
     $alamat       = \App\Models\Pengaturan::getValue('alamat', 'Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Kec. Penajam, Kab. Penajam Paser Utara, Kalimantan Timur');

@@ -155,11 +155,11 @@
             width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; background-color: #FFFFFF;
         }
         .form-field textarea { min-height: 120px; resize: vertical; font-family: inherit; }
-        .modal-footer { display: flex; gap: 12px; justify-content: space-between; margin-top: 24px; border-top: 1px solid #F1F5F9; padding-top: 16px; }
-        .btn-cancel { flex: 1; text-align: center; background: #FFFFFF; color: #475569; border: 1.5px solid #E2E8F0; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.88rem; transition: all 0.2s; }
+        .modal-footer { display: flex; gap: 16px; justify-content: space-between; margin-top: 24px; }
+        .btn-cancel { flex: 1; text-align: center; background: #FFFFFF; color: #1E293B; border: 1.5px solid #E2E8F0; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: all 0.2s; }
         .btn-cancel:hover { background: #FAFAFA; border-color: #CBD5E1; }
-        .btn-save { flex: 1; text-align: center; background: #DC2626; color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.88rem; transition: background 0.2s; }
-        .btn-save:hover { background: #B91C1C; }
+        .btn-save { flex: 1; text-align: center; background: #B91C1C; color: white; border: none; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: background 0.2s; }
+        .btn-save:hover { background: #991B1B; }
 
         /* Custom scrollbar for categories list */
         #categoriesListContainer::-webkit-scrollbar {
@@ -309,17 +309,17 @@
                                     <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                                 </svg>
                             </button>
-                            <form method="POST" action="{{ route('admin.berita.destroy', $b->id) }}" onsubmit="return confirm('Hapus artikel ini?')" style="display:inline;">
+                            <button type="button" onclick="openHapusModal({{ $b->id }}, '{{ addslashes($b->judul) }}')" class="btn-icon-action btn-icon-delete" title="Hapus Artikel">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                            </button>
+                            <form id="deleteForm-{{ $b->id }}" method="POST" action="{{ route('admin.berita.destroy', $b->id) }}" style="display: none;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-icon-action btn-icon-delete" title="Hapus Artikel">
-                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                                        <line x1="14" y1="11" x2="14" y2="17"></line>
-                                    </svg>
-                                </button>
                             </form>
                         </div>
                     </td>
@@ -372,7 +372,7 @@
                         <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Status</label>
                         <div style="position: relative;">
                             <select name="status" id="fStatus" required style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; appearance: none; -webkit-appearance: none; padding-right: 36px;">
-                                <option value="draf">Draft</option>
+                                <option value="draft">Draft</option>
                                 <option value="tayang">Tayang</option>
                             </select>
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748B;">
@@ -426,9 +426,9 @@
                     <textarea name="isi" id="fIsi" required placeholder="Tulis isi artikel di sini..." style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 12px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; min-height: 140px; resize: vertical; font-family: inherit;"></textarea>
                 </div>
 
-                <div class="modal-footer" style="justify-content: flex-end; gap: 12px; border-top: 1px solid #F1F5F9; padding-top: 16px; margin-top: 16px;">
-                    <button type="button" class="btn-cancel" onclick="closeModal()" style="flex: none; min-width: 100px;">Batal</button>
-                    <button type="submit" class="btn-save" id="btnSubmitArticle" style="flex: none; min-width: 150px; background-color: #DC2626;">Terbitkan Artikel</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+                    <button type="submit" class="btn-save" id="btnSubmitArticle">Terbitkan Artikel</button>
                 </div>
             </form>
         </div>
@@ -496,6 +496,34 @@
             <button type="button" onclick="closeKategoriModal()" style="width: 100%; text-align: center; background: #DC2626; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#B91C1C'" onmouseout="this.style.backgroundColor='#DC2626'">
                 Selesai
             </button>
+        </div>
+    </div>
+
+    <!-- MODAL: HAPUS BERITA -->
+    <div class="modal-overlay" id="hapusModal">
+        <div style="background: white; border-radius: 20px; padding: 28px 28px 24px; width: 90%; max-width: 440px; box-sizing: border-box; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <!-- Icon -->
+                <div style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #FEE2E2; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <!-- Text -->
+                <div style="flex: 1;">
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin: 0 0 8px; font-family: inherit;">Hapus Berita?</h3>
+                    <p style="font-size: 0.9rem; color: #475569; margin: 0; line-height: 1.6; font-family: inherit;">
+                        Anda akan menghapus data anggota <strong id="hapusJudul"></strong>.
+                    </p>
+                </div>
+            </div>
+            <!-- Buttons -->
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button type="button" onclick="closeHapusModal()" style="border: 1px solid #CBD5E1; background: #FFFFFF; color: #475569; padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; font-family: inherit; transition: background 0.2s;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='#FFFFFF'">Batal</button>
+                <button type="button" onclick="submitHapus()" style="background: #DC2626; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; font-family: inherit; transition: background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">Ya, Hapus</button>
+            </div>
         </div>
     </div>
 @endsection
@@ -576,17 +604,6 @@
             document.getElementById('detKategori').textContent = data.kategori || 'Umum';
             
             const statusSpan = document.getElementById('detStatus');
-            if (data.status === 'tayang') {
-                statusSpan.textContent = 'Tayang';
-                statusSpan.style.background = '#EFF6FF';
-                statusSpan.style.color = '#1D4ED8';
-            } else {
-                statusSpan.textContent = 'Draft';
-                statusSpan.style.background = '#F1F5F9';
-                statusSpan.style.color = '#64748B';
-            }
-            
-            document.getElementById('detJudul').textContent = data.judul;
             
             let formattedDate = 'Baru saja';
             if (data.created_at) {
@@ -666,30 +683,11 @@
         }
 
         // Category Management
-        let categories = [];
+        let categories = @json($kategoriList);
         
         // Initializer
         function initCategories() {
-            let stored = localStorage.getItem('berita_categories');
-            if (stored) {
-                try {
-                    categories = JSON.parse(stored);
-                } catch(e) {
-                    categories = @json($kategoriList);
-                }
-            } else {
-                categories = @json($kategoriList);
-            }
-            // Ensure some default categories exist
-            if (!categories || categories.length === 0) {
-                categories = ['Umum', 'Pertanian', 'Peternakan', 'Perikanan', 'Kerajinan', 'Keuangan', 'Lainnya'];
-            }
             renderCategories();
-            populateDropdowns();
-        }
-        
-        function saveCategories() {
-            localStorage.setItem('berita_categories', JSON.stringify(categories));
             populateDropdowns();
         }
         
@@ -755,19 +753,59 @@
         function addNewCategory() {
             const input = document.getElementById('newCategoryInput');
             const val = input.value.trim();
-            if (val && !categories.includes(val)) {
-                categories.push(val);
-                input.value = '';
-                renderCategories();
-                saveCategories();
+            if (!val) return;
+            if (categories.includes(val)) {
+                alert('Kategori tersebut sudah terdaftar.');
+                return;
             }
+            
+            fetch("{{ route('admin.berita.kategori.store') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ kategori: val })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    categories.push(val);
+                    input.value = '';
+                    renderCategories();
+                    populateDropdowns();
+                } else {
+                    alert(data.message || 'Gagal menambahkan kategori.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Terjadi kesalahan jaringan.');
+            });
         }
         
         function deleteCategory(catName) {
             if (confirm(`Hapus kategori "${catName}"?`)) {
-                categories = categories.filter(c => c !== catName);
-                renderCategories();
-                saveCategories();
+                fetch("{{ url('/admin/berita/kategori') }}/" + encodeURIComponent(catName), {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        categories = categories.filter(c => c !== catName);
+                        renderCategories();
+                        populateDropdowns();
+                    } else {
+                        alert(data.message || 'Gagal menghapus kategori.');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Terjadi kesalahan jaringan.');
+                });
             }
         }
         
@@ -785,6 +823,26 @@
 
         document.getElementById('kategoriModal').addEventListener('click', e => {
             if (e.target === document.getElementById('kategoriModal')) closeKategoriModal();
+        });
+
+        // Hapus Modal
+        let _hapusTargetId = null;
+        function openHapusModal(id, judul) {
+            _hapusTargetId = id;
+            document.getElementById('hapusJudul').innerText = judul;
+            document.getElementById('hapusModal').classList.add('active');
+        }
+        function closeHapusModal() {
+            document.getElementById('hapusModal').classList.remove('active');
+        }
+        function submitHapus() {
+            if (_hapusTargetId !== null) {
+                document.getElementById('deleteForm-' + _hapusTargetId).submit();
+            }
+        }
+
+        document.getElementById('hapusModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('hapusModal')) closeHapusModal();
         });
 
         // Initialize categories on load

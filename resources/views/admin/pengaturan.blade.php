@@ -278,7 +278,7 @@
             <!-- Preview Card Area -->
             <div style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 16px; padding: 24px; margin-bottom: 20px;">
                 <!-- Inner Image Preview Container -->
-                <div style="background: #FAFAFA; border: 1.5px solid #E2E8F0; border-radius: 12px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; position: relative; overflow: hidden;">
+                <div style="background: #FAFAFA; border: 1.5px solid #E2E8F0; border-radius: 12px; height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; position: relative; overflow: hidden;">
                     @php
                         $orgChart = \App\Models\Pengaturan::getValue('org_chart', '');
                     @endphp
@@ -287,9 +287,15 @@
                             $orgChartParsed = str_starts_with($orgChart, 'http') ? $orgChart : asset('uploads/' . $orgChart);
                         @endphp
                         <img src="{{ $orgChartParsed }}" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; background: #FFFFFF; opacity: 0.95;">
-                        <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(15, 23, 42, 0.8); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">
-                            Aktif
+                        <div style="position: absolute; bottom: 12px; left: 12px; background: #DC2626; color: #FFFFFF; padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
+                            Preview
                         </div>
+                        <button type="button" onclick="clearOrgPreview()" style="position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; background: rgba(15, 23, 42, 0.5); border: none; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; z-index: 10;" onmouseover="this.style.background='rgba(15, 23, 42, 0.7)'" onmouseout="this.style.background='rgba(15, 23, 42, 0.5)'">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
                     @else
                         <!-- Mockup Connector Icon -->
                         <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 4px;">
@@ -362,31 +368,32 @@
             <!-- Hidden input to hold serialized mission points -->
             <input type="hidden" name="misi" id="misiHiddenInput" value="{{ $settings['misi'] ?? '' }}">
 
+            <!-- Visi 2025 Heading -->
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E293B; margin: 0 0 20px 0; display: flex; align-items: center;">
+                <span style="width: 8px; height: 8px; background: #DC2626; border-radius: 50%; display: inline-block; margin-right: 10px;"></span>
+                Visi 2025
+            </h3>
             <!-- Visi 2025 Card -->
-            <div class="settings-card" style="background: #FFFFFF; border: 1.5px solid #F1F5F9; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: none;">
-                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E293B; margin: 0 0 20px 0; display: flex; align-items: center;">
-                    <span style="width: 8px; height: 8px; background: #DC2626; border-radius: 50%; display: inline-block; margin-right: 10px;"></span>
-                    Visi 2025
-                </h3>
-                <textarea name="visi" rows="4" style="font-family: inherit; background-color: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.9rem; min-height: 90px; resize: vertical; padding: 20px; line-height: 1.6; color: #475569; width: 100%; box-sizing: border-box; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#DC2626'">{{ $settings['visi'] ?? '' }}</textarea>
+            <div style="background: #FFFFFF; border: 1.5px solid #F1F5F9; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+                <textarea name="visi" rows="4" style="font-family: inherit; background-color: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.9rem; min-height: 90px; resize: vertical; padding: 20px; line-height: 1.6; color: #475569; width: 100%; box-sizing: border-box; outline: none; transition: all 0.2s;" onfocus="this.style.borderColor='#DC2626'; this.style.backgroundColor='#FFFFFF';">{{ $settings['visi'] ?? '' }}</textarea>
             </div>
             
-            <!-- Misi 2025 Card -->
+            <!-- Misi 2025 Block -->
             <div style="margin-bottom: 24px;">
                 <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E293B; margin: 0 0 20px 0; display: flex; align-items: center;">
                     <span style="width: 8px; height: 8px; background: #F59E0B; border-radius: 50%; display: inline-block; margin-right: 10px;"></span>
                     Misi 2025
                 </h3>
-
+ 
                 <!-- Interactive card list container -->
                 <div id="mission-list-container">
                     <!-- Loaded dynamically via JavaScript as nested cards -->
                 </div>
-
+ 
                 <!-- Add new mission point controls -->
-                <div style="display: flex; gap: 12px; align-items: center; margin-top: 16px; background: #FFFFFF; border: 1.5px solid #F1F5F9; border-radius: 16px; padding: 24px;">
-                    <input type="text" id="new-mission-input" placeholder="Tambah poin misi baru..." style="flex: 1; padding: 14px 20px; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; color: #475569; transition: border-color 0.2s;" onfocus="this.style.borderColor='#DC2626'" onkeypress="if(event.key === 'Enter'){ event.preventDefault(); addMissionItem(); }">
-                    <button type="button" onclick="addMissionItem()" style="background: #DC2626; color: #FFFFFF; border: none; padding: 14px 24px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; height: 48px; border: 1.5px solid transparent;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">
+                <div style="display: flex; gap: 12px; align-items: center; margin-top: 24px; width: 100%;">
+                    <input type="text" id="new-mission-input" placeholder="Tambah poin misi baru..." style="flex: 1; padding: 14px 20px; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; color: #475569; transition: all 0.2s;" onfocus="this.style.borderColor='#DC2626'; this.style.backgroundColor='#FFFFFF';" onkeypress="if(event.key === 'Enter'){ event.preventDefault(); addMissionItem(); }">
+                    <button type="button" onclick="addMissionItem()" style="background: #DC2626; color: #FFFFFF; border: none; padding: 0 24px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; height: 48px; border: 1.5px solid transparent;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">
                         + Tambah
                     </button>
                 </div>
@@ -508,10 +515,63 @@
             }
         }
 
+        function clearOrgPreview() {
+            const form = document.querySelector('#tab-struktur form');
+            if (form) {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'action';
+                hiddenInput.value = 'reset';
+                form.appendChild(hiddenInput);
+                form.submit();
+            }
+        }
+
         // Initialize mission list from PHP. If empty, start with empty array.
         let missionList = [];
         @php
-            $misiJson = '[]';
+            $defaultMisi = [
+                [
+                    "title" => "Memperluas Kemitraan dan Pasar",
+                    "items" => [
+                        "Memperluas jaringan kemitraan dengan kelompok tani dan pelaku usaha (UMKM) dan koperasi lain untuk menciptakan ekosistem ekonomi yang kokoh.",
+                        "Memperluas jaringan pasar untuk memastikan hasil pertanian memiliki akses ke pasar yg lebih luas, sehingga dapat meningkatkan penjualan bagi koperasi serta para mitra petani, pelaku UMKM dan koperasi lainnya."
+                    ]
+                ],
+                [
+                    "title" => "Penguatan Kelembagaan",
+                    "items" => [
+                        "Mengembangkan tata kelola koperasi yg transparan, profesional, terpercaya dan terintegrasi.",
+                        "Memperkuat kemandirian koperasi dalam meningkatkan kesejahteraan anggota dan masyarakat sekitar."
+                    ]
+                ],
+                [
+                    "title" => "Agrowisata & Pemancingan",
+                    "items" => [
+                        "Menyediakan program agrowisata yg inovatif dan edukatif.",
+                        "Mengembangkan fasilitas dan kegiatan wisata berbasis agribisnis yg menarik dan mendukung pembelajaran praktis."
+                    ]
+                ],
+                [
+                    "title" => "Pengelolaan Sampah Berkelanjutan",
+                    "items" => [
+                        "Mewujudkan masyarakat yang sadar lingkungan dan peduli terhadap pengelolaan Sampah.",
+                        "Menciptakan sistem pengelolaan Sampah yang efisien, terintegrasi dan berkelanjutan. Mulai dari pemilahan dari Rumah, Pengumpulan, Pengolahan, hingga pemanfaatan kembali.",
+                        "Meningkatkan nilai ekonomi sampah untuk mengurangi jumlah sampah, misal daur ulang kerajinan atau kompos.",
+                        "Menekankan pentingnya kerja sama antara pemerintah, masyarakat, dunia usaha, swadaya masyarakat dalam pengelolaan Sampah.",
+                        "Pemantauan dan evaluasi kinerja pengolahan sampah untuk memastikan sistem berjalan sesuai target and dilakukan perbaikan terus menerus."
+                    ]
+                ],
+                [
+                    "title" => "Klinik Bisnis & Magang",
+                    "items" => [
+                        "Menyelenggarakan pelatihan agribisnis dan UMKM untuk menciptakan sumber daya manusia yang kompeten dan berdaya saing.",
+                        "Membuka program magang bagi generasi muda yang ingin mendalami agribisnis dan UMKM."
+                    ]
+                ]
+            ];
+
+            $misiJson = json_encode($defaultMisi);
             if (!empty($settings['misi'])) {
                 $decoded = json_decode($settings['misi'], true);
                 if (is_array($decoded)) {
@@ -605,8 +665,13 @@
 
                     <!-- Input block inside card -->
                     <div style="display: flex; gap: 12px; align-items: center; margin-top: 14px;">
-                        <input type="text" id="new-subpoint-input-${index}" placeholder="Tambah sub-poin misi baru..." style="flex: 1; padding: 12px 18px; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.88rem; outline: none; background: #FAFAFA; box-sizing: border-box; color: #475569; transition: border-color 0.2s;" onfocus="this.style.borderColor='#DC2626'" onkeypress="if(event.key === 'Enter'){ event.preventDefault(); addSubPoint(${index}); }">
-                        <button type="button" onclick="addSubPoint(${index})" style="background: #DC2626; color: #FFFFFF; border: none; padding: 12px 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; height: 44px; border: 1.5px solid transparent;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">
+                        <span class="check-icon-wrapper" style="display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #DC2626; color: #DC2626; flex-shrink: 0;">
+                            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <input type="text" id="new-subpoint-input-${index}" placeholder="Tambah sub-poin misi baru..." style="flex: 1; padding: 12px 18px; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.88rem; outline: none; background: #FAFAFA; box-sizing: border-box; color: #475569; transition: all 0.2s;" onfocus="this.style.borderColor='#DC2626'; this.style.backgroundColor='#FFFFFF';" onkeypress="if(event.key === 'Enter'){ event.preventDefault(); addSubPoint(${index}); }">
+                        <button type="button" onclick="addSubPoint(${index})" style="background: #DC2626; color: #FFFFFF; border: none; padding: 0 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; height: 44px; border: 1.5px solid transparent;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">
                             + Tambah
                         </button>
                     </div>

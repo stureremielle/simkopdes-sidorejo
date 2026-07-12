@@ -17,26 +17,28 @@ class NewsLoadMoreVerificationTest extends TestCase
         Berita::truncate();
 
         // 2. Create 1 featured article + 14 standard active articles
-        $featured = Berita::create([
+        $featured = new Berita([
             'judul' => 'Featured Article',
             'kategori' => 'Pertanian',
             'isi' => 'Content...',
             'penulis' => 'Author',
             'is_featured' => 1,
             'status' => 'tayang',
-            'created_at' => now()->subDays(1) // Older created date
         ]);
+        $featured->created_at = now()->addDays(5);
+        $featured->save();
 
         for ($i = 1; $i <= 14; $i++) {
-            Berita::create([
+            $art = new Berita([
                 'judul' => 'Standard Article ' . $i,
                 'kategori' => 'Pertanian',
                 'isi' => 'Content of article ' . $i,
                 'penulis' => 'Author',
                 'is_featured' => 0,
                 'status' => 'tayang',
-                'created_at' => now()->addMinutes($i) // Distinct, incrementally newer created dates
             ]);
+            $art->created_at = now()->addMinutes($i);
+            $art->save();
         }
 
         // Total standard articles: 14.

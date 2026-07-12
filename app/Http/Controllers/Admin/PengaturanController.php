@@ -29,14 +29,18 @@ class PengaturanController extends Controller
      */
     public function save(Request $request)
     {
-        $fields = ['nama_koperasi', 'alamat', 'telepon', 'email', 'visi', 'misi'];
+        $fields = [
+            'nama_koperasi', 'alamat', 'telepon', 'email', 'visi', 'misi'
+        ];
 
         foreach ($fields as $key) {
-            $val = $request->input($key, '');
-            Pengaturan::updateOrCreate(
-                ['key_name' => $key],
-                ['value' => $val]
-            );
+            if ($request->has($key)) {
+                $val = $request->input($key, '');
+                Pengaturan::updateOrCreate(
+                    ['key_name' => $key],
+                    ['value' => $val]
+                );
+            }
         }
 
         // Handle administrator password change if provided in the unified settings form
@@ -60,6 +64,8 @@ class PengaturanController extends Controller
             $admin->password = md5($request->password_baru);
             $admin->save();
         }
+
+
 
         return redirect()->route('admin.pengaturan')->with('success', 'Pengaturan berhasil disimpan!');
     }

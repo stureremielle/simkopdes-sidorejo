@@ -81,12 +81,12 @@
     display: block;
 }
 
-/* "PILIHAN" badge — dark forest green capsule */
+/* "PILIHAN" badge — bright red capsule */
 .featured-badge {
     position: absolute;
     top: 20px;
     left: 20px;
-    background-color: #7F1D1D;
+    background-color: #DC2626;
     color: #FFFFFF;
     padding: 5px 14px;
     border-radius: 9999px;
@@ -239,20 +239,18 @@
     transform: scale(1.05);
 }
 
-/* Category badge — consistent white-bg + green text pill in top-left of image */
+/* Category badge — red background with white text */
 .card-badge {
     position: absolute;
     top: 14px;
     left: 14px;
-    background-color: rgba(255, 255, 255, 0.92);
-    color: #B91C1C;
+    background-color: #DC2626;
+    color: #FFFFFF;
     padding: 5px 12px;
     border-radius: 9999px;
     font-size: 0.73rem;
     font-weight: 700;
     letter-spacing: 0.2px;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
 }
 
 .card-body {

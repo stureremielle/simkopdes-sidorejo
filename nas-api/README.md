@@ -68,36 +68,51 @@ Agar REST API server dapat otomatis berjalan ketika TV Box dinyalakan (*auto-boo
 
 ---
 
-## 4. Konfigurasi Reverse SSH Tunnel (Konektivitas Tanpa IP Publik)
+## 4. Konfigurasi Konektivitas Aman (Tailscale Funnel)
 
-Karena TV Box Anda berada di dalam jaringan lokal (tidak memiliki IP Publik) dan Alwaysdata berada di cloud internet, kita menggunakan teknik **Reverse SSH Tunnel** agar server Alwaysdata dapat mengakses port `3000` di TV Box secara lokal.
+Karena TV Box Anda berada di dalam jaringan lokal (tidak memiliki IP Publik) dan Alwaysdata berada di cloud internet, kita menggunakan **Tailscale Funnel** agar server Alwaysdata dapat mengakses REST API di TV Box secara aman menggunakan protokol HTTPS publik dengan domain permanen tanpa perlu melakukan *port forwarding* pada router rumah.
 
-### Langkah A: Daftarkan SSH Key TV Box ke Alwaysdata
-Agar koneksi SSH dapat terhubung secara otomatis tanpa meminta password:
-1.  Di TV Box Anda, buat SSH key:
+### Langkah A: Instalasi & Login Tailscale
+1.  Instal Tailscale di TV Box ZTE (Armbian):
     ```bash
-    ssh-keygen -t rsa -b 4096
+    curl -fsSL https://tailscale.com/install.sh | sh
     ```
-2.  Salin public key Anda ke server Alwaysdata (sesuaikan port SSH, username, dan host):
+2.  Hubungkan TV Box ke akun Tailscale Anda:
     ```bash
-    ssh-copy-id -p [PORT_ALWAYSDATA] [USERNAME_ALWAYSDATA]@ssh.[SERVER_ALWAYSDATA].alwaysdata.net
+    sudo tailscale up
+    ```
+    *(Klik link login yang muncul di terminal untuk menyelesaikan otentikasi).*
+
+### Langkah B: Aktifkan HTTPS Certificates & ACL
+1.  Buka **Tailscale Admin Console** di browser.
+2.  Masuk ke menu **DNS** -> cari bagian **HTTPS Certificates** -> klik **Enable HTTPS...** (gratis).
+3.  Di menu **Access Control (ACL)**, pastikan fitur Funnel sudah diaktifkan untuk akun Anda dengan menambahkan konfigurasi berikut:
+    ```json
+    "nodeAttrs": {
+        "funnel": [
+            {
+                "target": ["autogroup:member"],
+                "attr": ["funnel"],
+            },
+        ],
+    },
     ```
 
-### Langkah B: Menjalankan Tunnel dengan `autossh` (Auto-reconnect)
-Gunakan `autossh` agar koneksi terowongan (*tunnel*) otomatis tersambung kembali jika koneksi internet terputus.
-
-1.  Instal `autossh` di TV Box Armbian Anda:
+### Langkah C: Menjalankan Funnel secara Permanen di Latar Belakang
+Jalankan perintah ini di TV Box agar terowongan port `3000` (Node.js) diaktifkan ke publik secara permanen dan otomatis berjalan saat booting:
+1.  Daftarkan port lokal ke serve engine:
     ```bash
-    sudo apt update
-    sudo apt install autossh -y
+    sudo tailscale serve --bg 3000
     ```
-2.  Jalankan perintah berikut untuk membuka terowongan dari TV Box:
+2.  Buka jalur publik (Funnel):
     ```bash
-    autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -N -f -R 3000:localhost:3000 -p [PORT_ALWAYSDATA] [USERNAME_ALWAYSDATA]@ssh.[SERVER_ALWAYSDATA].alwaysdata.net
+    sudo tailscale funnel --bg 3000
     ```
-    *   `-R 3000:localhost:3000` meneruskan port `3000` (API) di Alwaysdata ke port `3000` (Node.js API) di TV Box Anda.
-    *   `-N` menonaktifkan eksekusi command jarak jauh (hanya port forwarding).
-    *   `-f` menjalankan proses di latar belakang (*background*).
+3.  Cek status terowongan:
+    ```bash
+    sudo tailscale funnel status
+    ```
+    *(Catat URL HTTPS publik permanen yang diberikan, misalnya `https://armbian.tailcdb5ff.ts.net/`).*
 
 ---
 

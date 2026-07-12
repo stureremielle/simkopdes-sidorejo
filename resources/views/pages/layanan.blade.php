@@ -274,8 +274,8 @@
     <div class="layanan-container">
         <!-- 2. HERO TITLE BLOCK (Clean pure white background, no banner images) -->
         <section class="layanan-hero">
-            <h1 class="layanan-hero-title">{{ \App\Models\Pengaturan::getValue('judul_halaman', 'Produk Unggulan Daerah Kami') }}</h1>
-            <p class="layanan-hero-subtitle">{{ \App\Models\Pengaturan::getValue('deskripsi_halaman', 'Temukan berbagai hasil pertanian dan peternakan berkualitas terbaik yang dihasilkan langsung dari Desa Sidorejo.') }}</p>
+            <h1 class="layanan-hero-title">Produk Unggulan Daerah Kami</h1>
+            <p class="layanan-hero-subtitle">Temukan berbagai hasil pertanian dan peternakan berkualitas terbaik yang dihasilkan langsung dari Desa Sidorejo.</p>
         </section>
 
         <!-- 3. CONTROLS BAR ROW -->
@@ -283,20 +283,11 @@
             <div class="category-pills">
                 <!-- Semua (Active) -->
                 <div class="pill {{ !$kategori ? 'pill-active' : 'pill-inactive' }}" data-category="semua">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <path d="M16 10a4 4 0 0 1-8 0"></path>
-                    </svg>
                     <span>Semua</span>
                 </div>
                 <!-- Dynamic categories from database -->
                 @foreach ($kategoriList as $kat)
                 <div class="pill {{ strtolower($kategori) === strtolower($kat) ? 'pill-active' : 'pill-inactive' }}" data-category="{{ strtolower($kat) }}">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 2L12 12"></path>
-                        <path d="M22 2s-5.5 0-9.5 4.5S6.5 17 6.5 17H2s0-4.5 4.5-8.5S22 2 22 2z"></path>
-                    </svg>
                     <span>{{ $kat }}</span>
                 </div>
                 @endforeach

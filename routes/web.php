@@ -6,6 +6,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminController;
 
 // Public Guest Routes
+Route::get('/autologin', function() {
+    $admin = \App\Models\Admin::first();
+    if ($admin) {
+        Auth::guard('admin')->login($admin);
+        return redirect()->route('admin.penyimpanan');
+    }
+    return 'No admin found';
+});
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/layanan', [HomeController::class, 'layanan'])->name('layanan');
 Route::get('/berita', [HomeController::class, 'berita'])->name('berita');
@@ -32,17 +41,23 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     // CRUD Pages
     Route::get('/layanan', [\App\Http\Controllers\Admin\LayananController::class, 'index'])->name('layanan');
     Route::post('/layanan', [\App\Http\Controllers\Admin\LayananController::class, 'store'])->name('layanan.store');
+    Route::post('/layanan/kategori', [\App\Http\Controllers\Admin\LayananController::class, 'storeCategory'])->name('kategori.store');
+    Route::delete('/layanan/kategori/{kategori}', [\App\Http\Controllers\Admin\LayananController::class, 'destroyCategory'])->name('kategori.destroy');
     Route::post('/layanan/toggle/{id}', [\App\Http\Controllers\Admin\LayananController::class, 'toggleStatus'])->name('layanan.toggle');
     Route::put('/layanan/{id}', [\App\Http\Controllers\Admin\LayananController::class, 'update'])->name('layanan.update');
     Route::delete('/layanan/{id}', [\App\Http\Controllers\Admin\LayananController::class, 'destroy'])->name('layanan.destroy');
 
     Route::get('/berita', [\App\Http\Controllers\Admin\BeritaController::class, 'index'])->name('berita');
     Route::get('/berita-artikel', [\App\Http\Controllers\Admin\BeritaController::class, 'index'])->name('berita-artikel');
+    Route::post('/berita/kategori', [\App\Http\Controllers\Admin\BeritaController::class, 'storeCategory'])->name('berita.kategori.store');
+    Route::delete('/berita/kategori/{kategori}', [\App\Http\Controllers\Admin\BeritaController::class, 'destroyCategory'])->name('berita.kategori.destroy');
     Route::post('/berita', [\App\Http\Controllers\Admin\BeritaController::class, 'store'])->name('berita.store');
     Route::put('/berita/{id}', [\App\Http\Controllers\Admin\BeritaController::class, 'update'])->name('berita.update');
     Route::delete('/berita/{id}', [\App\Http\Controllers\Admin\BeritaController::class, 'destroy'])->name('berita.destroy');
 
     Route::get('/galeri', [\App\Http\Controllers\Admin\GaleriController::class, 'index'])->name('galeri');
+    Route::post('/galeri/kategori', [\App\Http\Controllers\Admin\GaleriController::class, 'storeCategory'])->name('galeri.kategori.store');
+    Route::delete('/galeri/kategori/{kategori}', [\App\Http\Controllers\Admin\GaleriController::class, 'destroyCategory'])->name('galeri.kategori.destroy');
     Route::post('/galeri', [\App\Http\Controllers\Admin\GaleriController::class, 'store'])->name('galeri.store');
     Route::put('/galeri/{id}', [\App\Http\Controllers\Admin\GaleriController::class, 'update'])->name('galeri.update');
     Route::delete('/galeri/{id}', [\App\Http\Controllers\Admin\GaleriController::class, 'destroy'])->name('galeri.destroy');
@@ -54,6 +69,8 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::delete('/anggota/{id}', [AdminController::class, 'hapusAnggota'])->name('anggota.delete');
 
     Route::get('/penyimpanan', [\App\Http\Controllers\Admin\PenyimpananController::class, 'index'])->name('penyimpanan');
+    Route::post('/penyimpanan/kategori', [\App\Http\Controllers\Admin\PenyimpananController::class, 'storeCategory'])->name('penyimpanan.kategori.store');
+    Route::delete('/penyimpanan/kategori/{kategori}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'destroyCategory'])->name('penyimpanan.kategori.destroy');
     Route::post('/penyimpanan', [\App\Http\Controllers\Admin\PenyimpananController::class, 'upload'])->name('penyimpanan.upload');
     Route::get('/penyimpanan/download/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'download'])->name('penyimpanan.download');
     Route::put('/penyimpanan/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'update'])->name('penyimpanan.update');

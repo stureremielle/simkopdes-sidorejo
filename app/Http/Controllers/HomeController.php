@@ -39,14 +39,20 @@ class HomeController extends Controller
         $query = Layanan::where('status', 'aktif');
 
         if ($kategori) {
-            $query->where('kategori', $kategori);
+            $matchingCat = \App\Models\KategoriLayanan::where('nama', $kategori)->first();
+            $query->where('kategori_id', $matchingCat ? $matchingCat->id : 0);
         }
 
-        $layananList = $query->orderBy('kategori')->orderBy('nama')->get();
-        $kategoriList = Layanan::where('status', 'aktif')
+        $layananList = $query->orderBy('kategori_id')->orderBy('nama')->get();
+        
+        $activeKategoriIds = Layanan::where('status', 'aktif')
             ->distinct()
-            ->orderBy('kategori')
-            ->pluck('kategori');
+            ->pluck('kategori_id')
+            ->filter();
+
+        $kategoriList = \App\Models\KategoriLayanan::whereIn('id', $activeKategoriIds)
+            ->orderBy('nama')
+            ->pluck('nama');
 
         return view('pages.layanan', compact('layananList', 'kategoriList', 'kategori'));
     }
@@ -56,8 +62,9 @@ class HomeController extends Controller
      */
     public function berita(Request $request)
     {
-        $featured = Berita::where('is_featured', 1)
-            ->where('status', 'tayang')
+        $featured = Berita::where('status', 'tayang')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->first();
 
         $query = Berita::where('status', 'tayang');
@@ -140,10 +147,8 @@ class HomeController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $kategoriList = Galeri::where('status', 'aktif')
-            ->distinct()
-            ->orderBy('kategori')
-            ->pluck('kategori');
+        $categories = \App\Models\KategoriGaleri::pluck('nama')->toArray();
+        $kategoriList = collect($categories);
 
         return view('pages.galeri', compact('galeriList', 'kategoriList'));
     }
@@ -327,8 +332,9 @@ class HomeController extends Controller
             ->get();
 
         // Fetch news background elements
-        $featured = Berita::where('is_featured', 1)
-            ->where('status', 'tayang')
+        $featured = Berita::where('status', 'tayang')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->first();
 
         $query = Berita::where('status', 'tayang');

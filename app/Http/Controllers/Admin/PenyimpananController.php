@@ -16,7 +16,7 @@ class PenyimpananController extends Controller
     public function index(Request $request)
     {
         if (PenyimpananFile::count() === 0) {
-            PenyimpananFile::insert([
+            $initialFiles = [
                 [
                     'nama_file' => 'ad_art_koperasi.pdf',
                     'nama_asli' => 'AD_ART_Koperasi.pdf',
@@ -71,14 +71,18 @@ class PenyimpananController extends Controller
                     'keterangan' => 'Rincian Pembagian SHU 2023',
                     'uploaded_at' => '2024-01-10 09:10:00'
                 ]
-            ]);
+            ];
+            foreach ($initialFiles as $fileData) {
+                PenyimpananFile::create($fileData);
+            }
         }
 
         $filterKat = $request->query('kat');
 
         $query = PenyimpananFile::query();
         if ($filterKat) {
-            $query->where('kategori', $filterKat);
+            $matchingCat = \App\Models\KategoriPenyimpanan::where('nama', $filterKat)->first();
+            $query->where('kategori_id', $matchingCat ? $matchingCat->id : 0);
         }
 
         $fileList = $query->orderBy('uploaded_at', 'desc')->get();
@@ -87,20 +91,22 @@ class PenyimpananController extends Controller
         $totalFiles = PenyimpananFile::count();
         $totalSize = PenyimpananFile::sum('ukuran') ?: 0;
 
-        // Group size and count stats per category
-        $statsKatQuery = PenyimpananFile::selectRaw('kategori, COUNT(*) as c, SUM(ukuran) as total')
-            ->groupBy('kategori')
+        // Group size and count stats per category_id
+        $statsKatQuery = PenyimpananFile::selectRaw('kategori_id, COUNT(*) as c, SUM(ukuran) as total')
+            ->groupBy('kategori_id')
             ->get();
 
+        $allCategories = \App\Models\KategoriPenyimpanan::all()->keyBy('id');
         $statsKat = [];
         foreach ($statsKatQuery as $stat) {
-            $statsKat[$stat->kategori] = [
+            $catName = $allCategories->get($stat->kategori_id)?->nama ?? 'Lainnya';
+            $statsKat[$catName] = [
                 'c' => $stat->c,
                 'total' => $stat->total
             ];
         }
 
-        $kategoriList = ['Legalitas', 'Laporan', 'Keuangan', 'Keanggotaan', 'Lainnya'];
+        $kategoriList = \App\Models\KategoriPenyimpanan::pluck('nama')->toArray();
 
         return view('admin.penyimpanan', compact(
             'fileList',
@@ -120,7 +126,7 @@ class PenyimpananController extends Controller
         $request->validate([
             'file_upload' => 'required|file|max:20480', // limit 20MB
             'nama_file' => 'nullable|string|max:255',
-            'kategori' => 'required|string|max:50',
+            'kategori' => 'required|string|max:30',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -137,6 +143,13 @@ class PenyimpananController extends Controller
             $originalName = $customName;
         }
 
+        // Truncate originalName to fit 255 character limit while preserving its extension
+        $ext = $file->getClientOriginalExtension();
+        if (strlen($originalName) > 255) {
+            $limit = 255 - (strlen($ext) ? strlen($ext) + 1 : 0);
+            $base = pathinfo($originalName, PATHINFO_FILENAME);
+            $originalName = substr($base, 0, $limit) . (strlen($ext) ? '.' . $ext : '');
+        }
         $size = $file->getSize();
         $mime = $file->getMimeType();
 
@@ -189,7 +202,7 @@ class PenyimpananController extends Controller
     {
         $request->validate([
             'nama_asli' => 'required|string|max:255',
-            'kategori' => 'required|string|max:50',
+            'kategori' => 'required|string|max:30',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -268,5 +281,47 @@ class PenyimpananController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal terhubung ke NAS untuk unduh berkas: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Store a newly created category.
+     */
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'kategori' => 'required|string|max:50',
+        ]);
+
+        $newCat = trim($request->kategori);
+        
+        $exists = \App\Models\KategoriPenyimpanan::whereRaw('LOWER(nama) = ?', [strtolower($newCat)])->exists();
+
+        if (!$exists) {
+            \App\Models\KategoriPenyimpanan::create(['nama' => ucwords($newCat)]);
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Kategori tersebut sudah terdaftar.'], 400);
+    }
+
+    /**
+     * Remove the specified category.
+     */
+    public function destroyCategory($kategori)
+    {
+        $catToDelete = $kategori;
+
+        // Check if there are any files using this category
+        $cat = \App\Models\KategoriPenyimpanan::where('nama', $catToDelete)->first();
+        if ($cat) {
+            $hasFiles = PenyimpananFile::where('kategori_id', $cat->id)->count();
+            if ($hasFiles > 0) {
+                return response()->json(['success' => false, 'message' => 'Tidak dapat menghapus karena kategori ini masih digunakan pada berkas.'], 400);
+            }
+            $cat->delete();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Kategori tidak ditemukan.'], 400);
     }
 }

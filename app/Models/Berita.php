@@ -10,6 +10,7 @@ class Berita extends Model
 
     protected $fillable = [
         'judul',
+        'kategori_id',
         'kategori',
         'isi',
         'penulis',
@@ -18,5 +19,30 @@ class Berita extends Model
         'status',
     ];
 
-    public $timestamps = false;
+    const UPDATED_AT = null; // tabel tidak punya kolom updated_at
+
+    public function kategoriRelation()
+    {
+        return $this->belongsTo(KategoriBerita::class, 'kategori_id');
+    }
+
+    public function getKategoriAttribute()
+    {
+        return $this->kategoriRelation?->nama ?? '';
+    }
+
+    public function setKategoriAttribute($value)
+    {
+        if (empty($value)) {
+            $this->attributes['kategori_id'] = null;
+            return;
+        }
+        $cat = KategoriBerita::whereRaw('LOWER(nama) = ?', [strtolower($value)])->first();
+        if ($cat) {
+            $this->attributes['kategori_id'] = $cat->id;
+        } else {
+            $newCat = KategoriBerita::create(['nama' => ucwords($value)]);
+            $this->attributes['kategori_id'] = $newCat->id;
+        }
+    }
 }
