@@ -117,7 +117,7 @@ app.post('/api/v1/arsip/upload', authenticateApiKey, upload.single('file_upload'
 /**
  * 2. ENDPOINT DOWNLOAD FILE
  * Route: GET /api/v1/arsip/download/:filename
- * Mengalirkan/download berkas fisik yang tersimpan di HDD eksternal.
+ * Mentransfer (download) berkas fisik yang tersimpan di HDD eksternal.
  */
 app.get('/api/v1/arsip/download/:filename', authenticateApiKey, (req, res) => {
     try {
@@ -134,7 +134,7 @@ app.get('/api/v1/arsip/download/:filename', authenticateApiKey, (req, res) => {
             });
         }
 
-        console.log(`[DOWNLOAD] Mengalirkan file: ${safeFilename}`);
+        console.log(`[DOWNLOAD] Mentransfer file: ${safeFilename}`);
         
         // Kirim file sebagai download attachment ke client
         return res.download(filePath, safeFilename, (err) => {
@@ -143,7 +143,7 @@ app.get('/api/v1/arsip/download/:filename', authenticateApiKey, (req, res) => {
                 if (!res.headersSent) {
                     return res.status(500).json({
                         status: 'error',
-                        message: 'Terjadi kesalahan saat mengalirkan berkas.',
+                        message: 'Terjadi kesalahan saat mentransfer berkas.',
                         error: err.message
                     });
                 }
