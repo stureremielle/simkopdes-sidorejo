@@ -1,0 +1,321 @@
+/*
+========================================================================
+   SIMKOPDES KONTAK STYLESHEET
+   Description: Hero banner, overlapping help card, 3-column grid icons, 
+                and full-width location card with static map placeholder.
+   Design System: Emerald Green #00A86B, Deep Green #064E3B, Charcoal Gray #1F2937
+========================================================================
+*/
+
+/* === 1. Hero Banner Section === */
+.contact-hero-section {
+    padding: 155px 0 115px 0;
+    /* Clear sticky header */
+    background-color: var(--white);
+    color: #0F172A;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-hero-section .hero-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.contact-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #0F172A;
+    /* Slate 900 */
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.contact-hero-subtitle {
+    font-size: 1.15rem;
+    color: #475569;
+    /* Slate 600 */
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* === 2. Overlapping Help Badge Card === */
+.contact-details-section {
+    background-color: #F8F9FA;
+    padding: 0 0 100px 0;
+}
+
+.contact-badge-card {
+    background-color: #B91C1C;
+    /* Beautiful deep red matching brand colors */
+    color: var(--white);
+    border-radius: 24px;
+    padding: 45px 30px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
+    margin: -60px auto 50px auto;
+    /* Overlops hero banner */
+    text-align: center;
+    max-width: 800px;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.chat-main-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--white);
+    margin-bottom: 20px;
+}
+
+.badge-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    color: var(--white);
+    letter-spacing: -0.3px;
+}
+
+.badge-subtitle {
+    font-size: 1.05rem;
+    margin: 0 0 24px 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+}
+
+.badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.25);
+    /* Darker translucent pill background to stand out on red */
+    color: var(--white);
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.clock-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* === 3. 3-Column Info Cards Grid === */
+.contact-grid-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+}
+
+.info-card-box {
+    background-color: var(--white);
+    border-radius: 20px;
+    border: 1px solid #F1F5F9;
+    padding: 35px 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #FFF1F2;
+    /* Light Red tint */
+    color: #DC2626;
+    /* Red */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.card-icon-circle svg {
+    width: 22px;
+    height: 22px;
+}
+
+.card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0 0 12px 0;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4B5563;
+    margin: 0;
+}
+
+.card-text a {
+    color: #4B5563;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.card-text a:hover {
+    color: #DC2626;
+}
+
+/* === 4. Full Width Location Card & Map Placeholder === */
+.location-full-card {
+    background-color: var(--white);
+    border-radius: 24px;
+    border: 1px solid #F1F5F9;
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+}
+
+.location-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.location-header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #FFF1F2;
+    color: #DC2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.location-header-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.location-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.location-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0;
+}
+
+.location-address {
+    font-size: 0.95rem;
+    font-weight: 550;
+    color: #4B5563;
+    margin: 0;
+}
+
+.map-frame-wrapper {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #E2E8F0;
+    margin-top: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.map-frame-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+/* === Responsive Media Queries === */
+@media (max-width: 992px) {
+    .contact-hero-title {
+        font-size: 2.75rem;
+    }
+
+    .contact-hero-subtitle {
+        font-size: 1.05rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-hero-section {
+        padding: 130px 0 100px 0;
+    }
+
+    .contact-hero-title {
+        font-size: 2.25rem;
+    }
+
+    .contact-hero-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .contact-badge-card {
+        padding: 35px 20px;
+        margin-top: -50px;
+        border-radius: 20px;
+    }
+
+    .badge-title {
+        font-size: 1.4rem;
+    }
+
+    .badge-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .contact-grid-info {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .location-full-card {
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+
+    .location-card-header {
+        align-items: flex-start;
+    }
+
+    .map-frame-wrapper {
+        height: 260px;
+    }
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
