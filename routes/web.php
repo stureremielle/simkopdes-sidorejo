@@ -75,6 +75,7 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::delete('/penyimpanan/kategori/{kategori}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'destroyCategory'])->name('penyimpanan.kategori.destroy');
     Route::post('/penyimpanan', [\App\Http\Controllers\Admin\PenyimpananController::class, 'upload'])->name('penyimpanan.upload');
     Route::get('/penyimpanan/download/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'download'])->name('penyimpanan.download');
+    Route::get('/penyimpanan/preview/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'preview'])->name('penyimpanan.preview');
     Route::put('/penyimpanan/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'update'])->name('penyimpanan.update');
     Route::delete('/penyimpanan/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'destroy'])->name('penyimpanan.destroy');
 

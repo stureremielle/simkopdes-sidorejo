@@ -285,6 +285,43 @@ class PenyimpananController extends Controller
     }
 
     /**
+     * Preview file via NAS API streaming (Inline display for PDFs and images).
+     */
+    public function preview($id)
+    {
+        $item = PenyimpananFile::findOrFail($id);
+
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('GET', $nasUrl . '/download/' . $item->nama_file, [
+                'headers' => [
+                    'X-API-KEY' => $nasKey
+                ],
+                'stream' => true,
+            ]);
+
+            $body = $response->getBody();
+
+            return response()->stream(function () use ($body) {
+                while (!$body->eof()) {
+                    echo $body->read(1024 * 8);
+                    flush();
+                }
+            }, 200, [
+                'Content-Type' => $response->getHeaderLine('Content-Type') ?: ($item->tipe ?: 'application/octet-stream'),
+                'Content-Length' => $response->getHeaderLine('Content-Length') ?: $item->ukuran,
+                'Content-Disposition' => 'inline; filename="' . rawurlencode($item->nama_asli) . '"',
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal terhubung ke NAS untuk pratinjau berkas: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Store a newly created category.
      */
     public function storeCategory(Request $request)
