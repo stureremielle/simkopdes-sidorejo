@@ -9,19 +9,35 @@
 @endsection
 
 @section('content')
-    @if (session('success'))
-        <div style="background-color: #DCFCE7; border: 1px solid #BBF7D0; color: #16A34A; padding: 12px 16px; border-radius: 8px; font-weight: 600; margin-bottom: 20px; font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            {{ session('success') }}
-        </div>
-    @endif
+    <div id="toast-container" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; max-width: 380px; width: calc(100% - 48px);">
+        @if (session('success'))
+            <div class="toast-alert success" style="background-color: #FFFFFF; border-left: 4px solid #16A34A; color: #1E293B; padding: 16px 20px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; transform: translateX(120%); opacity: 0;">
+                <div style="background-color: #DCFCE7; color: #16A34A; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div style="flex: 1; line-height: 1.4; font-weight: 500;">
+                    {!! session('success') !!}
+                </div>
+                <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        @endif
 
-    @if (session('error'))
-        <div style="background-color: #FEE2E2; border: 1px solid #FCA5A5; color: #DC2626; padding: 12px 16px; border-radius: 8px; font-weight: 600; margin-bottom: 20px; font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            {{ session('error') }}
-        </div>
-    @endif
+        @if (session('error'))
+            <div class="toast-alert error" style="background-color: #FFFFFF; border-left: 4px solid #DC2626; color: #1E293B; padding: 16px 20px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; transform: translateX(120%); opacity: 0;">
+                <div style="background-color: #FEE2E2; color: #DC2626; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <div style="flex: 1; line-height: 1.4; font-weight: 500;">
+                    {!! session('error') !!}
+                </div>
+                <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        @endif
+    </div>
 
     <!-- 1. Header Section -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
@@ -721,6 +737,38 @@
         function toggleDesc(el) {
             el.classList.toggle('collapsed');
             el.classList.toggle('expanded');
+        }
+
+        // Toast notifications logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const toasts = document.querySelectorAll('.toast-alert');
+            toasts.forEach((toast, idx) => {
+                // Slide in with delay
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(0)';
+                    toast.style.opacity = '1';
+                }, 100 + (idx * 200));
+
+                // Auto dismiss after 4 seconds
+                setTimeout(() => {
+                    fadeAndRemoveToast(toast);
+                }, 4000 + (idx * 500));
+            });
+        });
+
+        function dismissToast(button) {
+            const toast = button.closest('.toast-alert');
+            if (toast) {
+                fadeAndRemoveToast(toast);
+            }
+        }
+
+        function fadeAndRemoveToast(toast) {
+            toast.style.transform = 'translateX(120%)';
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
         }
     </script>
 @endsection
