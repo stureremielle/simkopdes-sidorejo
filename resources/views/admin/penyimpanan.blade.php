@@ -11,11 +11,11 @@
 @section('content')
     <div id="toast-container" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; max-width: 380px; width: calc(100% - 48px);">
         @if (session('success'))
-            <div class="toast-alert success" style="background-color: #FFFFFF; border-left: 4px solid #16A34A; color: #1E293B; padding: 16px 20px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; transform: translateX(120%); opacity: 0;">
-                <div style="background-color: #DCFCE7; color: #16A34A; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <div style="flex: 1; line-height: 1.4; font-weight: 500;">
+            <div class="toast-alert success" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; color: #1E293B; padding: 16px 20px; border-radius: 12px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; transform: translateX(120%); opacity: 0; box-sizing: border-box; width: 100%;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div style="flex: 1; line-height: 1.4; font-weight: 500; word-break: break-word; overflow-wrap: break-word;">
                     {!! session('success') !!}
                 </div>
                 <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
@@ -25,11 +25,13 @@
         @endif
 
         @if (session('error'))
-            <div class="toast-alert error" style="background-color: #FFFFFF; border-left: 4px solid #DC2626; color: #1E293B; padding: 16px 20px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; transform: translateX(120%); opacity: 0;">
-                <div style="background-color: #FEE2E2; color: #DC2626; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                </div>
-                <div style="flex: 1; line-height: 1.4; font-weight: 500;">
+            <div class="toast-alert error" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; color: #1E293B; padding: 16px 20px; border-radius: 12px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; transform: translateX(120%); opacity: 0; box-sizing: border-box; width: 100%;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div style="flex: 1; line-height: 1.4; font-weight: 500; word-break: break-word; overflow-wrap: break-word;">
                     {!! session('error') !!}
                 </div>
                 <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
