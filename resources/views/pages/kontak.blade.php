@@ -2,6 +2,7 @@
     $activePage = 'kontak';
     $telepon    = \App\Models\Pengaturan::getValue('telepon', '+62 812 3456 7890');
     $email      = \App\Models\Pengaturan::getValue('email', 'info@merahputih.co.id');
+    $alamat     = \App\Models\Pengaturan::getValue('alamat', 'Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Penajam');
     $phoneClean = preg_replace('/[^0-9+]/', '', $telepon);
 @endphp
 @extends('layouts.app')
@@ -87,7 +88,7 @@
                     </div>
                     <div class="location-header-text">
                         <h3 class="location-title">Lokasi Kami</h3>
-                        <p class="location-address">Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Penajam</p>
+                        <p class="location-address">{{ $alamat }}</p>
                     </div>
                 </div>
 

@@ -7,7 +7,7 @@
     <meta name="description" content="Halaman Panel Admin Sistem Informasi Manajemen Koperasi Desa Merah Putih Sidorejo.">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/admin.css') }}">
     @yield('styles')
 </head>
 <body>

@@ -133,4 +133,25 @@ class AboutPageVerificationTest extends TestCase
         $response->assertSee('Misi Khusus Satu');
         $response->assertSee('Misi Khusus Dua');
     }
+
+    /** @test */
+    public function it_displays_custom_nama_koperasi_and_alamat_setting_dynamically()
+    {
+        \App\Models\Pengaturan::updateOrCreate(
+            ['key_name' => 'nama_koperasi'],
+            ['value' => 'Koperasi Desa Mulia Abadi']
+        );
+
+        \App\Models\Pengaturan::updateOrCreate(
+            ['key_name' => 'alamat'],
+            ['value' => 'Jl. Melati No 12 Dusun I Desa Sidorejo, Penajam']
+        );
+
+        $response = $this->get('/tentang-kami');
+
+        $response->assertStatus(200);
+        $response->assertSee('Tentang Koperasi Desa Mulia Abadi');
+        $response->assertSee('Koperasi Desa Mulia Abadi');
+        $response->assertSee('Jl. Melati No 12 Dusun I Desa Sidorejo, Penajam');
+    }
 }

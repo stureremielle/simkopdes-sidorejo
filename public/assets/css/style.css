@@ -1203,3 +1203,189 @@ img {
     font-weight: 700;
     line-height: 1.3;
 }
+
+/* ========================================================================
+   9. Pengumuman Section
+   ======================================================================== */
+.pengumuman-section {
+    background-color: var(--white);
+    padding: 40px 0;
+}
+
+.pengumuman-card-wrapper {
+    background-color: var(--white);
+    border: 1.5px solid #FDEAEA;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+}
+
+.pengumuman-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.pengumuman-icon-circle {
+    width: 48px;
+    height: 48px;
+    background-color: var(--primary);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pengumuman-icon-circle svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+}
+
+.pengumuman-title-area {
+    display: flex;
+    flex-direction: column;
+}
+
+.pengumuman-title-text {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.25;
+}
+
+.pengumuman-subtitle-text {
+    font-size: 0.85rem;
+    color: var(--dark-charcoal);
+    opacity: 0.8;
+}
+
+/* Card list container for announcements */
+.pengumuman-list {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.pengumuman-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+    flex-wrap: wrap;
+    background-color: var(--white);
+    gap: 16px 24px;
+}
+
+.pengumuman-item:last-child {
+    border-bottom: none;
+}
+
+.pengumuman-item:hover {
+    background-color: #F8F9FA;
+    /* light gray hover */
+}
+
+.pengumuman-item-date-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark-charcoal);
+    font-weight: 500;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.pengumuman-item-date-area svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--primary);
+    stroke-width: 2;
+    fill: none;
+}
+
+.pengumuman-item-divider {
+    display: none;
+    color: #FDEAEA;
+    margin: 0 20px;
+    font-weight: 300;
+}
+
+.pengumuman-item-title-area {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--slate-dark);
+    flex-grow: 1;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.pengumuman-item-btn-area {
+    flex-shrink: 0;
+    width: 100%;
+    text-align: right;
+}
+
+.pengumuman-btn-link {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition-fast);
+}
+
+.pengumuman-btn-link:hover {
+    color: var(--primary-hover);
+}
+
+.pengumuman-btn-link:hover .arrow {
+    transform: translateX(4px);
+}
+
+.pengumuman-btn-link .arrow {
+    transition: var(--transition-fast);
+    display: inline-block;
+}
+
+.pengumuman-empty {
+    padding: 30px;
+    text-align: center;
+    color: var(--dark-charcoal);
+    font-size: 0.95rem;
+}
+
+/* Breakpoint for tablet and desktop */
+@media (min-width: 768px) {
+    .pengumuman-item {
+        flex-wrap: nowrap;
+    }
+
+    .pengumuman-item-date-area {
+        width: 220px;
+        flex-shrink: 0;
+    }
+
+    .pengumuman-item-divider {
+        display: block;
+    }
+
+    .pengumuman-item-title-area {
+        width: auto;
+        margin: 0;
+    }
+
+    .pengumuman-item-btn-area {
+        width: auto;
+    }
+}

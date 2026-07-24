@@ -1,0 +1,278 @@
+/* Modern Layout Details matching Irjul styles */
+.pill-btn {
+    background-color: transparent;
+    color: #475569;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.pill-btn.active {
+    background-color: #DC2626;
+    /* Red theme active */
+    color: #FFFFFF;
+}
+
+.search-input {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 10px 14px 10px 38px;
+    font-size: 0.88rem;
+    outline: none;
+    width: 220px;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: #DC2626;
+}
+
+.btn-upload-file {
+    background-color: #DC2626;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-upload-file:hover {
+    background-color: #B91C1C;
+}
+
+.file-table-card-wrapper {
+    background-color: #FFFFFF;
+    border-radius: 1rem;
+    /* rounded-2xl */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    /* shadow-sm */
+    border: 1px solid #E2E8F0;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.clean-file-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    table-layout: fixed;
+    min-width: 800px;
+}
+
+.clean-file-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #475569;
+    border-bottom: 2px solid #F1F5F9;
+}
+
+.clean-file-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #F1F5F9;
+    vertical-align: middle;
+    color: #475569;
+}
+
+.clean-file-table tr:last-child td {
+    border-bottom: none;
+}
+
+.clean-file-table tr:hover td {
+    background-color: #FAFAFA;
+}
+
+/* Category badge style: gray pill */
+.category-item-badge {
+    background-color: #F1F5F9;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    display: inline-block;
+}
+
+
+
+/* Modals style */
+.custom-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-overlay.active {
+    display: flex;
+}
+
+.modal-body {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Drag & Drop Zone */
+.drag-drop-zone {
+    border: 2px dashed #CBD5E1;
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.drag-drop-zone svg {
+    color: #94A3B8;
+}
+
+.drag-drop-zone:hover,
+.drag-drop-zone.dragover {
+    border-color: #DC2626;
+    background: #FFF1F2;
+}
+
+.drag-drop-zone:hover svg {
+    color: #DC2626;
+}
+
+.form-row {
+    margin-bottom: 16px;
+}
+
+.form-row label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    outline: none;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    color: #1E293B;
+    transition: border-color 0.2s;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+    border-color: #DC2626;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+    border-top: 1px solid #F1F5F9;
+    padding-top: 16px;
+}
+
+.btn-cancel-custom {
+    background: #FFFFFF;
+    color: #475569;
+    border: 1.5px solid #E2E8F0;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.88rem;
+    transition: background 0.2s;
+}
+
+.btn-cancel-custom:hover {
+    background: #F8FAFC;
+}
+
+.btn-submit-custom {
+    background: #DC2626;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.88rem;
+    transition: background 0.2s;
+}
+
+.btn-submit-custom:hover {
+    background: #B91C1C;
+}
+
+/* Description column expand/collapse styling */
+.desc-cell {
+    cursor: pointer;
+    user-select: none;
+    transition: max-height 0.25s ease;
+}
+
+.desc-cell.collapsed {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.desc-cell.expanded {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: break-word;
+}
+
+/* Date column styling */
+.date-cell {
+    white-space: nowrap;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    font-size: 0.82rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Slightly smaller action icons for Aksi column */
+.clean-file-table .btn-icon-action svg {
+    width: 15px;
+    height: 15px;
+}
+
+.clean-file-table .btn-icon-action {
+    padding: 5px;
+}

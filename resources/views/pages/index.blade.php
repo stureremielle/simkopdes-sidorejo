@@ -28,6 +28,60 @@
         </div>
     </section>
 
+    <!-- Section Pengumuman -->
+    <section id="pengumuman" class="pengumuman-section">
+        <div class="container">
+            <div class="pengumuman-card-wrapper animate-fade-in">
+                <!-- Header Section -->
+                <div class="pengumuman-header">
+                    <div class="pengumuman-icon-circle">
+                        <!-- Megaphone Icon -->
+                        <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </div>
+                    <div class="pengumuman-title-area">
+                        <h2 class="pengumuman-title-text" style="text-align: left; margin: 0; padding: 0;">Pengumuman</h2>
+                        <p class="pengumuman-subtitle-text" style="margin: 3px 0 0 0; padding: 0;">Informasi penting untuk anggota dan masyarakat.</p>
+                    </div>
+                </div>
+
+                <!-- Isi Pengumuman -->
+                <div class="pengumuman-list">
+                    @forelse ($announcements as $announce)
+                        <div class="pengumuman-item">
+                            <!-- [Icon Kalender] Tanggal -->
+                            <div class="pengumuman-item-date-area">
+                                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <span>{{ $announce->tanggal }}</span>
+                            </div>
+                            
+                            <!-- Judul Singkat Pengumuman -->
+                            <div class="pengumuman-item-title-area">
+                                {{ $announce->judul }}
+                            </div>
+                            
+                            <!-- Baca Selengkapnya -->
+                            <div class="pengumuman-item-btn-area">
+                                <a href="{{ route('pengumuman.detail', $announce->id) }}" class="pengumuman-btn-link">
+                                    Baca Selengkapnya <span class="arrow">&rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="pengumuman-empty">Tidak ada pengumuman aktif saat ini.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Mengapa Memilih Koperasi Kami -->
     <section id="pilihan" class="section why-choose-section">
         <div class="container">
@@ -89,7 +143,10 @@
                 <div class="product-card stagger-item">
                     <div class="product-image">
                         @if ($item->gambar_url)
-                            <img src="{{ $item->gambar_url }}" alt="{{ $item->nama }}">
+                            @php
+                                $imgSrc = str_starts_with($item->gambar_url, 'http') ? $item->gambar_url : asset($item->gambar_url);
+                            @endphp
+                            <img src="{{ $imgSrc }}" alt="{{ $item->nama }}">
                         @else
                             <div style="background:#fff1f2;display:flex;align-items:center;justify-content:center;height:100%;min-height:180px;color:#DC2626;font-size:3rem;">📦</div>
                         @endif

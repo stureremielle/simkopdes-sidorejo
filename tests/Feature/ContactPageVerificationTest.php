@@ -32,4 +32,18 @@ class ContactPageVerificationTest extends TestCase
         $response->assertSee('koperasi_test@admin.com');
         $response->assertSee('mailto:koperasi_test@admin.com');
     }
+
+    /** @test */
+    public function it_displays_custom_alamat_setting_dynamically()
+    {
+        Pengaturan::updateOrCreate(
+            ['key_name' => 'alamat'],
+            ['value' => 'Jl. Melati No 12 Dusun I Desa Sidorejo, Penajam']
+        );
+
+        $response = $this->get('/kontak');
+
+        $response->assertStatus(200);
+        $response->assertSee('Jl. Melati No 12 Dusun I Desa Sidorejo, Penajam');
+    }
 }

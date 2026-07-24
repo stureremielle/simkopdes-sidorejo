@@ -5,500 +5,7 @@
 @section('breadcrumb', 'Layanan & Produk')
 
 @section('styles')
-    <style>
-        /* Typography Inheritance */
-        input, select, textarea, button {
-            font-family: inherit;
-        }
-
-        /* 1. Layout Utama & Tabs */
-        .wrapper-tabs {
-            background: #F1F5F9;
-            padding: 4px;
-            border-radius: 0.75rem; /* rounded-xl */
-            display: inline-flex;
-            gap: 4px;
-            margin-bottom: 24px;
-        }
-
-        .tab-button {
-            padding: 8px 16px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: #64748B;
-            border: none;
-            cursor: pointer;
-            background: transparent;
-            border-radius: 0.5rem; /* rounded-lg */
-            transition: all 0.2s ease;
-        }
-
-        .tab-button.active {
-            background: #FFFFFF;
-            color: #DC2626;
-            font-weight: 650;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-block {
-            display: none;
-        }
-
-        .tab-block.active {
-            display: block;
-        }
-
-        /* 2. New Baris Kontrol styles */
-        .controls-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .left-filters {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        /* Search input wrapper with icon */
-        .search-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-wrapper svg {
-            position: absolute;
-            left: 14px;
-            color: #94A3B8;
-            pointer-events: none;
-            width: 16px;
-            height: 16px;
-        }
-
-        .search-wrapper input {
-            padding: 10px 16px 10px 38px;
-            font-size: 0.88rem;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 9999px;
-            outline: none;
-            width: 240px;
-            background-color: #FFFFFF;
-            transition: all 0.2s ease;
-            color: #1E293B;
-            font-family: inherit;
-        }
-
-        .search-wrapper input:focus {
-            border-color: #DC2626;
-        }
-
-        /* Category Select Wrapper with tag/labels icon */
-        .category-select-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .category-select-wrapper select {
-            padding: 10px 32px 10px 38px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: #1E293B;
-            background-color: #FFFFFF;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 9999px;
-            outline: none;
-            cursor: pointer;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            font-family: inherit;
-            transition: all 0.2s ease;
-        }
-
-        .category-select-wrapper select:focus {
-            border-color: #DC2626;
-        }
-
-        .category-select-wrapper .icon-left {
-            position: absolute;
-            left: 14px;
-            color: #64748B;
-            pointer-events: none;
-            width: 16px;
-            height: 16px;
-        }
-
-        .category-select-wrapper .icon-right {
-            position: absolute;
-            right: 14px;
-            color: #64748B;
-            pointer-events: none;
-            width: 12px;
-            height: 12px;
-        }
-
-        /* Status filter pills */
-        .status-pills {
-            display: flex;
-            background-color: #F1F5F9;
-            padding: 4px;
-            border-radius: 9999px;
-            gap: 2px;
-        }
-
-        .status-pill {
-            padding: 6px 16px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #64748B;
-            border: none;
-            cursor: pointer;
-            background: transparent;
-            border-radius: 9999px;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .status-pill.active {
-            background-color: #B91C1C;
-            color: #FFFFFF;
-        }
-
-        .btn-tambah-new {
-            background-color: #B91C1C;
-            color: #FFFFFF;
-            border: none;
-            font-size: 0.88rem;
-            font-weight: 700;
-            padding: 10px 20px;
-            border-radius: 9999px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background-color 0.2s ease;
-            font-family: inherit;
-        }
-
-        .btn-tambah-new:hover {
-            background-color: #991B1B;
-        }
-
-        .btn-tambah {
-            background-color: #DC2626;
-            color: #FFFFFF;
-            border: none;
-            font-size: 0.88rem;
-            font-weight: 600;
-            padding: 10px 18px;
-            border-radius: 8.5px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.2s;
-        }
-
-        .btn-tambah:hover {
-            background-color: #B91C1C;
-        }
-
-        /* 3. Horizontal Scroll Table Container */
-        .table-card-wrapper {
-            background-color: #FFFFFF;
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03); /* shadow-sm */
-            border: 1px solid #E2E8F0;
-            overflow-x: auto;
-            width: 100%;
-            margin-top: 4px;
-        }
-
-        .clean-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .clean-table th:not(:first-child), .clean-table td:not(:first-child) {
-            white-space: nowrap;
-        }
-
-        .clean-table th {
-            padding: 14px 18px;
-            text-align: left;
-            font-weight: 600;
-            color: #64748B; /* Medium gray */
-            font-size: 0.88rem; /* text-sm */
-            border-bottom: 1.5px solid #F1F5F9;
-        }
-
-        .clean-table td {
-            padding: 14px 18px;
-            border-bottom: 1px solid #F1F5F9;
-            vertical-align: middle;
-        }
-
-        .clean-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .clean-table tr:hover td {
-            background-color: #FAFAFA;
-        }
-
-        /* Badge and checkboxes */
-        .kategori-badge {
-            background-color: #FFF1F2; /* light red transparan */
-            color: #BE123C;
-            font-size: 0.75rem; /* text-xs */
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 9999px; /* rounded-full */
-            display: inline-block;
-        }
-
-        .status-badge {
-            background-color: #FFF1F2; /* light red transparan */
-            color: #DC2626;
-            font-size: 0.75rem; /* text-xs */
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 9999px; /* rounded-full */
-            display: inline-block;
-        }
-
-        .status-badge.nonaktif {
-            background-color: #F1F5F9;
-            color: #64748B;
-        }
-
-        /* Custom Unggulan Checkbox styling */
-        .unggulan-box {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border-radius: 4px;
-            border: 1.5px solid #CBD5E1;
-            transition: all 0.2s ease;
-            background-color: #FFFFFF;
-            vertical-align: middle;
-        }
-
-        .unggulan-box.checked {
-            background-color: #DC2626;
-            border-color: #DC2626;
-        }
-
-
-
-        /* Modal Structure */
-        .custom-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.4);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .custom-overlay.active {
-            display: flex;
-        }
-
-        .modal-body {
-            background: #FFFFFF;
-            border-radius: 16px;
-            padding: 24px;
-            width: 90%;
-            max-width: 480px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .form-row {
-            margin-bottom: 16px;
-        }
-
-        .form-row label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-
-        .form-row input, .form-row select, .form-row textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #CBD5E1;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            outline: none;
-            box-sizing: border-box;
-            background-color: #FFFFFF;
-        }
-
-        .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-            border-color: #7F1D1D;
-            background-color: #FFFFFF;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 24px;
-            border-top: 1px solid #F1F5F9;
-            padding-top: 16px;
-        }
-
-        .btn-cancel-custom {
-            flex: 1;
-            background: #FFFFFF;
-            color: #475569;
-            border: 1.5px solid #E2E8F0;
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.88rem;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .btn-cancel-custom:hover {
-            background: #FAFAFA;
-            border-color: #CBD5E1;
-        }
-
-        .btn-submit-custom {
-            flex: 1;
-            background: #DC2626;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.88rem;
-            transition: background 0.2s;
-            text-align: center;
-        }
-
-        .btn-submit-custom:hover {
-            background: #B91C1C;
-        }
-
-        /* Layout Grid Cards for Tab 3 & Tab 2 */
-        .category-card {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #E2E8F0;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
-
-        .featured-item-card {
-            background: #FFFFFF;
-            border-radius: 12px;
-            border: 1.5px solid #F1F5F9;
-            padding: 20px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            box-shadow: none;
-            opacity: 0.7;
-        }
-
-        .featured-item-card:hover {
-            opacity: 0.9;
-            border-color: #CBD5E1;
-        }
-
-        .featured-item-card.active {
-            border: 1.5px solid #DC2626 !important;
-            background: #FFF1F2 !important;
-            opacity: 1 !important;
-        }
-
-        .featured-item-card .item-icon {
-            color: #CBD5E1;
-            transition: color 0.2s;
-        }
-
-        .featured-item-card.active .item-icon {
-            color: #DC2626;
-        }
-
-        .featured-item-card .card-title-text {
-            color: #94A3B8;
-            font-weight: 700;
-            font-size: 0.92rem;
-            margin: 12px 0 3px 0;
-            transition: color 0.2s;
-        }
-
-        .featured-item-card.active .card-title-text {
-            color: #1E293B;
-        }
-
-        .featured-item-card .card-category-text {
-            font-size: 0.8rem;
-            color: #CBD5E1;
-            margin-bottom: 8px;
-            transition: color 0.2s;
-        }
-
-        .featured-item-card.active .card-category-text {
-            color: #64748B;
-        }
-
-        .featured-item-card .card-price-text {
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: #94A3B8;
-            transition: color 0.2s;
-        }
-
-        .featured-item-card.active .card-price-text {
-            color: #DC2626;
-        }
-
-        .featured-item-card .chk-bubble {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: 1.5px solid #E2E8F0;
-            color: transparent;
-            transition: all 0.2s;
-            font-size: 0.72rem;
-            font-weight: 900;
-        }
-
-        .featured-item-card.active .chk-bubble {
-            border-color: #DC2626;
-            color: #DC2626;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/layanan.css') }}?v={{ filemtime(public_path('assets/css/admin/layanan.css')) }}">
 @endsection
 
 @section('content')
@@ -619,7 +126,7 @@
                             <!-- Kolom UNGGULAN: Custom checkbox warna merah jika dicentang -->
                             <td style="text-align: center;">
                                 @php
-                                    $isFeaturedSim = in_array($l->id, [1, 2, 3]);
+                                    $isFeaturedSim = (bool) $l->is_featured;
                                 @endphp
                                 <span id="unggulanBox-{{ $l->id }}" class="unggulan-box {{ $isFeaturedSim ? 'checked' : '' }}" style="cursor: pointer;" onclick="toggleUnggulanFromTable({{ $l->id }})"></span>
                             </td>
@@ -735,18 +242,18 @@
                     <line x1="12" y1="9" x2="12" y2="13"></line>
                     <line x1="12" y1="17" x2="12.01" y2="17"></line>
                 </svg>
-                <span>Pilih maksimal 3 produk untuk ditampilkan di halaman beranda.</span>
+                <span>Pilih maksimal 3 produk untuk ditampilkan di halaman beranda. <em id="featuredSaveStatus" style="font-style: normal; font-size: 0.82rem;"></em></span>
             </div>
-            <span id="activeFeaturedLabel" style="color: #D97706; font-size: 0.88rem; font-weight: 800;">3/3</span>
+            <span id="activeFeaturedLabel" style="color: #D97706; font-size: 0.88rem; font-weight: 800;">0/3</span>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
             @php
-                $featuredSimArray = [1, 2, 3];
+                $featuredIds = $layananList->where('is_featured', true)->pluck('id')->toArray();
             @endphp
             @foreach($layananList as $l)
                 @php
-                    $isFeaturedNode = in_array($l->id, $featuredSimArray);
+                    $isFeaturedNode = (bool) $l->is_featured;
                 @endphp
                 <div class="featured-item-card {{ $isFeaturedNode ? 'active' : '' }}" data-id="{{ $l->id }}" onclick="clickFeaturedCard(this)">
                     <!-- Icon checklist pojok kanan atas -->
@@ -1041,7 +548,10 @@
             }
         }
 
-        // Featured card checklist toggle
+        // Featured card checklist toggle — auto-save via AJAX
+        const featuredSaveUrl = "{{ route('admin.layanan.featured') }}";
+        const featuredCsrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+            || "{{ csrf_token() }}";
         function clickFeaturedCard(card) {
             const isActive = card.classList.contains('active');
             const targetId = card.getAttribute('data-id');
@@ -1063,6 +573,46 @@
             }
 
             document.getElementById('activeFeaturedLabel').textContent = total + '/3';
+            autoSaveFeatured();
+        }
+
+        function autoSaveFeatured() {
+            const ids = [];
+            document.querySelectorAll('.featured-item-card.active').forEach(c => ids.push(c.getAttribute('data-id')));
+
+            const status = document.getElementById('featuredSaveStatus');
+            if (status) { status.textContent = '— Menyimpan...'; status.style.color = '#D97706'; }
+
+            const body = new FormData();
+            body.append('_token', featuredCsrfToken);
+            ids.forEach(id => body.append('featured_ids[]', id));
+
+            fetch(featuredSaveUrl, { method: 'POST', body })
+                .then(res => res.json())
+                .then(data => {
+                    if (status) {
+                        status.textContent = '— ✓ Tersimpan';
+                        status.style.color = '#16A34A';
+                        setTimeout(() => { status.textContent = ''; }, 2500);
+                    }
+                })
+                .catch(() => {
+                    if (status) { status.textContent = '— Gagal menyimpan'; status.style.color = '#EF4444'; }
+                });
+        }
+
+        // Init counter on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const total = document.querySelectorAll('.featured-item-card.active').length;
+            document.getElementById('activeFeaturedLabel').textContent = total + '/3';
+        });
+
+        // Table checkbox clicked toggle handler
+        function toggleUnggulanFromTable(id) {
+            const card = document.querySelector(`.featured-item-card[data-id="${id}"]`);
+            if (card) {
+                clickFeaturedCard(card);
+            }
         }
 
         // Table checkbox clicked toggle handler

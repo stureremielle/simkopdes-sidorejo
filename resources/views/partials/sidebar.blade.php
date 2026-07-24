@@ -56,6 +56,16 @@
                 <span>Data Anggota</span>
             </a>
         </li>
+        <!-- Pengumuman -->
+        <li class="menu-item {{ request()->is('admin/pengumuman*') ? 'active' : '' }}">
+            <a href="{{ route('admin.pengumuman.index') }}" style="{{ request()->is('admin/pengumuman*') ? 'background-color: #B91C1C !important; color: #ffffff !important;' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+                <span>Pengumuman</span>
+            </a>
+        </li>
         <!-- Penyimpanan File -->
         <li class="menu-item {{ request()->is('admin/files*') || request()->is('admin/penyimpanan*') ? 'active' : '' }}">
             <a href="{{ route('admin.penyimpanan') }}" style="{{ request()->is('admin/files*') || request()->is('admin/penyimpanan*') ? 'background-color: #B91C1C !important; color: #ffffff !important;' : '' }}">

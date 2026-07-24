@@ -58,4 +58,81 @@ class RegistrationTest extends TestCase
         // 4. Verify that two anggota exist offline in the database
         $this->assertEquals(2, Anggota::count());
     }
+
+    /** @test */
+    public function it_denies_registration_with_invalid_phone_numbers()
+    {
+        Anggota::truncate();
+
+        // 1. Submit number with non-digits
+        $response = $this->post(route('daftar.store'), [
+            'namaLengkap' => 'Test Phone Alpha',
+            'nikKtp' => '1111222233334444',
+            'jenisKelamin' => 'Laki-Laki',
+            'tempatLahir' => 'Penajam',
+            'tanggalLahir' => '1990-05-15',
+            'alamatLengkap' => 'Jl. Merak No. 5',
+            'rtSelect' => 'RT 06',
+            'dusunSelect' => 'Dusun II',
+            'noHp' => '08123456789a', // Letters!
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Ingin meningkatkan kesejahteraan',
+        ]);
+        $response->assertSessionHasErrors(['noHp']);
+
+        // 2. Submit number not starting with 08
+        $response = $this->post(route('daftar.store'), [
+            'namaLengkap' => 'Test Phone Prefix',
+            'nikKtp' => '1111222233334445',
+            'jenisKelamin' => 'Laki-Laki',
+            'tempatLahir' => 'Penajam',
+            'tanggalLahir' => '1990-05-15',
+            'alamatLengkap' => 'Jl. Merak No. 5',
+            'rtSelect' => 'RT 06',
+            'dusunSelect' => 'Dusun II',
+            'noHp' => '0211234567', // Not 08!
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Ingin meningkatkan kesejahteraan',
+        ]);
+        $response->assertSessionHasErrors(['noHp']);
+
+        // 3. Submit number that is too short
+        $response = $this->post(route('daftar.store'), [
+            'namaLengkap' => 'Test Phone Short',
+            'nikKtp' => '1111222233334446',
+            'jenisKelamin' => 'Laki-Laki',
+            'tempatLahir' => 'Penajam',
+            'tanggalLahir' => '1990-05-15',
+            'alamatLengkap' => 'Jl. Merak No. 5',
+            'rtSelect' => 'RT 06',
+            'dusunSelect' => 'Dusun II',
+            'noHp' => '0812345', // Too short!
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Ingin meningkatkan kesejahteraan',
+        ]);
+        $response->assertSessionHasErrors(['noHp']);
+
+        // 4. Submit NIK with letters
+        $response = $this->post(route('daftar.store'), [
+            'namaLengkap' => 'Test NIK Alpha',
+            'nikKtp' => '111122223333444a', // Letters!
+            'jenisKelamin' => 'Laki-Laki',
+            'tempatLahir' => 'Penajam',
+            'tanggalLahir' => '1990-05-15',
+            'alamatLengkap' => 'Jl. Merak No. 5',
+            'rtSelect' => 'RT 06',
+            'dusunSelect' => 'Dusun II',
+            'noHp' => '081234567890',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Ingin meningkatkan kesejahteraan',
+        ]);
+        $response->assertSessionHasErrors(['nikKtp']);
+
+        // Assert database is empty
+        $this->assertEquals(0, Anggota::count());
+    }
 }

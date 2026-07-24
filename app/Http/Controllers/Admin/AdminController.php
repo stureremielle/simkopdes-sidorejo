@@ -10,6 +10,7 @@ use App\Models\Galeri;
 use App\Models\Berita;
 use App\Models\PenyimpananFile;
 use App\Models\Pengaturan;
+use App\Models\KategoriLayanan;
 
 class AdminController extends Controller
 {
@@ -20,6 +21,10 @@ class AdminController extends Controller
     {
         $totalAnggota = Anggota::where('status', 'diterima')->count();
         $produkAktif  = Layanan::where('status', 'aktif')->count();
+        $kategoriProdukCount = Layanan::where('status', 'aktif')
+            ->whereNotNull('kategori_id')
+            ->distinct()
+            ->count('kategori_id');
         $fotoGaleri   = Galeri::where('status', 'aktif')->count();
 
         // Latest news
@@ -34,6 +39,7 @@ class AdminController extends Controller
         return view('admin.dashboard', compact(
             'totalAnggota',
             'produkAktif',
+            'kategoriProdukCount',
             'fotoGaleri',
             'artikelList',
             'pendaftaranList'
@@ -63,72 +69,6 @@ class AdminController extends Controller
      */
     public function anggota(Request $request)
     {
-        // Auto-seed mockup data if Budi Santoso doesn't exist
-        if (!Anggota::where('nama_lengkap', 'Budi Santoso')->exists()) {
-            // Avoid foreign key check issues if any, delete all
-            Anggota::query()->delete();
-
-            // Seed Budi Santoso
-            Anggota::create([
-                'nama_lengkap' => 'Budi Santoso',
-                'nik' => '6401010101010001',
-                'jenis_kelamin' => 'Laki-Laki',
-                'tempat_lahir' => 'Paser',
-                'tanggal_lahir' => '1990-01-12',
-                'alamat_lengkap' => 'Jl. Melati No. 12',
-                'rt' => 'RT01',
-                'dusun' => 'Dusun I',
-                'no_hp' => '08123456789',
-                'email' => 'budi@gmail.com',
-                'pekerjaan' => 'Petani',
-                'pendidikan' => 'SMA',
-                'motivasi' => 'Ingin mengembangkan usaha pertanian',
-                'jabatan' => 'Anggota',
-                'sumber' => 'Admin',
-                'status' => 'diterima',
-            ]);
-
-            // Seed Siti Rahma
-            Anggota::create([
-                'nama_lengkap' => 'Siti Rahma',
-                'nik' => '6401010101010002',
-                'jenis_kelamin' => 'Perempuan',
-                'tempat_lahir' => 'Penajam',
-                'tanggal_lahir' => '1995-10-15',
-                'alamat_lengkap' => 'RT03 Dusun I',
-                'rt' => 'RT03',
-                'dusun' => 'Dusun I',
-                'no_hp' => '08123456780',
-                'email' => 'rahma@mail.com',
-                'pekerjaan' => 'Pedagang',
-                'pendidikan' => 'SMK',
-                'motivasi' => 'Ingin meminjam modal untuk toko kelontong',
-                'jabatan' => 'Anggota',
-                'sumber' => 'Pendaftaran',
-                'status' => 'diterima',
-            ]);
-
-            // Seed Ahmad Fauzi
-            Anggota::create([
-                'nama_lengkap' => 'Ahmad Fauzi',
-                'nik' => '6401010101010003',
-                'jenis_kelamin' => 'Laki-Laki',
-                'tempat_lahir' => 'Balikpapan',
-                'tanggal_lahir' => '1988-12-05',
-                'alamat_lengkap' => 'RT06 Dusun II',
-                'rt' => 'RT06',
-                'dusun' => 'Dusun II',
-                'no_hp' => '08987654321',
-                'email' => 'fauzi@mail.com',
-                'pekerjaan' => 'Pekebun',
-                'pendidikan' => 'SMP',
-                'motivasi' => 'Meningkatkan hasil panen kelapa sawit',
-                'jabatan' => 'Anggota',
-                'sumber' => 'Pendaftaran',
-                'status' => 'menunggu',
-            ]);
-        }
-
         $status = $request->query('status');
         $search = $request->query('search');
         $jabatan = $request->query('jabatan');
@@ -176,21 +116,24 @@ class AdminController extends Controller
     {
         $request->validate([
             'nama_lengkap' => 'required|string|max:150',
-            'nik' => 'required|string|size:16|unique:anggota,nik',
+            'nik' => ['required', 'string', 'regex:/^[0-9]{16}$/', 'unique:anggota,nik'],
             'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
             'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'alamat_lengkap' => 'required|string|max:255',
             'rt' => 'nullable|string|max:10',
             'dusun' => 'nullable|string|max:50',
-            'no_hp' => 'required|string|max:20',
+            'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,18}$/'],
             'email' => 'nullable|email|max:100',
-            'pekerjaan' => 'nullable|string|max:100',
+            'pekerjaan' => 'nullable|string|max:30',
             'pendidikan' => 'nullable|string|max:20',
             'motivasi' => 'nullable|string',
             'jabatan' => 'required|string|max:50',
             'sumber' => 'required|in:Admin,Pendaftaran',
             'status' => 'required|in:menunggu,diterima,ditolak',
+        ], [
+            'nik.regex' => 'NIK wajib berupa 16 digit angka.',
+            'no_hp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
         ]);
 
         Anggota::create($request->all());
@@ -205,21 +148,24 @@ class AdminController extends Controller
     {
         $request->validate([
             'nama_lengkap' => 'required|string|max:150',
-            'nik' => 'required|string|size:16|unique:anggota,nik,' . $id,
+            'nik' => ['required', 'string', 'regex:/^[0-9]{16}$/', 'unique:anggota,nik,' . $id],
             'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
             'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'alamat_lengkap' => 'required|string|max:255',
             'rt' => 'nullable|string|max:10',
             'dusun' => 'nullable|string|max:50',
-            'no_hp' => 'required|string|max:20',
+            'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,18}$/'],
             'email' => 'nullable|email|max:100',
-            'pekerjaan' => 'nullable|string|max:100',
+            'pekerjaan' => 'nullable|string|max:30',
             'pendidikan' => 'nullable|string|max:20',
             'motivasi' => 'nullable|string',
             'jabatan' => 'required|string|max:50',
             'sumber' => 'required|in:Admin,Pendaftaran',
             'status' => 'required|in:menunggu,diterima,ditolak',
+        ], [
+            'nik.regex' => 'NIK wajib berupa 16 digit angka.',
+            'no_hp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
         ]);
 
         $anggota = Anggota::findOrFail($id);

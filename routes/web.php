@@ -19,6 +19,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/layanan', [HomeController::class, 'layanan'])->name('layanan');
 Route::get('/berita', [HomeController::class, 'berita'])->name('berita');
 Route::get('/berita/{id}', [HomeController::class, 'detailBerita'])->name('berita.detail');
+Route::get('/pengumuman/{id}', [HomeController::class, 'detailPengumuman'])->name('pengumuman.detail');
 Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
 Route::get('/tentang-kami', [HomeController::class, 'tentang'])->name('tentang');
 Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
@@ -46,7 +47,6 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::post('/layanan/toggle/{id}', [\App\Http\Controllers\Admin\LayananController::class, 'toggleStatus'])->name('layanan.toggle');
     Route::put('/layanan/{id}', [\App\Http\Controllers\Admin\LayananController::class, 'update'])->name('layanan.update');
     Route::delete('/layanan/{id}', [\App\Http\Controllers\Admin\LayananController::class, 'destroy'])->name('layanan.destroy');
-
     Route::get('/berita', [\App\Http\Controllers\Admin\BeritaController::class, 'index'])->name('berita');
     Route::get('/berita-artikel', [\App\Http\Controllers\Admin\BeritaController::class, 'index'])->name('berita-artikel');
     Route::post('/berita/kategori', [\App\Http\Controllers\Admin\BeritaController::class, 'storeCategory'])->name('berita.kategori.store');
@@ -68,6 +68,8 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::put('/anggota/{id}', [AdminController::class, 'updateAnggota'])->name('anggota.update');
     Route::delete('/anggota/{id}', [AdminController::class, 'hapusAnggota'])->name('anggota.delete');
 
+    Route::post('/layanan/featured', [\App\Http\Controllers\Admin\LayananController::class, 'saveFeatured'])->name('layanan.featured');
+
     Route::get('/penyimpanan', [\App\Http\Controllers\Admin\PenyimpananController::class, 'index'])->name('penyimpanan');
     Route::post('/penyimpanan/kategori', [\App\Http\Controllers\Admin\PenyimpananController::class, 'storeCategory'])->name('penyimpanan.kategori.store');
     Route::delete('/penyimpanan/kategori/{kategori}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'destroyCategory'])->name('penyimpanan.kategori.destroy');
@@ -75,6 +77,8 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::get('/penyimpanan/download/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'download'])->name('penyimpanan.download');
     Route::put('/penyimpanan/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'update'])->name('penyimpanan.update');
     Route::delete('/penyimpanan/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'destroy'])->name('penyimpanan.destroy');
+
+    Route::resource('pengumuman', \App\Http\Controllers\Admin\PengumumanController::class);
 
     Route::get('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'index'])->name('pengaturan');
     Route::post('/pengaturan', [\App\Http\Controllers\Admin\PengaturanController::class, 'save'])->name('pengaturan.save');

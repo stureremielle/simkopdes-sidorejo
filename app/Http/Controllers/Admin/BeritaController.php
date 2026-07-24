@@ -34,7 +34,7 @@ class BeritaController extends Controller
         }
 
         if ($statusFilter && $statusFilter !== 'semua') {
-            $query->where('status', $statusFilter);
+            $query->where('status', $statusFilter === 'draf' ? 'draft' : $statusFilter);
         }
 
         $beritaList = $query->orderBy('created_at', 'desc')->get();
@@ -93,13 +93,14 @@ class BeritaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:200',
+            'judul' => 'required|string|max:80',
             'kategori' => 'required|string|max:50',
             'isi' => 'required|string',
             'penulis' => 'required|string|max:100',
-            'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:3072',
+            'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:5120',
             'status' => 'required|in:tayang,draft',
             'is_featured' => 'nullable|boolean',
+            'tanggal_publikasi' => 'required|date',
         ]);
 
         $featured = $request->has('is_featured') ? 1 : 0;
@@ -130,6 +131,7 @@ class BeritaController extends Controller
             'gambar_url' => $gambarUrl,
             'status' => $request->status,
             'is_featured' => $featured,
+            'tanggal_publikasi' => $request->tanggal_publikasi,
         ]);
 
         return redirect()->route('admin.berita')->with('success', 'Artikel berhasil ditambahkan.');
@@ -141,13 +143,14 @@ class BeritaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required|string|max:200',
+            'judul' => 'required|string|max:80',
             'kategori' => 'required|string|max:50',
             'isi' => 'required|string',
             'penulis' => 'required|string|max:100',
-            'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:3072',
+            'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:5120',
             'status' => 'required|in:tayang,draft',
             'is_featured' => 'nullable|boolean',
+            'tanggal_publikasi' => 'required|date',
         ]);
 
         $berita = Berita::findOrFail($id);
@@ -186,6 +189,7 @@ class BeritaController extends Controller
             'gambar_url' => $gambarUrl,
             'status' => $request->status,
             'is_featured' => $featured,
+            'tanggal_publikasi' => $request->tanggal_publikasi,
         ]);
 
         return redirect()->route('admin.berita')->with('success', 'Artikel berhasil diperbarui.');

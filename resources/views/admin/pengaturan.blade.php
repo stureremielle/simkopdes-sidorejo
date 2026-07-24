@@ -1,109 +1,10 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
 @section('title', 'Pengaturan - Panel Admin')
+@section('breadcrumb', 'Pengaturan')
 
 @section('styles')
-    <style>
-        .settings-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-        .settings-tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.88rem;
-            color: #64748B;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            background: transparent;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        .settings-tab.active {
-            background: #FFFFFF;
-            border-color: #F1F5F9;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            color: #DC2626;
-            font-weight: 700;
-        }
-        .settings-panel {
-            display: none;
-        }
-        .settings-panel.active {
-            display: block;
-        }
-        .settings-card {
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-        .settings-card h3 {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #0F172A;
-            margin: 0 0 20px;
-        }
-        .s-field {
-            margin-bottom: 16px;
-        }
-        .s-field label {
-            display: block;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: #334155;
-            margin-bottom: 6px;
-        }
-        .s-field input, .s-field textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1.5px solid #F1F5F9;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            outline: none;
-            box-sizing: border-box;
-            background-color: #FAFAFA;
-            color: #1E293B;
-            transition: all 0.2s;
-        }
-        .s-field input:focus, .s-field textarea:focus {
-            border-color: #DC2626;
-            background-color: #FFFFFF;
-        }
-        .btn-save-settings {
-            background: #DC2626;
-            color: white;
-            border: none;
-            padding: 11px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-save-settings:hover {
-            background: #B91C1C;
-        }
-        #mission-list-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        #mission-list-container::-webkit-scrollbar-track {
-            background: #FAFAFA;
-            border-radius: 4px;
-        }
-        #mission-list-container::-webkit-scrollbar-thumb {
-            background: #CBD5E1;
-            border-radius: 4px;
-        }
-        #mission-list-container::-webkit-scrollbar-thumb:hover {
-            background: #94A3B8;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/pengaturan.css') }}?v={{ filemtime(public_path('assets/css/admin/pengaturan.css')) }}">
 @endsection
 
 @section('content')
@@ -230,9 +131,9 @@
 
                 <!-- Mode 2: Input URL -->
                 <div id="hero-url-container" style="display: none;">
-                    <div class="s-field" style="margin: 0;">
-                        <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">URL Gambar</label>
-                        <input type="text" name="hero_url" id="heroUrlInput" placeholder="Masukkan URL gambar landscape..." style="padding: 10px 14px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; width: 100%;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="text" name="hero_url" id="heroUrlInput" placeholder="URL Gambar" style="flex: 1; padding: 12px 16px; border: 1.5px solid #F1F5F9; border-radius: 10px; font-size: 0.9rem; outline: none; background: #FFFFFF; box-sizing: border-box; color: #1E293B;" onfocus="this.style.borderColor='#DC2626'" onblur="this.style.borderColor='#F1F5F9'">
+                        <button type="button" onclick="applyHeroUrl()" style="background: #DC2626; color: #FFFFFF; border: none; padding: 12px 22px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">Terapkan</button>
                     </div>
                 </div>
 
@@ -333,11 +234,12 @@
 
                 <!-- Gunakan URL Container -->
                 <div id="org-url-container" style="display: none;">
-                    <div class="s-field" style="margin: 0;">
-                        <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">URL Gambar Struktur</label>
-                        <input type="text" name="org_url" id="orgUrlInput" placeholder="Masukkan URL gambar bagan struktur..." style="padding: 10px 14px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; width: 100%;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="text" name="org_url" id="orgUrlInput" placeholder="URL Gambar" style="flex: 1; padding: 12px 16px; border: 1.5px solid #F1F5F9; border-radius: 10px; font-size: 0.9rem; outline: none; background: #FFFFFF; box-sizing: border-box; color: #1E293B;" onfocus="this.style.borderColor='#DC2626'" onblur="this.style.borderColor='#F1F5F9'">
+                        <button type="button" onclick="applyOrgUrl()" style="background: #DC2626; color: #FFFFFF; border: none; padding: 12px 22px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">Terapkan</button>
                     </div>
                 </div>
+
 
 
             </div>
@@ -469,6 +371,37 @@
             }
         }
 
+        function applyHeroUrl() {
+            const url = document.getElementById('heroUrlInput').value.trim();
+            if (!url) return;
+
+            const previewBox = document.querySelector('#tab-background div[style*="height: 180px"]');
+            if (!previewBox) return;
+
+            previewBox.innerHTML = `
+                <img src="${url}" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity: 0.9;" onerror="this.parentElement.innerHTML='<div style=\'color:#EF4444;font-size:0.85rem;font-weight:600;padding:8px;\'>URL gambar tidak valid atau tidak dapat dimuat.</div>'">
+                <div style="position: absolute; bottom: 12px; left: 12px; background: rgba(15, 23, 42, 0.7); color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700;">Preview Beranda</div>
+                <button type="button" onclick="clearHeroUrlPreview()" style="position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; background: rgba(15, 23, 42, 0.5); border: none; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;" onmouseover="this.style.background='rgba(15,23,42,0.7)'" onmouseout="this.style.background='rgba(15,23,42,0.5)'">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            `;
+        }
+
+        function clearHeroUrlPreview() {
+            document.getElementById('heroUrlInput').value = '';
+            const previewBox = document.querySelector('#tab-background div[style*="height: 180px"]');
+            if (previewBox) {
+                previewBox.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    <div style="font-weight: 500; color: #94A3B8; font-size: 0.88rem;">Menggunakan foto default</div>
+                `;
+            }
+        }
+
         function switchOrgMode(mode) {
             const btnUpload = document.getElementById('btn-org-upload');
             const btnUrl = document.getElementById('btn-org-url');
@@ -527,6 +460,39 @@
             }
         }
 
+        function applyOrgUrl() {
+            const url = document.getElementById('orgUrlInput').value.trim();
+            if (!url) return;
+
+            // Find or create the preview container inside the preview card
+            const previewBox = document.querySelector('#tab-struktur .settings-panel div[style*="height: 320px"], #tab-struktur div[style*="height: 320px"]');
+            if (!previewBox) return;
+
+            previewBox.innerHTML = `
+                <img src="${url}" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; background: #FFFFFF; opacity: 0.95;" onerror="this.parentElement.innerHTML='<div style=\'color:#EF4444;font-size:0.85rem;font-weight:600;\'>URL gambar tidak valid atau tidak dapat dimuat.</div>'">
+                <div style="position: absolute; bottom: 12px; left: 12px; background: #DC2626; color: #FFFFFF; padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Preview</div>
+                <button type="button" onclick="clearOrgUrlPreview()" style="position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; background: rgba(15, 23, 42, 0.5); border: none; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; z-index: 10;" onmouseover="this.style.background='rgba(15,23,42,0.7)'" onmouseout="this.style.background='rgba(15,23,42,0.5)'">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            `;
+        }
+
+        function clearOrgUrlPreview() {
+            document.getElementById('orgUrlInput').value = '';
+            const previewBox = document.querySelector('#tab-struktur div[style*="height: 320px"]');
+            if (previewBox) {
+                previewBox.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 4px;">
+                        <path d="M12 2v8M12 10a4 4 0 0 0-4 4v8M12 10a4 4 0 0 1 4 4v8"></path>
+                        <circle cx="12" cy="2" r="1" fill="#94A3B8"></circle>
+                        <circle cx="8" cy="22" r="1" fill="#94A3B8"></circle>
+                        <circle cx="16" cy="22" r="1" fill="#94A3B8"></circle>
+                    </svg>
+                    <div style="font-weight: 600; color: #64748B; font-size: 0.9rem;">Belum ada gambar struktur organisasi</div>
+                    <div style="color: #94A3B8; font-size: 0.8rem;">Upload atau gunakan URL di bawah ini</div>
+                `;
+            }
+        }
         // Initialize mission list from PHP. If empty, start with empty array.
         let missionList = [];
         @php

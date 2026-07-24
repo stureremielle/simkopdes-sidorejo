@@ -6,15 +6,23 @@
 @section('title', 'Tentang Kami')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/tentang.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/tentang.css') }}?v={{ time() }}">
 @endsection
 
 @section('content')
     <!-- HERO BANNER SECTION -->
     <section class="about-hero-section">
         <div class="container hero-container">
-            <h1 class="about-hero-title">Tentang Koperasi Desa Merah Putih</h1>
-            <p class="about-hero-subtitle">Badan usaha koperasi berbasis desa yang berdomisili di Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Kecamatan Penajam, Kabupaten Penajam Paser Utara, Provinsi Kalimantan Timur.</p>
+            <h1 class="about-hero-title">Tentang {{ $settings['nama_koperasi'] ?? 'Koperasi Desa Merah Putih' }}</h1>
+            @php
+                $addr = $settings['alamat'] ?? 'Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Kecamatan Penajam, Kabupaten Penajam Paser Utara, Provinsi Kalimantan Timur';
+                if ($addr === 'Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Kec. Penajam, Kab. Penajam Paser Utara, Kalimantan Timur' || $addr === 'Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Kecamatan Penajam, Kabupaten Penajam Paser Utara, Provinsi Kalimantan Timur') {
+                    $formattedAddr = 'Jl. Pariwisata RT 04 Dusun II<br class="desktop-br">Desa Sidorejo, Kecamatan Penajam, Kabupaten Penajam Paser Utara, Provinsi<br class="desktop-br">Kalimantan Timur.';
+                } else {
+                    $formattedAddr = e($addr);
+                }
+            @endphp
+            <p class="about-hero-subtitle">Badan usaha koperasi berbasis desa yang berdomisili di {!! $formattedAddr !!}</p>
         </div>
     </section>
 
@@ -22,8 +30,8 @@
     <section class="about-profile-section">
         <div class="container">
             <div class="profile-card">
-                <h2 class="profile-title">Koperasi Desa Merah Putih Sidorejo</h2>
-                <p class="profile-description">Didirikan oleh dan untuk warga Desa Sidorejo, koperasi ini mengusung semangat gotong royong, kemandirian ekonomi, dan pemberdayaan masyarakat desa sesuai prinsip koperasi Indonesia.</p>
+                <h2 class="profile-title">{{ $settings['nama_koperasi'] ?? 'Koperasi Desa Merah Putih Sidorejo' }}</h2>
+                <p class="profile-description">Didirikan oleh dan untuk warga Desa Sidorejo, koperasi ini mengusung semangat gotong royong, kemandirian<br class="desktop-br">ekonomi, dan pemberdayaan masyarakat desa sesuai prinsip koperasi Indonesia.</p>
             </div>
         </div>
     </section>
@@ -231,7 +239,7 @@
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
                                 </span>
-                                <span class="misi-text-content">Menyelenggarakan pelatihan agribisnis dan UMKM untuk menciptakan sumber daya manusia yang kompeten dan berdaya saing.</span>
+                                <span class="misi-text-content">Menyelenggarakan pelatihan agribisnis dan UMKM untuk menciptakan sumber daya manusia yang kompeten and berdaya saing.</span>
                             </li>
                             <li class="misi-item">
                                 <span class="check-icon-wrapper">
@@ -418,7 +426,7 @@
                             <div class="tree-avatar">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
+                                    <circle cx="9" cy="7" r="4"></circle>
                                 </svg>
                             </div>
                             <div class="node-info">

@@ -4,350 +4,9 @@
 @section('breadcrumb', 'Data anggota')
 
 @section('content')
-    <!-- Styling inline overrides -->
-    <style>
-        .page-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #0F172A;
-        }
-
-        /* 3 Stats Card Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: #FFFFFF;
-            border-radius: 16px;
-            padding: 24px;
-            border: 1.5px solid #F1F5F9;
-            box-shadow: none;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .stat-card-title {
-            font-size: 0.88rem;
-            color: #64748B;
-            font-weight: 600;
-        }
-
-        .stat-card-number {
-            font-size: 2.2rem;
-            font-weight: 800;
-        }
-
-        /* Filter block */
-        .filter-section-wrapper {
-            background-color: #FFFFFF;
-            border-radius: 16px;
-            padding: 20px 24px;
-            border: 1.5px solid #F1F5F9;
-            box-shadow: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-
-        .search-container {
-            position: relative;
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .search-input-field {
-            width: 100%;
-            padding: 10px 14px 10px 42px;
-            border: 1.5px solid #F1F5F9;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            color: #1E293B;
-            outline: none;
-            background-color: #FFFFFF;
-            transition: border-color 0.2s;
-            box-sizing: border-box;
-        }
-
-        .search-input-field:focus {
-            border-color: #DC2626;
-        }
-
-        .filter-dropdown-select {
-            padding: 10px 14px;
-            border: 1.5px solid #F1F5F9;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            color: #1E293B;
-            outline: none;
-            min-width: 140px;
-            background-color: #FFFFFF;
-            cursor: pointer;
-        }
-
-        .filter-dropdown-select:focus {
-            border-color: #DC2626;
-        }
-
-        /* Action buttons styling */
-        .btn-green-action {
-            background-color: #DC2626;
-            color: #FFFFFF;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.88rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background-color 0.2s;
-            text-decoration: none;
-        }
-
-        .btn-green-action:hover {
-            background-color: #B91C1C;
-        }
-
-        .list-table-container {
-            background-color: #FFFFFF;
-            border-radius: 16px;
-            border: 1.5px solid #F1F5F9;
-            box-shadow: none;
-            overflow: hidden;
-        }
-
-        .members-data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.88rem;
-        }
-
-        .members-data-table th {
-            padding: 14px 20px;
-            text-align: left;
-            font-weight: 700;
-            color: #475569;
-            border-bottom: 1.5px solid #F1F5F9;
-            background: #FFFFFF;
-        }
-
-        .members-data-table td {
-            padding: 16px 20px;
-            border-bottom: 1px solid #F1F5F9;
-            vertical-align: middle;
-            color: #475569;
-        }
-
-        .members-data-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .members-data-table tr:hover td {
-            background-color: #FAFAFA;
-        }
-
-        /* Badges styles */
-        .avatar-circle-badge {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #FFFFFF;
-            font-weight: 700;
-            font-size: 0.88rem;
-            flex-shrink: 0;
-        }
-
-        .role-pill-badge {
-            background-color: #F1F5F9;
-            color: #475569;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            display: inline-block;
-        }
-
-        .status-pill-active {
-            background-color: #ECFDF5;
-            color: #10B981;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 999px;
-            display: inline-block;
-        }
-
-        .status-pill-pending {
-            background-color: #FEF3C7;
-            color: #D97706;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 999px;
-            display: inline-block;
-        }
-
-        .status-pill-rejected {
-            background-color: #FEE2E2;
-            color: #EF4444;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 999px;
-            display: inline-block;
-        }
-
-
-
-        /* Modals style */
-        .custom-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.4);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .custom-overlay.active {
-            display: flex;
-        }
-
-        .modal-body {
-            background: #FFFFFF;
-            border-radius: 16px;
-            padding: 24px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-        }
-
-        .modal-section-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #0F172A;
-            margin-top: 24px;
-            margin-bottom: 14px;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .form-row {
-            margin-bottom: 14px;
-        }
-
-        .form-row label {
-            display: block;
-            font-size: 0.88rem;
-            font-weight: 500;
-            color: #1E293B;
-            margin-bottom: 8px;
-        }
-
-        .form-row input, .form-row select, .form-row textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #CBD5E1;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            outline: none;
-            box-sizing: border-box;
-            background-color: #FFFFFF;
-            color: #0F172A;
-            font-family: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-row input::placeholder, .form-row textarea::placeholder {
-            color: #94A3B8;
-        }
-
-        .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-            border-color: #DC2626;
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 24px;
-            border-top: 1px solid #F1F5F9;
-            padding-top: 16px;
-        }
-
-        .btn-cancel-custom {
-            background: #FFFFFF;
-            color: #1E293B;
-            border: 1px solid #CBD5E1;
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.88rem;
-            font-family: inherit;
-            transition: background 0.2s;
-            flex: 1;
-            text-align: center;
-        }
-
-        .btn-cancel-custom:hover {
-            background: #F8FAFC;
-        }
-
-        .btn-submit-custom {
-            background: #DC2626;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.88rem;
-            font-family: inherit;
-            transition: background 0.2s;
-            flex: 1;
-            text-align: center;
-        }
-
-        .btn-submit-custom:hover {
-            background: #B91C1C;
-        }
-
-        /* Detail table representation */
-        .detail-label {
-            font-size: 0.78rem;
-            color: #94A3B8;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-        }
-
-        .detail-val {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #0F172A;
-            margin-bottom: 12px;
-        }
-    </style>
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/anggota.css') }}?v={{ filemtime(public_path('assets/css/admin/anggota.css')) }}">
+@endsection
 
     <!-- Header Section -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
@@ -700,8 +359,6 @@
                                 <option value="RT06">RT06</option>
                                 <option value="RT07">RT07</option>
                                 <option value="RT08">RT08</option>
-                                <option value="RT09">RT09</option>
-                                <option value="RT10">RT10</option>
                             </select>
                         </div>
                         <div class="form-row">
@@ -720,7 +377,7 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
                             <label>No HP</label>
-                            <input type="text" name="no_hp" required placeholder="Contoh: 08123456789">
+                            <input type="tel" name="no_hp" required pattern="08[0-9]{8,18}" title="Nomor HP wajib diawali dengan 08, hanya berisi angka, dan panjang 10-20 digit" placeholder="Contoh: 08123456789">
                         </div>
                         <div class="form-row">
                             <label>Email</label>
@@ -869,8 +526,6 @@
                                 <option value="RT06">RT06</option>
                                 <option value="RT07">RT07</option>
                                 <option value="RT08">RT08</option>
-                                <option value="RT09">RT09</option>
-                                <option value="RT10">RT10</option>
                             </select>
                         </div>
                         <div class="form-row">
@@ -888,7 +543,7 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
                             <label>No HP</label>
-                            <input type="text" name="no_hp" id="editNoHp" required>
+                            <input type="tel" name="no_hp" id="editNoHp" required pattern="08[0-9]{8,18}" title="Nomor HP wajib diawali dengan 08, hanya berisi angka, dan panjang 10-20 digit">
                         </div>
                         <div class="form-row">
                             <label>Email</label>
@@ -1132,6 +787,112 @@
         });
         document.getElementById('hapusModal').addEventListener('click', e => {
             if (e.target === document.getElementById('hapusModal')) closeHapusModal();
+        });
+
+        // Phone number input restriction (numbers only) & 08 prefix custom validation bubble
+        document.addEventListener('DOMContentLoaded', function() {
+            const addNoHp = document.querySelector('#tambahModal input[name="no_hp"]');
+            const editNoHp = document.getElementById('editNoHp');
+            const addNik = document.querySelector('#tambahModal input[name="nik"]');
+            const editNik = document.getElementById('editNikVal');
+
+            function restrictNonDigits(inputEl) {
+                if (!inputEl) return;
+                inputEl.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            }
+
+            function restrictNoHp(inputEl) {
+                if (!inputEl) return;
+                inputEl.addEventListener('input', function() {
+                    let val = this.value.replace(/[^0-9]/g, '');
+                    if (val.length > 0 && val[0] !== '0') {
+                        val = '';
+                    } else if (val.length > 1 && val[1] !== '8') {
+                        val = '0';
+                    }
+                    this.value = val;
+                });
+            }
+
+            restrictNonDigits(addNik);
+            restrictNonDigits(editNik);
+            restrictNoHp(addNoHp);
+            restrictNoHp(editNoHp);
+
+            function validatePhone(inputEl) {
+                if (!inputEl) return true;
+                const val = inputEl.value;
+                if (!/^08[0-9]{8,18}$/.test(val)) {
+                    inputEl.setCustomValidity('Nomor HP wajib diawali dengan 08.');
+                    return false;
+                } else {
+                    inputEl.setCustomValidity('');
+                    return true;
+                }
+            }
+
+            function validateNik(inputEl) {
+                if (!inputEl) return true;
+                const val = inputEl.value;
+                if (val.length !== 16) {
+                    inputEl.setCustomValidity('NIK harus tepat 16 digit angka.');
+                    return false;
+                } else {
+                    inputEl.setCustomValidity('');
+                    return true;
+                }
+            }
+
+            if (addNoHp) {
+                addNoHp.addEventListener('input', () => validatePhone(addNoHp));
+            }
+            if (editNoHp) {
+                editNoHp.addEventListener('input', () => validatePhone(editNoHp));
+            }
+            if (addNik) {
+                addNik.addEventListener('input', () => validateNik(addNik));
+            }
+            if (editNik) {
+                editNik.addEventListener('input', () => validateNik(editNik));
+            }
+
+            const tambahForm = document.querySelector('#tambahModal form');
+            if (tambahForm) {
+                tambahForm.addEventListener('submit', function(e) {
+                    let valid = true;
+                    if (!validatePhone(addNoHp)) {
+                        addNoHp.reportValidity();
+                        valid = false;
+                    }
+                    if (!validateNik(addNik)) {
+                        addNik.reportValidity();
+                        valid = false;
+                    }
+                    if (!valid) {
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            const editForm = document.getElementById('editForm');
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    let valid = true;
+                    if (!validatePhone(editNoHp)) {
+                        editNoHp.reportValidity();
+                        valid = false;
+                    }
+                    if (!validateNik(editNik)) {
+                        editNik.reportValidity();
+                        valid = false;
+                    }
+                    if (!valid) {
+                        e.preventDefault();
+                    }
+                });
+            }
         });
     </script>
 @endsection

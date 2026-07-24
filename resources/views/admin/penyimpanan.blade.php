@@ -5,238 +5,7 @@
 @section('breadcrumb', 'Penyimpanan File')
 
 @section('styles')
-    <style>
-        /* Modern Layout Details matching Irjul styles */
-        .pill-btn {
-            background-color: transparent;
-            color: #475569;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 9999px;
-            cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 700;
-            transition: all 0.2s ease;
-        }
-
-        .pill-btn.active {
-            background-color: #DC2626; /* Red theme active */
-            color: #FFFFFF;
-        }
-
-        .search-input {
-            border: 1px solid #E2E8F0;
-            border-radius: 8px;
-            padding: 10px 14px 10px 38px;
-            font-size: 0.88rem;
-            outline: none;
-            width: 220px;
-            box-sizing: border-box;
-            background: #FFFFFF;
-            transition: border-color 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: #DC2626;
-        }
-
-        .btn-upload-file {
-            background-color: #DC2626;
-            color: #FFFFFF;
-            font-weight: 700;
-            font-size: 0.88rem;
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
-        }
-
-        .btn-upload-file:hover {
-            background-color: #B91C1C;
-        }
-
-        .file-table-card-wrapper {
-            background-color: #FFFFFF;
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03); /* shadow-sm */
-            border: 1px solid #E2E8F0;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .clean-file-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.88rem;
-            table-layout: fixed;
-        }
-
-        .clean-file-table th {
-            padding: 14px 20px;
-            text-align: left;
-            font-weight: 600;
-            color: #475569;
-            border-bottom: 2px solid #F1F5F9;
-        }
-
-        .clean-file-table td {
-            padding: 16px 20px;
-            border-bottom: 1px solid #F1F5F9;
-            vertical-align: middle;
-            color: #475569;
-        }
-
-        .clean-file-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .clean-file-table tr:hover td {
-            background-color: #FAFAFA;
-        }
-
-        /* Category badge style: gray pill */
-        .category-item-badge {
-            background-color: #F1F5F9;
-            color: #475569;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            display: inline-block;
-        }
-
-
-
-        /* Modals style */
-        .custom-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.4);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .custom-overlay.active {
-            display: flex;
-        }
-
-        .modal-body {
-            background: #FFFFFF;
-            border-radius: 16px;
-            padding: 24px;
-            width: 100%;
-            max-width: 520px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-        }
-
-        /* Drag & Drop Zone */
-        .drag-drop-zone {
-            border: 2px dashed #CBD5E1;
-            border-radius: 12px;
-            padding: 24px 16px;
-            text-align: center;
-            background: #FFFFFF;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 20px;
-        }
-
-        .drag-drop-zone svg {
-            color: #94A3B8;
-        }
-
-        .drag-drop-zone:hover, .drag-drop-zone.dragover {
-            border-color: #DC2626;
-            background: #FFF1F2;
-        }
-
-        .drag-drop-zone:hover svg {
-            color: #DC2626;
-        }
-
-        .form-row {
-            margin-bottom: 16px;
-        }
-
-        .form-row label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-
-        .form-row input, .form-row select, .form-row textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            outline: none;
-            box-sizing: border-box;
-            background-color: #FFFFFF;
-            color: #1E293B;
-            transition: border-color 0.2s;
-        }
-
-        .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-            border-color: #DC2626;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 24px;
-            border-top: 1px solid #F1F5F9;
-            padding-top: 16px;
-        }
-
-        .btn-cancel-custom {
-            background: #FFFFFF;
-            color: #475569;
-            border: 1.5px solid #E2E8F0;
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.88rem;
-            transition: background 0.2s;
-        }
-
-        .btn-cancel-custom:hover {
-            background: #F8FAFC;
-        }
-
-        .btn-submit-custom {
-            background: #DC2626;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.88rem;
-            transition: background 0.2s;
-        }
-
-        .btn-submit-custom:hover {
-            background: #B91C1C;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/penyimpanan.css') }}?v={{ filemtime(public_path('assets/css/admin/penyimpanan.css')) }}">
 @endsection
 
 @section('content')
@@ -322,11 +91,11 @@
             <thead>
                 <tr>
                     <th style="width: 30%;">Nama File</th>
-                    <th style="width: 15%;">Kategori</th>
+                    <th style="width: 12%; padding-left: 8px; padding-right: 8px;">Kategori</th>
                     <th style="width: 25%;">Deskripsi</th>
-                    <th style="width: 10%;">Ukuran</th>
-                    <th style="width: 10%;">Tanggal</th>
-                    <th style="text-align: center; width: 10%;">Aksi</th>
+                    <th style="width: 10%; padding-left: 8px; padding-right: 8px;">Ukuran</th>
+                    <th style="width: 10%; padding-left: 8px; padding-right: 8px;">Tanggal</th>
+                    <th style="text-align: center; width: 13%; padding-left: 8px; padding-right: 8px;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="filesTbody">
@@ -364,24 +133,24 @@
                             </span>
                         </td>
                         <!-- Category Badge -->
-                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <td style="white-space: nowrap; padding-left: 8px !important; padding-right: 8px !important;">
                             <span class="category-item-badge">{{ $f->kategori }}</span>
                         </td>
                         <!-- Description -->
-                        <td style="color: #64748B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ $f->keterangan }}">
+                        <td class="desc-cell collapsed" onclick="toggleDesc(this)" style="color: #64748B;" title="{{ $f->keterangan }}">
                             {{ $f->keterangan ?: '-' }}
                         </td>
                         <!-- Format Size standard format -->
-                        <td style="font-weight: 500; color: #1E293B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <td style="font-weight: 500; color: #1E293B; white-space: nowrap; padding-left: 8px !important; padding-right: 8px !important;">
                             {{ \App\Helpers\Helper::formatFileSize($f->ukuran) }}
                         </td>
                         <!-- Formatted Date inside list -->
-                        <td style="color: #64748B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            {{ \Carbon\Carbon::parse($f->uploaded_at)->translatedFormat('M Y') }}
+                        <td class="date-cell" style="color: #64748B;">
+                            {{ \Carbon\Carbon::parse($f->uploaded_at)->translatedFormat('d M Y') }}
                         </td>
                         <!-- Actions -->
-                        <td style="text-align: center; white-space: nowrap;">
-                            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+                        <td style="text-align: center; white-space: nowrap; padding: 16px 4px;">
+                            <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
                                 <!-- Download icon Link -->
                                 <a href="{{ route('admin.penyimpanan.download', $f->id) }}" class="btn-icon-action" title="Download">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -390,9 +159,16 @@
                                         <line x1="12" y1="15" x2="12" y2="3"></line>
                                     </svg>
                                 </a>
+                                <!-- Lihat File (Preview) icon trigger -->
+                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ asset('uploads/' . $f->nama_file) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
                                 <!-- Pencil edit icon trigger -->
                                 <button class="btn-icon-action btn-icon-edit" onclick="openEditModal({{ json_encode($f) }})" title="Edit">
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M12 20h9"></path>
                                         <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                                     </svg>
@@ -621,6 +397,47 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- MODAL 4: PRATINJAU FILE -->
+    <div class="custom-overlay" id="previewModal">
+        <div class="modal-body" style="position: relative; max-width: 800px; width: 90%; max-height: 90vh; display: flex; flex-direction: column; padding: 24px; border-radius: 20px;">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <!-- Eye Icon -->
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <h3 style="font-weight: 800; font-size: 1.2rem; color: #1E293B; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px;" id="previewModalTitle">Pratinjau File</h3>
+                </div>
+                <button onclick="closePreviewModal()" style="background: none; border: none; color: #94A3B8; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; transition: color 0.2s;" onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94A3B8'">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #F8FAFC; border-radius: 12px; border: 1px solid #E2E8F0; min-height: 300px; padding: 12px; box-sizing: border-box;">
+                <img id="previewImage" src="" alt="Pratinjau Gambar" style="max-width: 100%; max-height: 60vh; object-fit: contain; border-radius: 8px; display: none;">
+                <div id="previewFallbackMessage" style="text-align: center; color: #64748B; font-size: 0.95rem; font-weight: 500; display: none;">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 12px; display: block;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span id="previewFallbackText">Pratinjau tidak tersedia untuk format berkas ini. Silakan unduh dokumen untuk melihat.</span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="border-top: 1px solid #F1F5F9; padding-top: 16px; margin-top: 20px; display: flex; justify-content: flex-end; flex-shrink: 0;">
+                <button type="button" onclick="closePreviewModal()" class="btn-cancel-custom" style="padding: 10px 32px; width: auto; flex: none; margin: 0;">Tutup</button>
+            </div>
+>>>>>>> friend-version
         </div>
     </div>
 @endsection
@@ -831,6 +648,9 @@
         document.getElementById('categoriesModal').addEventListener('click', e => {
             if (e.target === document.getElementById('categoriesModal')) closeCategoriesModal();
         });
+        document.getElementById('previewModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('previewModal')) closePreviewModal();
+        });
 
         // Setup Drag & Drop
         const dropZone = document.getElementById('dropZone');
@@ -864,6 +684,43 @@
                 }
             }
             return true;
+        }
+
+        function previewFile(url, fileName) {
+            const ext = fileName.split('.').pop().toLowerCase();
+            const imgExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            
+            if (ext === 'pdf') {
+                window.open(url, '_blank');
+            } else if (imgExtensions.includes(ext)) {
+                // Show Image modal
+                document.getElementById('previewModalTitle').innerText = fileName;
+                const img = document.getElementById('previewImage');
+                img.src = url;
+                img.style.display = 'block';
+                document.getElementById('previewFallbackMessage').style.display = 'none';
+                
+                document.getElementById('previewModal').classList.add('active');
+            } else {
+                // Fallback for unsupported files
+                document.getElementById('previewModalTitle').innerText = fileName;
+                document.getElementById('previewImage').style.display = 'none';
+                document.getElementById('previewFallbackText').innerText = 'Pratinjau tidak tersedia untuk format berkas ini. Silakan unduh dokumen untuk melihat.';
+                document.getElementById('previewFallbackMessage').style.display = 'block';
+                
+                document.getElementById('previewModal').classList.add('active');
+            }
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.remove('active');
+            // Clear image source to avoid loading lag next time
+            document.getElementById('previewImage').src = '';
+        }
+
+        function toggleDesc(el) {
+            el.classList.toggle('collapsed');
+            el.classList.toggle('expanded');
         }
     </script>
 @endsection

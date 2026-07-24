@@ -244,6 +244,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('daftarForm');
     if (!form) return;
 
+    const nikKtpEl = document.getElementById('nikKtp');
+    if (nikKtpEl) {
+        nikKtpEl.addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    const noHpEl = document.getElementById('noHp');
+    if (noHpEl) {
+        noHpEl.addEventListener('input', function () {
+            let val = this.value.replace(/[^0-9]/g, '');
+            if (val.length > 0 && val[0] !== '0') {
+                val = '';
+            } else if (val.length > 1 && val[1] !== '8') {
+                val = '0';
+            }
+            this.value = val;
+        });
+    }
+
     const requiredFields = [
         ['namaLengkap',  'hint-namaLengkap'],
         ['nikKtp',       'hint-nikKtp'],
@@ -264,6 +284,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // NIK khusus: harus tepat 16 karakter
         if (fieldId === 'nikKtp' && !invalid && el.value.trim().length !== 16) {
             invalid = true;
+        }
+        // noHp khusus: harus diawali 08 dan hanya angka
+        if (fieldId === 'noHp' && !invalid) {
+            const val = el.value.trim();
+            if (!/^08[0-9]*$/.test(val)) {
+                invalid = true;
+                hint.textContent = 'Nomor HP harus diawali dengan 08';
+            } else {
+                hint.textContent = 'Wajib diisi';
+            }
         }
         hint.classList.toggle('field-hint-visible', invalid);
         el.classList.toggle('form-input-error', invalid);

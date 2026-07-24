@@ -15,7 +15,67 @@ class PenyimpananController extends Controller
      */
     public function index(Request $request)
     {
-
+        if (PenyimpananFile::count() === 0) {
+            $initialFiles = [
+                [
+                    'nama_file' => 'ad_art_koperasi.pdf',
+                    'nama_asli' => 'AD_ART_Koperasi.pdf',
+                    'kategori' => 'Legalitas',
+                    'ukuran' => 1258291,
+                    'tipe' => 'application/pdf',
+                    'keterangan' => 'Anggaran Dasar & Anggaran Rumah Tangga Koperasi',
+                    'uploaded_at' => '2024-01-15 08:30:00'
+                ],
+                [
+                    'nama_file' => 'laporan_rat_2023.pdf',
+                    'nama_asli' => 'Laporan_RAT_2023.pdf',
+                    'kategori' => 'Laporan',
+                    'ukuran' => 3565158,
+                    'tipe' => 'application/pdf',
+                    'keterangan' => 'Laporan Pertanggungjawaban RAT Buku 2023',
+                    'uploaded_at' => '2023-12-20 14:15:00'
+                ],
+                [
+                    'nama_file' => 'sk_pengurus_2024.pdf',
+                    'nama_asli' => 'SK_Pengurus_2024.pdf',
+                    'kategori' => 'Legalitas',
+                    'ukuran' => 524288,
+                    'tipe' => 'application/pdf',
+                    'keterangan' => 'Surat Keputusan Pengurus 2024',
+                    'uploaded_at' => '2024-01-18 10:00:00'
+                ],
+                [
+                    'nama_file' => 'laporan_keuangan_2023.xlsx',
+                    'nama_asli' => 'Laporan_Keuangan_2023.xlsx',
+                    'kategori' => 'Keuangan',
+                    'ukuran' => 2202009,
+                    'tipe' => 'application/vnd.ms-excel',
+                    'keterangan' => 'Laporan Keuangan Tahunan 2023',
+                    'uploaded_at' => '2023-12-28 16:45:00'
+                ],
+                [
+                    'nama_file' => 'daftar_anggota_2024.pdf',
+                    'nama_asli' => 'Daftar_Anggota_2024.pdf',
+                    'kategori' => 'Keanggotaan',
+                    'ukuran' => 943718,
+                    'tipe' => 'application/pdf',
+                    'keterangan' => 'Daftar Anggota Aktif 2024',
+                    'uploaded_at' => '2024-03-05 11:20:00'
+                ],
+                [
+                    'nama_file' => 'shu_2023.pdf',
+                    'nama_asli' => 'SHU_2023.pdf',
+                    'kategori' => 'Keuangan',
+                    'ukuran' => 1572864,
+                    'tipe' => 'application/pdf',
+                    'keterangan' => 'Rincian Pembagian SHU 2023',
+                    'uploaded_at' => '2024-01-10 09:10:00'
+                ]
+            ];
+            foreach ($initialFiles as $fileData) {
+                PenyimpananFile::create($fileData);
+            }
+        }
 
         $filterKat = $request->query('kat');
 
@@ -90,6 +150,7 @@ class PenyimpananController extends Controller
             $base = pathinfo($originalName, PATHINFO_FILENAME);
             $originalName = substr($base, 0, $limit) . (strlen($ext) ? '.' . $ext : '');
         }
+        
         $size = $file->getSize();
         $mime = $file->getMimeType();
 

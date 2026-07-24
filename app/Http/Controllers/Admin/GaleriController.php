@@ -98,7 +98,7 @@ class GaleriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:200',
+            'judul' => 'required|string|max:50',
             'kategori' => 'required|string|max:50',
             'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // limit 5MB
             'materi_file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240', // limit 10MB
@@ -174,7 +174,7 @@ class GaleriController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required|string|max:200',
+            'judul' => 'required|string|max:50',
             'kategori' => 'required|string|max:50',
             'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'materi_file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',

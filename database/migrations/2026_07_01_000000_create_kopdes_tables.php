@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('dusun', 15)->nullable();
             $table->string('no_hp', 15);
             $table->string('email', 35)->nullable();
-            $table->string('pekerjaan', 50)->nullable();
+            $table->string('pekerjaan', 30)->nullable();
             $table->string('pendidikan', 10)->nullable();
             $table->text('motivasi')->nullable();
             $table->string('jabatan', 30)->default('Anggota');
@@ -45,7 +45,7 @@ return new class extends Migration
         // 3. Table: layanan
         Schema::create('layanan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 100);
+            $table->string('nama', 50);
             $table->string('kategori', 30);
             $table->text('deskripsi')->nullable();
             $table->decimal('harga', 15, 2)->default(0.00);
@@ -58,7 +58,7 @@ return new class extends Migration
         // 4. Table: berita
         Schema::create('berita', function (Blueprint $table) {
             $table->id();
-            $table->string('judul', 150);
+            $table->string('judul', 80);
             $table->string('kategori', 30)->default('Umum');
             $table->text('isi');
             $table->string('penulis', 50)->default('Admin');
@@ -71,7 +71,7 @@ return new class extends Migration
         // 5. Table: galeri
         Schema::create('galeri', function (Blueprint $table) {
             $table->id();
-            $table->string('judul', 100);
+            $table->string('judul', 50);
             $table->string('kategori', 30)->default('Umum');
             $table->string('gambar_url', 255);
             $table->string('materi_url', 255)->nullable();
@@ -83,8 +83,8 @@ return new class extends Migration
         // 6. Table: penyimpanan_file
         Schema::create('penyimpanan_file', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_file', 80);
-            $table->string('nama_asli', 50);
+            $table->string('nama_file', 255);
+            $table->string('nama_asli', 255);
             $table->string('kategori', 30)->default('Umum');
             $table->integer('ukuran')->default(0);
             $table->string('tipe', 80)->nullable();

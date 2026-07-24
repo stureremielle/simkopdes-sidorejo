@@ -17,9 +17,21 @@ class Berita extends Model
         'gambar_url',
         'is_featured',
         'status',
+        'tanggal_publikasi',
     ];
 
     const UPDATED_AT = null; // tabel tidak punya kolom updated_at
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->tanggal_publikasi)) {
+                $model->tanggal_publikasi = date('Y-m-d');
+            }
+        });
+    }
+
 
     public function kategoriRelation()
     {

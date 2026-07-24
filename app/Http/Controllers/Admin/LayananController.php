@@ -61,7 +61,7 @@ class LayananController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:150',
+            'nama' => 'required|string|max:50',
             'kategori' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'harga' => 'nullable|numeric|min:0',
@@ -102,7 +102,7 @@ class LayananController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:150',
+            'nama' => 'required|string|max:50',
             'kategori' => 'required|string|max:50',
             'deskripsi' => 'nullable|string',
             'harga' => 'nullable|numeric|min:0',
@@ -173,6 +173,26 @@ class LayananController extends Controller
         $layanan->delete();
 
         return redirect()->route('admin.layanan')->with('success', 'Layanan berhasil dihapus.');
+    }
+
+    /**
+     * Save featured products for homepage.
+     */
+    public function saveFeatured(Request $request)
+    {
+        $ids = $request->input('featured_ids', []);
+        $ids = array_map('intval', (array) $ids);
+        $ids = array_slice($ids, 0, 3); // max 3
+
+        // Reset all
+        Layanan::query()->update(['is_featured' => false]);
+
+        // Mark selected
+        if (!empty($ids)) {
+            Layanan::whereIn('id', $ids)->update(['is_featured' => true]);
+        }
+
+        return response()->json(['ok' => true]);
     }
 
     /**

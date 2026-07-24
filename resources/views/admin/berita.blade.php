@@ -5,178 +5,7 @@
 @section('breadcrumb', 'Berita & Artikel')
 
 @section('styles')
-    <style>
-        /* 1. Global Font Overrides */
-        input, select, textarea, button {
-            font-family: inherit;
-        }
-        .filter-controls-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .left-filters {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .search-input-wrapper {
-            position: relative;
-            min-width: 240px;
-        }
-        .search-input-wrapper input {
-            width: 100%;
-            padding: 10px 14px 10px 40px;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            outline: none;
-            color: #1E293B;
-            transition: border-color 0.2s;
-        }
-        .search-input-wrapper input:focus {
-            border-color: #CBD5E1;
-        }
-        .search-icon-svg {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            stroke: #94a3b8;
-            stroke-width: 2.2;
-            fill: none;
-        }
-        .status-tabs-pill {
-            display: flex;
-            background: transparent;
-            gap: 8px;
-        }
-        .status-pill-link {
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            font-weight: 550;
-            color: #64748B;
-            text-decoration: none;
-            transition: all 0.2s;
-            background: #FFFFFF;
-            border: 1.5px solid #F1F5F9;
-        }
-        .status-pill-link:hover {
-            background: #F8FAFC;
-            color: #1E293B;
-        }
-        .status-pill-link.active {
-            background: #DC2626 !important;
-            color: #ffffff !important;
-            border-color: #DC2626 !important;
-        }
-        .berita-table-wrapper {
-            border-radius: 12px;
-            border: 1.5px solid #F1F5F9;
-            margin-top: 10px;
-            background: #FFFFFF;
-        }
-        .berita-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-        }
-        .berita-table th {
-            background: #FFFFFF;
-            padding: 11px 14px;
-            font-weight: 600;
-            color: #64748B;
-            border-bottom: 1.5px solid #F1F5F9;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            text-align: left;
-        }
-        .berita-table td {
-            padding: 11px 14px;
-            border-bottom: 1px solid #F1F5F9;
-            vertical-align: middle;
-            color: #475569;
-        }
-        .berita-table tr:last-child td {
-            border-bottom: none;
-        }
-        .berita-table tr:hover td {
-            background: #FAFAFA;
-        }
-        .article-title-text {
-            color: #1a2e24;
-            font-weight: 700;
-            font-size: 0.88rem;
-            text-decoration: none;
-            transition: color 0.15s;
-        }
-        .featured-star {
-            color: #fbbf24;
-            font-size: 1rem;
-            margin-left: 4px;
-        }
-        .badge-pill {
-            font-size: 0.72rem;
-            font-weight: 650;
-            padding: 3px 8px;
-            border-radius: 9999px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .badge-tayang { background: #FFF1F2; color: #DC2626; }
-        .badge-draf { background: #F1F5F9; color: #475569; }
-        .action-columns {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.4); z-index: 1000; align-items: center; justify-content: center;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .form-modal {
-            background: white; border-radius: 16px; padding: 24px; width: 90%; max-width: 520px; max-height: 90vh; overflow-y: auto;
-        }
-        .form-field { margin-bottom: 14px; }
-        .form-field label { display: block; font-size: 0.85rem; font-weight: 550; color: #475569; margin-bottom: 6px; }
-        .form-field input, .form-field select, .form-field textarea {
-            width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; background-color: #FFFFFF;
-        }
-        .form-field textarea { min-height: 120px; resize: vertical; font-family: inherit; }
-        .modal-footer { display: flex; gap: 16px; justify-content: space-between; margin-top: 24px; }
-        .btn-cancel { flex: 1; text-align: center; background: #FFFFFF; color: #1E293B; border: 1.5px solid #E2E8F0; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: all 0.2s; }
-        .btn-cancel:hover { background: #FAFAFA; border-color: #CBD5E1; }
-        .btn-save { flex: 1; text-align: center; background: #B91C1C; color: white; border: none; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: background 0.2s; }
-        .btn-save:hover { background: #991B1B; }
-
-        /* Custom scrollbar for categories list */
-        #categoriesListContainer::-webkit-scrollbar {
-            width: 6px;
-        }
-        #categoriesListContainer::-webkit-scrollbar-track {
-            background: #F1F5F9;
-            border-radius: 8px;
-        }
-        #categoriesListContainer::-webkit-scrollbar-thumb {
-            background: #CBD5E1;
-            border-radius: 8px;
-        }
-        #categoriesListContainer::-webkit-scrollbar-thumb:hover {
-            background: #94A3B8;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/admin/berita.css') }}?v={{ filemtime(public_path('assets/css/admin/berita.css')) }}">
 @endsection
 
 @section('content')
@@ -184,7 +13,7 @@
         <div>
             <h1 class="page-title" style="margin:0; font-size:1.75rem; font-weight:700; color:#1E293B;">Berita &amp; Artikel</h1>
             <div style="font-size:0.88rem; color:#64748B; margin-top:4px; font-weight:500;">
-                {{ $beritaList->where('status', 'tayang')->count() }} tayang &middot; {{ $beritaList->where('status', 'draf')->count() }} draft
+                {{ $beritaList->where('status', 'tayang')->count() }} tayang &middot; {{ $beritaList->where('status', 'draft')->count() }} draft
             </div>
         </div>
         <div style="display:flex; align-items:center; gap:12px;">
@@ -287,7 +116,7 @@
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
-                            <span>{{ \App\Helpers\Helper::formatTanggal($b->created_at) }}</span>
+                            <span>{{ \App\Helpers\Helper::formatTanggal($b->tanggal_publikasi ?? ($b->created_at ? $b->created_at->toDateString() : date('Y-m-d'))) }}</span>
                         </div>
                     </td>
                     <td>
@@ -388,15 +217,9 @@
                         <input type="text" name="penulis" id="fPenulis" required value="Admin" placeholder="Nama penulis" style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none;">
                     </div>
                     <div class="form-field">
-                        <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Tanggal Publikasi</label>
+                        <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Tanggal Publikasi <span style="color: #EF4444;">*</span></label>
                         <div style="position: relative;">
-                            <input type="text" id="fTanggal" readonly value="{{ date('d/m/Y') }}" style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; cursor: default; padding-right: 40px;">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748B; pointer-events: none;">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
+                            <input type="date" name="tanggal_publikasi" id="fTanggal" required style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none;">
                         </div>
                     </div>
                 </div>
@@ -545,7 +368,7 @@
             document.getElementById('fPenulis').value = 'Admin';
             document.getElementById('fKategori').value = categories[0] || '';
             document.getElementById('fExcerpt').value = '';
-            document.getElementById('fTanggal').value = "{{ date('d/m/Y') }}";
+            document.getElementById('fTanggal').value = "{{ date('Y-m-d') }}";
             resetUploadArea();
             document.getElementById('beritaModal').classList.add('active');
         }
@@ -563,24 +386,11 @@
             document.getElementById('fGambar').value = data.gambar_url || '';
             document.getElementById('fStatus').value = data.status;
             
-            if (data.created_at) {
-                const d = new Date(data.created_at);
-                if (!isNaN(d.getTime())) {
-                    const day = String(d.getDate()).padStart(2, '0');
-                    const month = String(d.getMonth() + 1).padStart(2, '0');
-                    const year = d.getFullYear();
-                    document.getElementById('fTanggal').value = `${day}/${month}/${year}`;
-                } else {
-                    const parts = data.created_at.split(' ')[0].split('-');
-                    if (parts.length === 3) {
-                        document.getElementById('fTanggal').value = `${parts[2]}/${parts[1]}/${parts[0]}`;
-                    } else {
-                        document.getElementById('fTanggal').value = "{{ date('d/m/Y') }}";
-                    }
-                }
-            } else {
-                document.getElementById('fTanggal').value = "{{ date('d/m/Y') }}";
+            let pubDate = data.tanggal_publikasi;
+            if (!pubDate && data.created_at) {
+                pubDate = data.created_at.split(' ')[0];
             }
+            document.getElementById('fTanggal').value = pubDate || "{{ date('Y-m-d') }}";
             
             if (data.gambar_url) {
                 setUploadAreaFile(data.gambar_url);
@@ -606,21 +416,16 @@
             const statusSpan = document.getElementById('detStatus');
             
             let formattedDate = 'Baru saja';
-            if (data.created_at) {
-                const d = new Date(data.created_at);
-                if (!isNaN(d.getTime())) {
+            let pubDate = data.tanggal_publikasi;
+            if (!pubDate && data.created_at) {
+                pubDate = data.created_at.split(' ')[0];
+            }
+            if (pubDate) {
+                const parts = pubDate.split('-');
+                if (parts.length === 3) {
                     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
-                    const day = d.getDate();
-                    const monthStr = months[d.getMonth()];
-                    const year = d.getFullYear();
-                    formattedDate = `${day} ${monthStr} ${year}`;
-                } else {
-                    const parts = data.created_at.split(' ')[0].split('-');
-                    if (parts.length === 3) {
-                        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
-                        const mIdx = parseInt(parts[1], 10) - 1;
-                        formattedDate = `${parts[2]} ${months[mIdx]} ${parts[0]}`;
-                    }
+                    const mIdx = parseInt(parts[1], 10) - 1;
+                    formattedDate = `${parseInt(parts[2], 10)} ${months[mIdx]} ${parts[0]}`;
                 }
             }
             document.getElementById('detMeta').textContent = `${data.penulis || 'Admin'} - ${formattedDate}`;

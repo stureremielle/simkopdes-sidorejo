@@ -17,6 +17,7 @@ class Layanan extends Model
         'satuan',
         'gambar_url',
         'status',
+        'is_featured',
     ];
 
     public $timestamps = false;

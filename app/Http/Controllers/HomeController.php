@@ -8,6 +8,7 @@ use App\Models\Layanan;
 use App\Models\Galeri;
 use App\Models\Pengaturan;
 use App\Models\Anggota;
+use App\Models\Pengumuman;
 
 class HomeController extends Controller
 {
@@ -21,13 +22,29 @@ class HomeController extends Controller
             ->where('status', 'tayang')
             ->first();
 
-        // 3 active services
-        $products = Layanan::where('status', 'aktif')
+        // Featured products selected by admin, fallback to 3 latest active
+        $products = Layanan::where('is_featured', true)->where('status', 'aktif')->get();
+        if ($products->isEmpty()) {
+            $products = Layanan::where('status', 'aktif')->orderBy('id', 'desc')->take(3)->get();
+        }
+
+        // Active announcements sorted by latest date (all active data)
+        $announcements = Pengumuman::where('status', 'Aktif')
+            ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
-            ->take(3)
             ->get();
 
-        return view('pages.index', compact('featured', 'products'));
+        return view('pages.index', compact('featured', 'products', 'announcements'));
+    }
+
+    /**
+     * Announcement detail page.
+     */
+    public function detailPengumuman($id)
+    {
+        $pengumuman = Pengumuman::where('status', 'Aktif')->findOrFail($id);
+
+        return view('pages.detail-pengumuman', compact('pengumuman'));
     }
 
     /**
@@ -96,7 +113,7 @@ class HomeController extends Controller
                     $cardImgUrl = 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&fit=crop&q=80';
                 }
                 
-                $formattedDate = \App\Helpers\Helper::formatTanggal($a->created_at);
+                $formattedDate = \App\Helpers\Helper::formatTanggal($a->tanggal_publikasi ?? ($a->created_at ? $a->created_at->toDateString() : date('Y-m-d')));
                 $detailUrl = route('berita.detail', $a->id);
                 
                 $html .= '
@@ -147,7 +164,15 @@ class HomeController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $categories = \App\Models\KategoriGaleri::pluck('nama')->toArray();
+        $activeCategoryIds = Galeri::where('status', 'aktif')
+            ->whereNotNull('kategori_id')
+            ->distinct()
+            ->pluck('kategori_id')
+            ->toArray();
+
+        $categories = \App\Models\KategoriGaleri::whereIn('id', $activeCategoryIds)
+            ->pluck('nama')
+            ->toArray();
         $kategoriList = collect($categories);
 
         return view('pages.galeri', compact('galeriList', 'kategoriList'));
@@ -282,18 +307,21 @@ class HomeController extends Controller
     {
         $request->validate([
             'namaLengkap' => 'required|string|max:150',
-            'nikKtp' => 'required|string|size:16',
+            'nikKtp' => ['required', 'string', 'regex:/^[0-9]{16}$/'],
             'jenisKelamin' => 'required|in:Laki-Laki,Perempuan',
             'tempatLahir' => 'required|string|max:100',
             'tanggalLahir' => 'required|date',
             'alamatLengkap' => 'required|string|max:255',
             'rtSelect' => 'required|string|max:10',
             'dusunSelect' => 'required|string|max:50',
-            'noHp' => 'required|string|max:20',
+            'noHp' => ['required', 'string', 'regex:/^08[0-9]{8,18}$/'],
             'email' => 'nullable|email|max:100',
-            'pekerjaan' => 'required|string|max:100',
+            'pekerjaan' => 'required|string|max:30',
             'pendidikan' => 'required|string|max:20',
             'motivasi' => 'required|string',
+        ], [
+            'nikKtp.regex' => 'NIK wajib berupa 16 digit angka.',
+            'noHp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
         ]);
 
 

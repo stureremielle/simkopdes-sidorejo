@@ -21,7 +21,7 @@
 }
 
 .about-hero-title {
-    font-size: 3.25rem;
+    font-size: 2.5rem;
     font-weight: 800;
     color: var(--white);
     margin-bottom: 20px;
@@ -219,6 +219,10 @@
     .vision-icon-badge svg {
         width: 26px;
         height: 26px;
+    }
+
+    .desktop-br {
+        display: none;
     }
 }
 
