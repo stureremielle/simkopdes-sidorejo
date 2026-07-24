@@ -154,9 +154,9 @@ class PenyimpananController extends Controller
         $size = $file->getSize();
         $mime = $file->getMimeType();
 
-        // Konfigurasi NAS API dari .env
-        $nasUrl = env('NAS_API_URL');
-        $nasKey = env('NAS_API_KEY');
+        // Konfigurasi NAS API dari config
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
 
         try {
             // Kirim file ke REST API NAS (ZTE TV Box) via Multipart Form Data
@@ -224,8 +224,8 @@ class PenyimpananController extends Controller
     {
         $item = PenyimpananFile::findOrFail($id);
         
-        $nasUrl = env('NAS_API_URL');
-        $nasKey = env('NAS_API_KEY');
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
 
         try {
             // Hapus file secara fisik dari server NAS
@@ -253,8 +253,8 @@ class PenyimpananController extends Controller
     {
         $item = PenyimpananFile::findOrFail($id);
 
-        $nasUrl = env('NAS_API_URL');
-        $nasKey = env('NAS_API_KEY');
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
 
         try {
             // Gunakan Guzzle client langsung untuk streaming respon
