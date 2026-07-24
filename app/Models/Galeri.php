@@ -19,6 +19,8 @@ class Galeri extends Model
         'created_at',
     ];
 
+    protected $appends = ['kategori'];
+
     public $timestamps = false;
 
     public function kategoriRelation()
@@ -28,7 +30,7 @@ class Galeri extends Model
 
     public function getKategoriAttribute()
     {
-        return $this->kategoriRelation?->nama ?? '';
+        return $this->kategoriRelation?->nama ?? 'Kegiatan';
     }
 
     public function setKategoriAttribute($value)

@@ -20,6 +20,8 @@ class Layanan extends Model
         'is_featured',
     ];
 
+    protected $appends = ['kategori'];
+
     public $timestamps = false;
 
     public function kategoriRelation()
@@ -29,7 +31,7 @@ class Layanan extends Model
 
     public function getKategoriAttribute()
     {
-        return $this->kategoriRelation?->nama ?? '';
+        return $this->kategoriRelation?->nama ?? 'Lainnya';
     }
 
     public function setKategoriAttribute($value)

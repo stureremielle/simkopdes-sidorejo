@@ -18,6 +18,8 @@ class PenyimpananFile extends Model
         'keterangan',
     ];
 
+    protected $appends = ['kategori'];
+
     const CREATED_AT = 'uploaded_at';
     const UPDATED_AT = null;
 
@@ -28,7 +30,7 @@ class PenyimpananFile extends Model
 
     public function getKategoriAttribute()
     {
-        return $this->kategoriRelation?->nama ?? '';
+        return $this->kategoriRelation?->nama ?? 'Lainnya';
     }
 
     public function setKategoriAttribute($value)

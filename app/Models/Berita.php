@@ -20,6 +20,8 @@ class Berita extends Model
         'tanggal_publikasi',
     ];
 
+    protected $appends = ['kategori'];
+
     const UPDATED_AT = null; // tabel tidak punya kolom updated_at
     protected static function boot()
     {
@@ -40,7 +42,7 @@ class Berita extends Model
 
     public function getKategoriAttribute()
     {
-        return $this->kategoriRelation?->nama ?? '';
+        return $this->kategoriRelation?->nama ?? 'Umum';
     }
 
     public function setKategoriAttribute($value)
