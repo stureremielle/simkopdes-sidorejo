@@ -15,7 +15,7 @@ class Layanan extends Model
         'deskripsi',
         'harga',
         'satuan',
-        'gambar_url',
+        'gambar',
         'status',
         'is_featured',
     ];

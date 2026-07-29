@@ -31,14 +31,14 @@ class GaleriController extends Controller
             $query->where('kategori_id', $matchingCat ? $matchingCat->id : 0);
         }
 
-        $galeriList = $query->orderBy('created_at', 'desc')->get();
+        $galeriList = $query->orderBy('id', 'desc')->get();
 
         // Get unique categories for filter row
         $kategoriList = \App\Models\KategoriGaleri::pluck('nama')->toArray();
 
         // Stats
         $statTotal = Galeri::count();
-        $statHasFile = Galeri::whereNotNull('materi_url')->where('materi_url', '<>', '')->count();
+        $statHasFile = Galeri::whereNotNull('materi')->where('materi', '<>', '')->count();
 
         return view('admin.galeri', compact(
             'galeriList',
@@ -56,7 +56,7 @@ class GaleriController extends Controller
     public function storeCategory(Request $request)
     {
         $request->validate([
-            'kategori' => 'required|string|max:50',
+            'kategori' => 'required|string|max:20',
         ]);
 
         $newCat = trim($request->kategori);
@@ -97,16 +97,44 @@ class GaleriController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'judul' => 'required|string|max:50',
-            'kategori' => 'required|string|max:50',
-            'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // limit 5MB
-            'materi_file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240', // limit 10MB
-            'keterangan' => 'nullable|string',
-            'status' => 'required|in:aktif,nonaktif',
-        ]);
+        $hasMateri = $request->input('has_materi') == '1' || $request->hasFile('materi_file') || $request->filled('keterangan');
 
-        $gambarUrl = '';
+        $rules = [
+            'judul'       => 'required|string|max:50',
+            'kategori'    => 'required|string|max:20',
+            'periode'     => 'required|string',
+            'gambar_file' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:5120',
+            'status'      => 'required|in:aktif,nonaktif',
+        ];
+
+        if ($hasMateri) {
+            $rules['materi_file'] = 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpeg,png,jpg,gif,svg,webp|max:10240';
+            $rules['keterangan']  = 'required|string';
+        } else {
+            $rules['materi_file'] = 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpeg,png,jpg,gif,svg,webp|max:10240';
+            $rules['keterangan']  = 'nullable|string';
+        }
+
+        $messages = [
+            'judul.required'       => 'Judul kegiatan wajib diisi.',
+            'judul.max'            => 'Judul kegiatan maksimal 50 karakter.',
+            'kategori.required'    => 'Kategori wajib dipilih.',
+            'periode.required'     => 'Tanggal kegiatan wajib diisi.',
+            'gambar_file.required' => 'Foto kegiatan wajib diisi.',
+            'gambar_file.image'    => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.mimes'    => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.max'      => 'Ukuran foto maksimal 5 MB.',
+            'materi_file.required' => 'File materi wajib diunggah jika File Materi diaktifkan.',
+            'materi_file.file'     => 'File materi harus berformat PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'materi_file.mimes'    => 'File materi harus berformat PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'materi_file.max'      => 'Ukuran file materi maksimal 10 MB.',
+            'keterangan.required'  => 'Deskripsi file materi wajib diisi jika File Materi diaktifkan.',
+            'status.required'      => 'Status wajib dipilih.',
+        ];
+
+        $request->validate($rules, $messages);
+
+        $gambar = '';
         if ($request->hasFile('gambar_file')) {
             $file = $request->file('gambar_file');
             $safeName = time() . '_img_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $file->getClientOriginalName());
@@ -116,13 +144,10 @@ class GaleriController extends Controller
                 File::makeDirectory($uploadPath, 0755, true, true);
             }
             $file->move($uploadPath, $safeName);
-            $gambarUrl = 'uploads/galeri/' . $safeName;
-        } else {
-            // Fallback default image or empty
-            $gambarUrl = 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&fit=crop&q=80';
+            $gambar = 'uploads/galeri/' . $safeName;
         }
 
-        $materiUrl = null;
+        $materi = null;
         if ($request->hasFile('materi_file')) {
             $file = $request->file('materi_file');
             $safeName = time() . '_doc_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $file->getClientOriginalName());
@@ -132,7 +157,7 @@ class GaleriController extends Controller
                 File::makeDirectory($uploadPath, 0755, true, true);
             }
             $file->move($uploadPath, $safeName);
-            $materiUrl = $safeName; // Just save filename to match 'Notulen_RAT_2024.pdf' style in mockup
+            $materi = $safeName;
         }
 
         $createdAt = now();
@@ -158,8 +183,8 @@ class GaleriController extends Controller
         Galeri::create([
             'judul' => $request->judul,
             'kategori' => $request->kategori,
-            'gambar_url' => $gambarUrl,
-            'materi_url' => $materiUrl,
+            'gambar' => $gambar,
+            'materi' => $materi,
             'keterangan' => $request->keterangan,
             'status' => $request->status,
             'created_at' => $createdAt,
@@ -173,27 +198,66 @@ class GaleriController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'judul' => 'required|string|max:50',
-            'kategori' => 'required|string|max:50',
-            'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'materi_file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
-            'keterangan' => 'nullable|string',
-            'status' => 'required|in:aktif,nonaktif',
-        ]);
-
         $item = Galeri::findOrFail($id);
-        
-        $gambarUrl = $item->gambar_url;
+
+        $hasMateri = $request->input('has_materi') == '1' || $request->hasFile('materi_file') || $request->filled('keterangan');
+        $removeMateri = $request->input('remove_materi') == '1';
+
+        $hasPhoto = $request->hasFile('gambar_file') || ($item->gambar && $request->input('remove_gambar') != '1');
+
+        $rules = [
+            'judul'    => 'required|string|max:50',
+            'kategori' => 'required|string|max:20',
+            'periode'  => 'required|string',
+            'status'   => 'required|in:aktif,nonaktif',
+        ];
+
+        if (!$hasPhoto) {
+            $rules['gambar_file'] = 'required|image|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:5120';
+        } else {
+            $rules['gambar_file'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:5120';
+        }
+
+        if ($hasMateri && !$removeMateri) {
+            if (!$item->materi || $request->hasFile('materi_file')) {
+                $rules['materi_file'] = ($item->materi && !$request->hasFile('materi_file')) ? 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpeg,png,jpg,gif,svg,webp|max:10240' : 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpeg,png,jpg,gif,svg,webp|max:10240';
+            } else {
+                $rules['materi_file'] = 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpeg,png,jpg,gif,svg,webp|max:10240';
+            }
+            $rules['keterangan'] = 'required|string';
+        } else {
+            $rules['materi_file'] = 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpeg,png,jpg,gif,svg,webp|max:10240';
+            $rules['keterangan']  = 'nullable|string';
+        }
+
+        $messages = [
+            'judul.required'       => 'Judul kegiatan wajib diisi.',
+            'judul.max'            => 'Judul kegiatan maksimal 50 karakter.',
+            'kategori.required'    => 'Kategori wajib dipilih.',
+            'periode.required'     => 'Tanggal kegiatan wajib diisi.',
+            'gambar_file.required' => 'Foto kegiatan wajib diisi.',
+            'gambar_file.image'    => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.mimes'    => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.max'      => 'Ukuran foto maksimal 5 MB.',
+            'materi_file.required' => 'File materi wajib diunggah jika File Materi diaktifkan.',
+            'materi_file.file'     => 'File materi harus berformat PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'materi_file.mimes'    => 'File materi harus berformat PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'materi_file.max'      => 'Ukuran file materi maksimal 10 MB.',
+            'keterangan.required'  => 'Deskripsi file materi wajib diisi jika File Materi diaktifkan.',
+            'status.required'      => 'Status wajib dipilih.',
+        ];
+
+        $request->validate($rules, $messages);
+
+        $gambar = $item->gambar;
         if ($request->input('remove_gambar') == '1' && !$request->hasFile('gambar_file')) {
-            $oldPath = public_path($item->gambar_url);
+            $oldPath = public_path($item->gambar);
             if (File::isFile($oldPath)) {
                 File::delete($oldPath);
             }
-            $gambarUrl = 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&fit=crop&q=80';
+            $gambar = '';
         } elseif ($request->hasFile('gambar_file')) {
-            // Delete old file if exists in uploads
-            $oldPath = public_path($item->gambar_url);
+            $oldPath = public_path($item->gambar);
             if (File::isFile($oldPath)) {
                 File::delete($oldPath);
             }
@@ -206,23 +270,23 @@ class GaleriController extends Controller
                 File::makeDirectory($uploadPath, 0755, true, true);
             }
             $file->move($uploadPath, $safeName);
-            $gambarUrl = 'uploads/galeri/' . $safeName;
+            $gambar = 'uploads/galeri/' . $safeName;
         }
 
-        $materiUrl = $item->materi_url;
+        $materi = $item->materi;
         $keterangan = $request->keterangan;
         if ($request->input('remove_materi') == '1' && !$request->hasFile('materi_file')) {
-            if ($item->materi_url) {
-                $oldDocPath = public_path('uploads/galeri/materi/' . $item->materi_url);
+            if ($item->materi) {
+                $oldDocPath = public_path('uploads/galeri/materi/' . $item->materi);
                 if (File::isFile($oldDocPath)) {
                     File::delete($oldDocPath);
                 }
             }
-            $materiUrl = null;
+            $materi = null;
             $keterangan = null;
         } elseif ($request->hasFile('materi_file')) {
-            if ($item->materi_url) {
-                $oldDocPath = public_path('uploads/galeri/materi/' . $item->materi_url);
+            if ($item->materi) {
+                $oldDocPath = public_path('uploads/galeri/materi/' . $item->materi);
                 if (File::isFile($oldDocPath)) {
                     File::delete($oldDocPath);
                 }
@@ -236,16 +300,16 @@ class GaleriController extends Controller
                 File::makeDirectory($uploadPath, 0755, true, true);
             }
             $file->move($uploadPath, $safeName);
-            $materiUrl = $safeName;
+            $materi = $safeName;
         }
 
         $updateData = [
-            'judul' => $request->judul,
-            'kategori' => $request->kategori,
-            'gambar_url' => $gambarUrl,
-            'materi_url' => $materiUrl,
+            'judul'      => $request->judul,
+            'kategori'   => $request->kategori,
+            'gambar'     => $gambar,
+            'materi'     => $materi,
             'keterangan' => $keterangan,
-            'status' => $request->status,
+            'status'     => $request->status,
         ];
 
         $periode = $request->input('periode');
@@ -280,13 +344,13 @@ class GaleriController extends Controller
         $item = Galeri::findOrFail($id);
 
         // Delete physical files
-        $oldPath = public_path($item->gambar_url);
+        $oldPath = public_path($item->gambar);
         if (File::isFile($oldPath)) {
             File::delete($oldPath);
         }
 
-        if ($item->materi_url) {
-            $oldDocPath = public_path('uploads/galeri/materi/' . $item->materi_url);
+        if ($item->materi) {
+            $oldDocPath = public_path('uploads/galeri/materi/' . $item->materi);
             if (File::isFile($oldDocPath)) {
                 File::delete($oldDocPath);
             }

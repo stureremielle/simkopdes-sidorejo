@@ -663,6 +663,11 @@ img {
     font-weight: 700;
     margin-bottom: 12px;
     color: var(--navy-teal);
+    line-height: 1.4;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .product-desc {
@@ -1325,8 +1330,14 @@ img {
     font-weight: 700;
     color: var(--slate-dark);
     flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
     margin: 8px 0;
     width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .pengumuman-item-btn-area {

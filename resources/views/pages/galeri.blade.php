@@ -16,10 +16,9 @@
         $displayCards[] = [
             'judul' => $g->judul,
             'kategori' => $g->kategori,
-            'gambar_url' => str_starts_with($g->gambar_url, 'http') ? $g->gambar_url : asset($g->gambar_url),
+            'gambar' => str_starts_with($g->gambar, 'http') ? $g->gambar : asset($g->gambar),
             'keterangan' => $g->keterangan,
-            'materi' => !empty($g->materi_url),
-            'materi_url' => $g->materi_url,
+            'materi' => $g->materi,
             'tanggal' => \App\Helpers\Helper::formatBulanTahun($g->created_at)
         ];
     }
@@ -53,10 +52,10 @@
                     data-title="{{ $card['judul'] }}"
                     data-date="{{ $card['tanggal'] }}"
                     data-materi="{{ $card['materi'] ? 'true' : 'false' }}"
-                    data-materi-url="{{ $card['materi_url'] ?? '' }}"
+                    data-materi-url="{{ $card['materi'] ?? '' }}"
                     data-desc="{{ $card['keterangan'] }}">
                     <div class="card-media-wrapper">
-                        <img src="{{ $card['gambar_url'] }}" alt="{{ $card['judul'] }}">
+                        <img src="{{ $card['gambar'] }}" alt="{{ $card['judul'] }}">
                         <span class="category-badge">{{ $card['kategori'] }}</span>
                         @if ($card['materi'])
                         <div class="material-badge" title="Tersedia materi">
@@ -116,12 +115,12 @@
                     <span class="category-badge" id="lightboxBadge"></span>
                 </div>
                 <div class="lightbox-info-section">
-                    <h3 class="lightbox-title" id="lightboxTitle"></h3>
+                    <h3 class="lightbox-title" id="lightboxTitle" style="white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word;"></h3>
                     <div class="lightbox-meta">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" class="calendar-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         <span id="lightboxDate"></span>
                     </div>
-                    <div class="lightbox-desc-section" id="lightboxDesc" style="margin-top:15px; font-size:0.95rem; line-height:1.6; color:#475569;">
+                    <div class="lightbox-desc-section" id="lightboxDesc" style="margin-top:15px; font-size:0.95rem; line-height:1.6; color:#475569; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word;">
                     </div>
                     <div class="lightbox-attachment-box" id="downloadArea" style="margin-top:20px;">
                         <div class="attachment-left"><div class="attachment-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div></div>

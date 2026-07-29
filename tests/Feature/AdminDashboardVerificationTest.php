@@ -90,5 +90,51 @@ class AdminDashboardVerificationTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('+2 tahun ini');
         $response->assertSee('2 kategori'); // Only Pertanian and Peternakan are counted!
+
+        // Test Galeri Category count logic
+        \App\Models\Galeri::query()->delete();
+
+        $catG1 = \App\Models\KategoriGaleri::firstOrCreate(['nama' => 'Sosialisasi']);
+        $catG2 = \App\Models\KategoriGaleri::firstOrCreate(['nama' => 'Pelatihan Khusus']);
+
+        // Photo 1 in Sosialisasi
+        $p1 = \App\Models\Galeri::create([
+            'judul' => 'Kegiatan 1',
+            'kategori_id' => $catG1->id,
+            'gambar' => 'test1.jpg',
+            'status' => 'aktif'
+        ]);
+        // Photo 2 also in Sosialisasi (duplicate category)
+        $p2 = \App\Models\Galeri::create([
+            'judul' => 'Kegiatan 2',
+            'kategori_id' => $catG1->id,
+            'gambar' => 'test2.jpg',
+            'status' => 'aktif'
+        ]);
+        // Photo 3 in Pelatihan
+        $p3 = \App\Models\Galeri::create([
+            'judul' => 'Kegiatan 3',
+            'kategori_id' => $catG2->id,
+            'gambar' => 'test3.jpg',
+            'status' => 'aktif'
+        ]);
+
+        // Expect 2 galeri categories
+        $res = $this->get('/admin/dashboard');
+        $res->assertViewHas('kategoriGaleriCount', 2);
+
+        // Delete 1 photo in Sosialisasi (photo 2 still exists in Sosialisasi)
+        $p1->delete();
+
+        // Expect still 2 galeri categories
+        $res2 = $this->get('/admin/dashboard');
+        $res2->assertViewHas('kategoriGaleriCount', 2);
+
+        // Delete photo 2 (no more photos in Sosialisasi)
+        $p2->delete();
+
+        // Expect 1 galeri category (only Pelatihan left)
+        $res3 = $this->get('/admin/dashboard');
+        $res3->assertViewHas('kategoriGaleriCount', 1);
     }
 }

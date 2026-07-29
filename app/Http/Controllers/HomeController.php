@@ -17,9 +17,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Featured news
-        $featured = Berita::where('is_featured', 1)
-            ->where('status', 'tayang')
+        // Featured news: always the latest published article by date
+        $featured = Berita::where('status', 'tayang')
+            ->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')
+            ->orderBy('id', 'desc')
             ->first();
 
         // Featured products selected by admin, fallback to 3 latest active
@@ -60,7 +61,7 @@ class HomeController extends Controller
             $query->where('kategori_id', $matchingCat ? $matchingCat->id : 0);
         }
 
-        $layananList = $query->orderBy('kategori_id')->orderBy('nama')->get();
+        $layananList = $query->orderBy('id', 'desc')->get();
         
         $activeKategoriIds = Layanan::where('status', 'aktif')
             ->distinct()
@@ -80,7 +81,7 @@ class HomeController extends Controller
     public function berita(Request $request)
     {
         $featured = Berita::where('status', 'tayang')
-            ->orderBy('created_at', 'desc')
+            ->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')
             ->orderBy('id', 'desc')
             ->first();
 
@@ -96,7 +97,7 @@ class HomeController extends Controller
             $offset = (int) $request->input('offset', 6);
             $limit = 6;
             
-            $additionalArticles = (clone $query)->orderBy('created_at', 'desc')
+            $additionalArticles = (clone $query)->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')
                 ->orderBy('id', 'desc')
                 ->skip($offset)
                 ->take($limit)
@@ -107,10 +108,10 @@ class HomeController extends Controller
             $html = '';
             foreach ($additionalArticles as $a) {
                 // Card image url
-                $cardImg = $a->gambar_url;
-                $cardImgUrl = \Str::startsWith($cardImg, 'http') ? $cardImg : (\Str::startsWith($cardImg, 'uploads/') || \Str::startsWith($cardImg, 'storage/') || \Str::startsWith($cardImg, '/') ? asset(ltrim($cardImg, '/')) : asset('assets/images/' . $cardImg));
-                if (!$cardImg) {
-                    $cardImgUrl = 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&fit=crop&q=80';
+                $cardGambar = $a->gambar;
+                $cardGambarSrc = '';
+                if ($cardGambar) {
+                    $cardGambarSrc = \Str::startsWith($cardGambar, 'http') ? $cardGambar : (\Str::startsWith($cardGambar, 'uploads/') || \Str::startsWith($cardGambar, 'storage/') || \Str::startsWith($cardGambar, '/') ? asset(ltrim($cardGambar, '/')) : asset('assets/images/' . $cardGambar));
                 }
                 
                 $formattedDate = \App\Helpers\Helper::formatTanggal($a->tanggal_publikasi ?? ($a->created_at ? $a->created_at->toDateString() : date('Y-m-d')));
@@ -119,7 +120,7 @@ class HomeController extends Controller
                 $html .= '
                 <article class="berita-card">
                      <div class="card-img-wrapper">
-                         <img src="' . $cardImgUrl . '" alt="' . e($a->judul) . '">
+                          <img src="' . $cardGambarSrc . '" alt="' . e($a->judul) . '">
                          <span class="card-badge">' . e($a->kategori) . '</span>
                      </div>
                     <div class="card-body">
@@ -143,7 +144,7 @@ class HomeController extends Controller
             ]);
         }
 
-        $artikel = $query->orderBy('created_at', 'desc')->orderBy('id', 'desc')->take(6)->get();
+        $artikel = $query->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')->orderBy('id', 'desc')->take(6)->get();
 
         $badgeColors = [
             'Pertanian' => 'badge-pertanian',
@@ -161,7 +162,7 @@ class HomeController extends Controller
     public function galeri()
     {
         $galeriList = Galeri::where('status', 'aktif')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         $activeCategoryIds = Galeri::where('status', 'aktif')
@@ -306,22 +307,30 @@ class HomeController extends Controller
     public function prosesDaftar(Request $request)
     {
         $request->validate([
-            'namaLengkap' => 'required|string|max:150',
-            'nikKtp' => ['required', 'string', 'regex:/^[0-9]{16}$/'],
+            'namaLengkap' => 'required|string|max:40',
+            'nikKtp' => ['required', 'string', 'regex:/^[0-9]{16}$/', 'unique:anggota,nik'],
             'jenisKelamin' => 'required|in:Laki-Laki,Perempuan',
-            'tempatLahir' => 'required|string|max:100',
+            'tempatLahir' => 'required|string|max:25',
             'tanggalLahir' => 'required|date',
-            'alamatLengkap' => 'required|string|max:255',
-            'rtSelect' => 'required|string|max:10',
-            'dusunSelect' => 'required|string|max:50',
-            'noHp' => ['required', 'string', 'regex:/^08[0-9]{8,18}$/'],
-            'email' => 'nullable|email|max:100',
-            'pekerjaan' => 'required|string|max:30',
-            'pendidikan' => 'required|string|max:20',
+            'alamatLengkap' => 'required|string|max:80',
+            'rtSelect' => 'required|string|max:5',
+            'dusunSelect' => 'required|string|max:8',
+            'noHp' => ['required', 'string', 'starts_with:08', 'regex:/^[0-9]+$/', 'min:10', 'max:15'],
+            'email' => 'nullable|email|max:60',
+            'pekerjaan' => 'required|string|max:20',
+            'pendidikan' => 'required|string|max:10',
             'motivasi' => 'required|string',
         ], [
+            'nikKtp.required' => 'NIK wajib diisi.',
             'nikKtp.regex' => 'NIK wajib berupa 16 digit angka.',
-            'noHp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
+            'nikKtp.unique' => 'NIK sudah terdaftar.',
+            'noHp.required' => 'Nomor HP / WhatsApp wajib diisi.',
+            'noHp.starts_with' => 'Nomor HP / WhatsApp harus diawali dengan angka 08.',
+            'noHp.regex' => 'Nomor HP / WhatsApp hanya boleh berisi angka.',
+            'noHp.min' => 'Nomor HP / WhatsApp harus terdiri dari 10–15 digit.',
+            'noHp.max' => 'Nomor HP / WhatsApp maksimal 15 digit.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 60 karakter.',
         ]);
 
 
@@ -361,7 +370,7 @@ class HomeController extends Controller
 
         // Fetch news background elements
         $featured = Berita::where('status', 'tayang')
-            ->orderBy('created_at', 'desc')
+            ->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')
             ->orderBy('id', 'desc')
             ->first();
 
@@ -369,7 +378,7 @@ class HomeController extends Controller
         if ($featured) {
             $query->where('id', '!=', $featured->id);
         }
-        $artikel = $query->orderBy('created_at', 'desc')->take(6)->get();
+        $artikel = $query->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')->orderBy('id', 'desc')->take(6)->get();
 
         $badgeColors = [
             'Pertanian' => 'badge-pertanian',

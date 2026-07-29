@@ -14,8 +14,7 @@ class Berita extends Model
         'kategori',
         'isi',
         'penulis',
-        'gambar_url',
-        'is_featured',
+        'gambar',
         'status',
         'tanggal_publikasi',
     ];
@@ -23,6 +22,7 @@ class Berita extends Model
     protected $appends = ['kategori'];
 
     const UPDATED_AT = null; // tabel tidak punya kolom updated_at
+
     protected static function boot()
     {
         parent::boot();
@@ -33,7 +33,6 @@ class Berita extends Model
             }
         });
     }
-
 
     public function kategoriRelation()
     {

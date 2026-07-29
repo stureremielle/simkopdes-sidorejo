@@ -97,7 +97,7 @@ class BeritaAndGaleriCategoryTest extends TestCase
             'kategori' => 'Umum',
             'isi' => 'Konten berita.',
             'penulis' => 'Penulis',
-            'gambar_url' => '',
+            'gambar' => '',
             'status' => 'tayang',
         ]);
 
@@ -174,7 +174,7 @@ class BeritaAndGaleriCategoryTest extends TestCase
         Galeri::create([
             'judul' => 'Judul Kegiatan',
             'kategori' => 'Kegiatan',
-            'gambar_url' => '',
+            'gambar' => '',
             'keterangan' => 'Keterangan',
             'status' => 'aktif',
         ]);

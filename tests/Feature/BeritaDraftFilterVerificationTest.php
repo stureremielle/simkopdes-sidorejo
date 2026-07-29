@@ -42,7 +42,7 @@ class BeritaDraftFilterVerificationTest extends TestCase
                 'kategori' => 'Umum',
                 'isi' => 'Konten berita.',
                 'penulis' => 'Penulis',
-                'gambar_url' => '',
+                'gambar' => '',
                 'status' => 'tayang',
             ]);
         }
@@ -53,7 +53,7 @@ class BeritaDraftFilterVerificationTest extends TestCase
                 'kategori' => 'Umum',
                 'isi' => 'Konten berita.',
                 'penulis' => 'Penulis',
-                'gambar_url' => '',
+                'gambar' => '',
                 'status' => 'draft',
             ]);
         }

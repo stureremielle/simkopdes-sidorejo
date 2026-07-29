@@ -15,28 +15,28 @@ return new class extends Migration
         // 1. Table: admin
         Schema::create('admin', function (Blueprint $table) {
             $table->id();
-            $table->string('username', 30)->unique();
-            $table->string('password', 60);
+            $table->string('username', 20)->unique();
+            $table->string('password', 32);
             $table->timestamp('created_at')->useCurrent();
         });
 
         // 2. Table: anggota
         Schema::create('anggota', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_lengkap', 50);
+            $table->string('nama_lengkap', 40);
             $table->char('nik', 16);
             $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
             $table->string('tempat_lahir', 25);
             $table->date('tanggal_lahir');
-            $table->string('alamat_lengkap', 100);
+            $table->string('alamat_lengkap', 80);
             $table->string('rt', 5)->nullable();
-            $table->string('dusun', 15)->nullable();
+            $table->string('dusun', 8)->nullable();
             $table->string('no_hp', 15);
             $table->string('email', 35)->nullable();
-            $table->string('pekerjaan', 30)->nullable();
+            $table->string('pekerjaan', 20)->nullable();
             $table->string('pendidikan', 10)->nullable();
             $table->text('motivasi')->nullable();
-            $table->string('jabatan', 30)->default('Anggota');
+            $table->string('jabatan', 20)->default('Anggota');
             $table->string('sumber', 15)->default('Pendaftaran');
             $table->enum('status', ['menunggu', 'diterima', 'ditolak'])->default('menunggu');
             $table->timestamp('created_at')->useCurrent();
@@ -61,7 +61,7 @@ return new class extends Migration
             $table->string('judul', 80);
             $table->string('kategori', 30)->default('Umum');
             $table->text('isi');
-            $table->string('penulis', 50)->default('Admin');
+            $table->string('penulis', 20)->default('Admin');
             $table->string('gambar_url', 255)->nullable();
             $table->boolean('is_featured')->default(false);
             $table->enum('status', ['tayang', 'draft'])->default('tayang');
@@ -131,7 +131,7 @@ return new class extends Migration
                 'tanggal_lahir' => '1992-08-20',
                 'alamat_lengkap' => 'Jl. Kupu No. 3',
                 'rt' => 'RT 07',
-                'dusun' => 'Dusun III',
+                'dusun' => 'Dusun II',
                 'no_hp' => '089876543210',
                 'email' => 'rina@mail.com',
                 'pekerjaan' => 'Pedagang',

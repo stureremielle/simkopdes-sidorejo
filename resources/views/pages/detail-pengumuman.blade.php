@@ -63,10 +63,10 @@
                     </div>
 
                     {{-- Title --}}
-                    <h1 class="modal-article-title">{{ $pengumuman->judul }}</h1>
+                    <h1 class="modal-article-title" style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">{{ $pengumuman->judul }}</h1>
 
                     {{-- HTML Body content --}}
-                    <div class="detail-body">
+                    <div class="detail-body" style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
                         {!! $pengumuman->isi !!}
                     </div>
 

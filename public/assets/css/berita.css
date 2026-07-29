@@ -138,6 +138,11 @@
     color: #111111;
     margin-bottom: 14px;
     line-height: 1.3;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -282,6 +287,11 @@
     color: #111111;
     margin-bottom: 10px;
     line-height: 1.4;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 /* On hover — article title turns green (as seen in mockup for Lokakarya card) */

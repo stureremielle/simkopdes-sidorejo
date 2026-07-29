@@ -63,7 +63,7 @@
             <div class="space-y-2">
                 <label for="username" class="block text-sm font-bold text-gray-700 tracking-wide">Username</label>
                 <div class="relative">
-                    <input type="text" id="username" name="username" placeholder="admin" required value="{{ old('username') }}"
+                    <input type="text" id="username" name="username" placeholder="admin" required maxlength="20" value="{{ old('username') }}"
                         class="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#DC2626] focus:bg-white focus:ring-4 focus:ring-[#DC2626]/10 text-gray-700 transition-all placeholder-gray-400 font-medium">
                 </div>
             </div>

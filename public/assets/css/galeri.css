@@ -283,6 +283,10 @@
     flex-direction: column;
     flex-grow: 1;
     text-align: left;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 .gallery-card .card-title {
@@ -292,6 +296,11 @@
     /* Bold, black */
     line-height: 1.35;
     margin-bottom: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 .card-footer-bottom {
@@ -487,6 +496,9 @@
     background-color: var(--white);
     display: flex;
     flex-direction: column;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 @media (max-width: 576px) {
@@ -502,6 +514,23 @@
     /* Large, bold, high-contrast black text */
     line-height: 1.25;
     margin-bottom: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+.lightbox-desc-section {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #475569;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 @media (max-width: 576px) {

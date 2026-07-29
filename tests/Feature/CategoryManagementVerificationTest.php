@@ -117,7 +117,7 @@ class CategoryManagementVerificationTest extends TestCase
             'deskripsi' => 'Padi berkualitas',
             'harga' => 15000,
             'satuan' => 'kg',
-            'gambar_url' => '',
+            'gambar' => '',
             'status' => 'aktif'
         ]);
 

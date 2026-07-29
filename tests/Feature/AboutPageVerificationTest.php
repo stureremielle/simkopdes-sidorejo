@@ -28,6 +28,9 @@ class AboutPageVerificationTest extends TestCase
             'rt' => 'RT 01',
             'dusun' => 'Dusun I',
             'no_hp' => '081234567890',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Motivasi',
             'status' => 'diterima',
         ]);
 
@@ -41,6 +44,9 @@ class AboutPageVerificationTest extends TestCase
             'rt' => 'RT 04',
             'dusun' => 'Dusun II',
             'no_hp' => '089876543210',
+            'pekerjaan' => 'Pedagang',
+            'pendidikan' => 'D3',
+            'motivasi' => 'Motivasi',
             'status' => 'diterima',
         ]);
 
@@ -55,6 +61,9 @@ class AboutPageVerificationTest extends TestCase
             'rt' => 'RT 01',
             'dusun' => 'Dusun I',
             'no_hp' => '081234567891',
+            'pekerjaan' => 'Swasta',
+            'pendidikan' => 'S1',
+            'motivasi' => 'Motivasi',
             'status' => 'menunggu',
         ]);
 
@@ -69,6 +78,9 @@ class AboutPageVerificationTest extends TestCase
             'rt' => 'RT01',
             'dusun' => 'DI', // Alternate dusun format
             'no_hp' => '081234567892',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Motivasi',
             'status' => 'diterima',
         ]);
 

@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('penyimpanan_file', function (Blueprint $table) {
-            $table->string('nama_file', 80)->change();
-            $table->string('nama_asli', 50)->change();
+            $table->string('nama_file', 255)->change();
+            $table->string('nama_asli', 255)->change();
         });
     }
 };

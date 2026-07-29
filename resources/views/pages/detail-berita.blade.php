@@ -26,14 +26,12 @@
                 <div class="container">
                     <div class="featured-card">
                         <div class="featured-img-wrapper">
-                            @if ($featured->gambar_url)
+                            @if ($featured->gambar)
                                 @php
-                                    $featImg = $featured->gambar_url;
-                                    $featImgUrl = Str::startsWith($featImg, 'http') ? $featImg : (Str::startsWith($featImg, 'uploads/') || Str::startsWith($featImg, 'storage/') || Str::startsWith($featImg, '/') ? asset(ltrim($featImg, '/')) : asset('assets/images/' . $featImg));
+                                    $featGambar = $featured->gambar;
+                                    $featGambarSrc = Str::startsWith($featGambar, 'http') ? $featGambar : (Str::startsWith($featGambar, 'uploads/') || Str::startsWith($featGambar, 'storage/') || Str::startsWith($featGambar, '/') ? asset(ltrim($featGambar, '/')) : asset('assets/images/' . $featGambar));
                                 @endphp
-                                <img src="{{ $featImgUrl }}" alt="{{ $featured->judul }}">
-                            @else
-                                <img src="https://images.unsplash.com/photo-1508962914676-134849a727f0?q=80&w=650" alt="{{ $featured->judul }}">
+                                <img src="{{ $featGambarSrc }}" alt="{{ $featured->judul }}">
                             @endif
                             <span class="featured-badge">PILIHAN</span>
                         </div>
@@ -70,14 +68,12 @@
                         @foreach ($artikel as $a)
                             <article class="berita-card">
                                  <div class="card-img-wrapper">
-                                     @if ($a->gambar_url)
+                                     @if ($a->gambar)
                                          @php
-                                             $cardImg = $a->gambar_url;
-                                             $cardImgUrl = Str::startsWith($cardImg, 'http') ? $cardImg : (Str::startsWith($cardImg, 'uploads/') || Str::startsWith($cardImg, 'storage/') || Str::startsWith($cardImg, '/') ? asset(ltrim($cardImg, '/')) : asset('assets/images/' . $cardImg));
+                                             $cardGambar = $a->gambar;
+                                             $cardGambarSrc = Str::startsWith($cardGambar, 'http') ? $cardGambar : (Str::startsWith($cardGambar, 'uploads/') || Str::startsWith($cardGambar, 'storage/') || Str::startsWith($cardGambar, '/') ? asset(ltrim($cardGambar, '/')) : asset('assets/images/' . $cardGambar));
                                          @endphp
-                                         <img src="{{ $cardImgUrl }}" alt="{{ $a->judul }}">
-                                     @else
-                                         <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&fit=crop&q=80" alt="{{ $a->judul }}">
+                                         <img src="{{ $cardGambarSrc }}" alt="{{ $a->judul }}">
                                      @endif
                                      <span class="card-badge">{{ $a->kategori }}</span>
                                  </div>
@@ -109,14 +105,12 @@
 
                 {{-- Image Banner area with overlay close button and category --}}
                 <div class="modal-hero-banner">
-                    @if ($berita->gambar_url)
+                    @if ($berita->gambar)
                         @php
-                            $bannerImg = $berita->gambar_url;
-                            $bannerImgUrl = Str::startsWith($bannerImg, 'http') ? $bannerImg : (Str::startsWith($bannerImg, 'uploads/') || Str::startsWith($bannerImg, 'storage/') || Str::startsWith($bannerImg, '/') ? asset(ltrim($bannerImg, '/')) : asset('assets/images/' . $bannerImg));
+                            $bannerImg = $berita->gambar;
+                            $bannerImgSrc = Str::startsWith($bannerImg, 'http') ? $bannerImg : (Str::startsWith($bannerImg, 'uploads/') || Str::startsWith($bannerImg, 'storage/') || Str::startsWith($bannerImg, '/') ? asset(ltrim($bannerImg, '/')) : asset('assets/images/' . $bannerImg));
                         @endphp
-                        <img src="{{ $bannerImgUrl }}" alt="{{ $berita->judul }}">
-                    @else
-                        <img src="https://images.unsplash.com/photo-1508962914676-134849a727f0?q=80&w=1200" alt="{{ $berita->judul }}">
+                        <img src="{{ $bannerImgSrc }}" alt="{{ $berita->judul }}">
                     @endif
 
                     {{-- Coral Category Badge --}}

@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Koperasi Desa Merah Putih Sidorejo')
 
@@ -8,7 +8,7 @@
         $heroBgUrl = $heroBg ? (str_starts_with($heroBg, 'http') ? $heroBg : asset('uploads/' . $heroBg)) : '';
     @endphp
     <!-- Hero Section -->
-    <section id="home" class="hero-section" @if($heroBgUrl) style="background-image: linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.32)), url('{{ $heroBgUrl }}');" @endif>
+    <section id="home" class="hero-section" style="background-image: @if($heroBgUrl) linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.32)), url('{{ $heroBgUrl }}') @else none @endif;">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1 class="hero-title" id="heroHeading">
@@ -63,7 +63,7 @@
                             </div>
                             
                             <!-- Judul Singkat Pengumuman -->
-                            <div class="pengumuman-item-title-area">
+                            <div class="pengumuman-item-title-area" style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; min-width: 0;">
                                 {{ $announce->judul }}
                             </div>
                             
@@ -142,9 +142,9 @@
                 @forelse ($products as $item)
                 <div class="product-card stagger-item">
                     <div class="product-image">
-                        @if ($item->gambar_url)
+                        @if ($item->gambar)
                             @php
-                                $imgSrc = str_starts_with($item->gambar_url, 'http') ? $item->gambar_url : asset($item->gambar_url);
+                                $imgSrc = str_starts_with($item->gambar, 'http') ? $item->gambar : asset($item->gambar);
                             @endphp
                             <img src="{{ $imgSrc }}" alt="{{ $item->nama }}">
                         @else
@@ -152,7 +152,7 @@
                         @endif
                     </div>
                     <div class="product-content">
-                        <h3 class="product-title">{{ $item->nama }}</h3>
+                        <h3 class="product-title" style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; line-height: 1.4;">{{ $item->nama }}</h3>
                         <p class="product-desc">{{ Str::limit($item->deskripsi, 80) }}</p>
                         <a href="{{ route('layanan') }}" class="product-link">
                             Lihat detail

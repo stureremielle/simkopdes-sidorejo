@@ -82,15 +82,19 @@
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label for="namaLengkap" class="form-label">Nama Lengkap <span class="required">*</span></label>
-                                <input type="text" id="namaLengkap" name="namaLengkap" class="form-input" placeholder="Sesuai KTP" required value="{{ old('namaLengkap') }}">
+                                <input type="text" id="namaLengkap" name="namaLengkap" class="form-input" placeholder="Sesuai KTP" required maxlength="40" value="{{ old('namaLengkap') }}">
                                 <span class="field-hint" id="hint-namaLengkap">Wajib diisi</span>
                             </div>
                         </div>
                         <div class="form-row split-row">
                             <div class="form-group">
                                 <label for="nikKtp" class="form-label">NIK (KTP) <span class="required">*</span></label>
-                                <input type="text" id="nikKtp" name="nikKtp" class="form-input" placeholder="16 digit" maxlength="16" required value="{{ old('nikKtp') }}">
-                                <span class="field-hint" id="hint-nikKtp">Wajib diisi / harus 16 digit</span>
+                                <input type="text" id="nikKtp" name="nikKtp" class="form-input @error('nikKtp') form-input-error @enderror" placeholder="16 digit" maxlength="16" required value="{{ old('nikKtp') }}">
+                                @error('nikKtp')
+                                    <span class="field-hint field-hint-visible" id="hint-nikKtp" style="color:#EF4444;font-weight:600;">{{ $message }}</span>
+                                @else
+                                    <span class="field-hint" id="hint-nikKtp">Wajib diisi / harus 16 digit</span>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="jenisKelamin" class="form-label">Jenis Kelamin <span class="required">*</span></label>
@@ -108,7 +112,7 @@
                         <div class="form-row split-row">
                             <div class="form-group">
                                 <label for="tempatLahir" class="form-label">Tempat Lahir <span class="required">*</span></label>
-                                <input type="text" id="tempatLahir" name="tempatLahir" class="form-input" placeholder="Kota/Kabupaten" required value="{{ old('tempatLahir') }}">
+                                <input type="text" id="tempatLahir" name="tempatLahir" class="form-input" placeholder="Kota/Kabupaten" required maxlength="25" value="{{ old('tempatLahir') }}">
                                 <span class="field-hint" id="hint-tempatLahir">Wajib diisi</span>
                             </div>
                             <div class="form-group">
@@ -131,7 +135,7 @@
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label for="alamatLengkap" class="form-label">Alamat Lengkap <span class="required">*</span></label>
-                                <input type="text" id="alamatLengkap" name="alamatLengkap" class="form-input" placeholder="Nama jalan / blok / nomor rumah" required value="{{ old('alamatLengkap') }}">
+                                <input type="text" id="alamatLengkap" name="alamatLengkap" class="form-input" placeholder="Nama jalan / blok / nomor rumah" required maxlength="80" value="{{ old('alamatLengkap') }}">
                                 <span class="field-hint" id="hint-alamatLengkap">Wajib diisi</span>
                             </div>
                         </div>
@@ -174,12 +178,13 @@
                         <div class="form-row split-row">
                             <div class="form-group">
                                 <label for="noHp" class="form-label">No. HP / WhatsApp <span class="required">*</span></label>
-                                <input type="tel" id="noHp" name="noHp" class="form-input" placeholder="08xxxxxxxxxx" required value="{{ old('noHp') }}">
-                                <span class="field-hint" id="hint-noHp">Wajib diisi</span>
+                                <input type="tel" id="noHp" name="noHp" class="form-input @error('noHp') form-input-error @enderror" placeholder="08xxxxxxxxxx" required maxlength="15" value="{{ old('noHp') }}">
+                                <span class="field-hint @error('noHp') field-hint-visible @enderror" id="hint-noHp">@error('noHp') {{ $message }} @else Wajib diisi @enderror</span>
                             </div>
                             <div class="form-group">
-                                <label for="email" class="form-label">Email (opsional)</label>
-                                <input type="email" id="email" name="email" class="form-input" placeholder="contoh@email.com" value="{{ old('email') }}">
+                                <label for="email" class="form-label">Email (Opsional)</label>
+                                <input type="email" id="email" name="email" class="form-input @error('email') form-input-error @enderror" maxlength="60" placeholder="contoh@email.com" value="{{ old('email') }}">
+                                <span class="field-hint @error('email') field-hint-visible @enderror" id="hint-email">@error('email') {{ $message }} @enderror</span>
                             </div>
                         </div>
                     </div>
@@ -192,13 +197,14 @@
                         </div>
                         <div class="form-row split-row">
                             <div class="form-group">
-                                <label for="pekerjaan" class="form-label">Pekerjaan</label>
-                                <input type="text" id="pekerjaan" name="pekerjaan" class="form-input" placeholder="Petani, Pedagang, dll." value="{{ old('pekerjaan') }}">
+                                <label for="pekerjaan" class="form-label">Pekerjaan <span class="required">*</span></label>
+                                <input type="text" id="pekerjaan" name="pekerjaan" class="form-input" placeholder="Petani, Pedagang, dll." required maxlength="20" value="{{ old('pekerjaan') }}">
+                                <span class="field-hint" id="hint-pekerjaan">Wajib diisi</span>
                             </div>
                             <div class="form-group">
-                                <label for="pendidikan" class="form-label">Pendidikan Terakhir</label>
+                                <label for="pendidikan" class="form-label">Pendidikan Terakhir <span class="required">*</span></label>
                                 <div class="select-input-wrapper">
-                                    <select id="pendidikan" name="pendidikan" class="form-input form-select">
+                                    <select id="pendidikan" name="pendidikan" class="form-input form-select" required>
                                         <option value="" disabled {{ empty(old('pendidikan')) ? 'selected' : '' }}>— Pilih —</option>
                                         @foreach (['SD','SMP','SMA/SMK','D3','S1','S2/S3'] as $p)
                                             <option value="{{ $p }}" {{ old('pendidikan') === $p ? 'selected' : '' }}>{{ $p }}</option>
@@ -206,6 +212,7 @@
                                     </select>
                                     <svg class="select-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </div>
+                                <span class="field-hint" id="hint-pendidikan">Wajib dipilih</span>
                             </div>
                         </div>
                     </div>
@@ -218,8 +225,9 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group full-width">
-                                <label for="motivasi" class="form-label">Motivasi Bergabung</label>
-                                <textarea id="motivasi" name="motivasi" class="form-input form-textarea" rows="4" placeholder="Ceritakan alasan Anda ingin bergabung dengan koperasi...">{{ old('motivasi') }}</textarea>
+                                <label for="motivasi" class="form-label">Motivasi Bergabung <span class="required">*</span></label>
+                                <textarea id="motivasi" name="motivasi" class="form-input form-textarea" rows="4" placeholder="Ceritakan alasan Anda ingin bergabung dengan koperasi..." required>{{ old('motivasi') }}</textarea>
+                                <span class="field-hint" id="hint-motivasi">Wajib diisi</span>
                             </div>
                         </div>
                     </div>
@@ -274,6 +282,9 @@ document.addEventListener('DOMContentLoaded', function () {
         ['rtSelect',     'hint-rtSelect'],
         ['dusunSelect',  'hint-dusunSelect'],
         ['noHp',         'hint-noHp'],
+        ['pekerjaan',    'hint-pekerjaan'],
+        ['pendidikan',   'hint-pendidikan'],
+        ['motivasi',     'hint-motivasi'],
     ];
 
     function validate(fieldId, hintId) {
@@ -285,12 +296,24 @@ document.addEventListener('DOMContentLoaded', function () {
         if (fieldId === 'nikKtp' && !invalid && el.value.trim().length !== 16) {
             invalid = true;
         }
-        // noHp khusus: harus diawali 08 dan hanya angka
+        // noHp khusus: harus diawali 08, hanya angka, dan panjang 10-15 digit
         if (fieldId === 'noHp' && !invalid) {
             const val = el.value.trim();
-            if (!/^08[0-9]*$/.test(val)) {
+            if (val === '') {
                 invalid = true;
-                hint.textContent = 'Nomor HP harus diawali dengan 08';
+                hint.textContent = 'Nomor HP / WhatsApp wajib diisi.';
+            } else if (!val.startsWith('08')) {
+                invalid = true;
+                hint.textContent = 'Nomor HP / WhatsApp harus diawali dengan angka 08.';
+            } else if (!/^[0-9]+$/.test(val)) {
+                invalid = true;
+                hint.textContent = 'Nomor HP / WhatsApp hanya boleh berisi angka.';
+            } else if (val.length > 15) {
+                invalid = true;
+                hint.textContent = 'Nomor HP / WhatsApp maksimal 15 digit.';
+            } else if (val.length < 10) {
+                invalid = true;
+                hint.textContent = 'Nomor HP / WhatsApp harus terdiri dari 10–15 digit.';
             } else {
                 hint.textContent = 'Wajib diisi';
             }
@@ -298,6 +321,35 @@ document.addEventListener('DOMContentLoaded', function () {
         hint.classList.toggle('field-hint-visible', invalid);
         el.classList.toggle('form-input-error', invalid);
         return !invalid;
+    }
+
+    function validateEmail() {
+        const el = document.getElementById('email');
+        const hint = document.getElementById('hint-email');
+        if (!el || !hint) return true;
+        const val = el.value.trim();
+        let invalid = false;
+
+        if (val !== '') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(val)) {
+                invalid = true;
+                hint.textContent = 'Format email tidak valid.';
+            } else if (val.length > 60) {
+                invalid = true;
+                hint.textContent = 'Email maksimal 60 karakter.';
+            }
+        }
+
+        hint.classList.toggle('field-hint-visible', invalid);
+        el.classList.toggle('form-input-error', invalid);
+        return !invalid;
+    }
+
+    const emailEl = document.getElementById('email');
+    if (emailEl) {
+        emailEl.addEventListener('input', validateEmail);
+        emailEl.addEventListener('change', validateEmail);
     }
 
     requiredFields.forEach(([fId, hId]) => {
@@ -312,6 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
         requiredFields.forEach(([fId, hId]) => {
             if (!validate(fId, hId)) valid = false;
         });
+        if (!validateEmail()) valid = false;
         if (!valid) e.preventDefault();
     });
 });

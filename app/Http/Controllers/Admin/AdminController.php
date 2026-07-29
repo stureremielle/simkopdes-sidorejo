@@ -26,6 +26,10 @@ class AdminController extends Controller
             ->distinct()
             ->count('kategori_id');
         $fotoGaleri   = Galeri::where('status', 'aktif')->count();
+        $kategoriGaleriCount = Galeri::where('status', 'aktif')
+            ->whereNotNull('kategori_id')
+            ->distinct()
+            ->count('kategori_id');
 
         // Latest news
         $artikelList = Berita::orderBy('created_at', 'desc')->take(5)->get();
@@ -41,6 +45,7 @@ class AdminController extends Controller
             'produkAktif',
             'kategoriProdukCount',
             'fotoGaleri',
+            'kategoriGaleriCount',
             'artikelList',
             'pendaftaranList'
         ));
@@ -114,27 +119,50 @@ class AdminController extends Controller
      */
     public function simpanAnggota(Request $request)
     {
+        $messages = [
+            'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
+            'nama_lengkap.max' => 'Nama lengkap maksimal 40 karakter.',
+            'nik.required' => 'NIK wajib diisi.',
+            'nik.regex' => 'NIK wajib berupa 16 digit angka.',
+            'nik.unique' => 'NIK sudah terdaftar.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'tempat_lahir.required' => 'Tempat lahir wajib diisi.',
+            'tempat_lahir.max' => 'Tempat lahir maksimal 25 karakter.',
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'alamat_lengkap.required' => 'Alamat lengkap wajib diisi.',
+            'alamat_lengkap.max' => 'Alamat lengkap maksimal 80 karakter.',
+            'rt.required' => 'RT wajib dipilih.',
+            'dusun.required' => 'Dusun wajib dipilih.',
+            'no_hp.required' => 'Nomor HP / WhatsApp wajib diisi.',
+            'no_hp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 60 karakter.',
+            'pekerjaan.required' => 'Pekerjaan wajib diisi.',
+            'pekerjaan.max' => 'Pekerjaan maksimal 20 karakter.',
+            'pendidikan.required' => 'Pendidikan terakhir wajib dipilih.',
+            'motivasi.required' => 'Motivasi bergabung wajib diisi.',
+            'jabatan.required' => 'Jabatan wajib dipilih.',
+            'status.required' => 'Status keanggotaan wajib dipilih.',
+        ];
+
         $request->validate([
-            'nama_lengkap' => 'required|string|max:150',
+            'nama_lengkap' => 'required|string|max:40',
             'nik' => ['required', 'string', 'regex:/^[0-9]{16}$/', 'unique:anggota,nik'],
             'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
-            'tempat_lahir' => 'required|string|max:100',
+            'tempat_lahir' => 'required|string|max:25',
             'tanggal_lahir' => 'required|date',
-            'alamat_lengkap' => 'required|string|max:255',
-            'rt' => 'nullable|string|max:10',
-            'dusun' => 'nullable|string|max:50',
-            'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,18}$/'],
-            'email' => 'nullable|email|max:100',
-            'pekerjaan' => 'nullable|string|max:30',
-            'pendidikan' => 'nullable|string|max:20',
-            'motivasi' => 'nullable|string',
-            'jabatan' => 'required|string|max:50',
+            'alamat_lengkap' => 'required|string|max:80',
+            'rt' => 'required|string|max:5',
+            'dusun' => 'required|string|max:8',
+            'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,13}$/'],
+            'email' => 'nullable|email|max:60',
+            'pekerjaan' => 'required|string|max:20',
+            'pendidikan' => 'required|string|max:10',
+            'motivasi' => 'required|string',
+            'jabatan' => 'required|string|max:20',
             'sumber' => 'required|in:Admin,Pendaftaran',
             'status' => 'required|in:menunggu,diterima,ditolak',
-        ], [
-            'nik.regex' => 'NIK wajib berupa 16 digit angka.',
-            'no_hp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
-        ]);
+        ], $messages);
 
         Anggota::create($request->all());
 
@@ -146,27 +174,50 @@ class AdminController extends Controller
      */
     public function updateAnggota(Request $request, $id)
     {
+        $messages = [
+            'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
+            'nama_lengkap.max' => 'Nama lengkap maksimal 40 karakter.',
+            'nik.required' => 'NIK wajib diisi.',
+            'nik.regex' => 'NIK wajib berupa 16 digit angka.',
+            'nik.unique' => 'NIK sudah terdaftar.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'tempat_lahir.required' => 'Tempat lahir wajib diisi.',
+            'tempat_lahir.max' => 'Tempat lahir maksimal 25 karakter.',
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'alamat_lengkap.required' => 'Alamat lengkap wajib diisi.',
+            'alamat_lengkap.max' => 'Alamat lengkap maksimal 80 karakter.',
+            'rt.required' => 'RT wajib dipilih.',
+            'dusun.required' => 'Dusun wajib dipilih.',
+            'no_hp.required' => 'Nomor HP / WhatsApp wajib diisi.',
+            'no_hp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 60 karakter.',
+            'pekerjaan.required' => 'Pekerjaan wajib diisi.',
+            'pekerjaan.max' => 'Pekerjaan maksimal 20 karakter.',
+            'pendidikan.required' => 'Pendidikan terakhir wajib dipilih.',
+            'motivasi.required' => 'Motivasi bergabung wajib diisi.',
+            'jabatan.required' => 'Jabatan wajib dipilih.',
+            'status.required' => 'Status keanggotaan wajib dipilih.',
+        ];
+
         $request->validate([
-            'nama_lengkap' => 'required|string|max:150',
+            'nama_lengkap' => 'required|string|max:40',
             'nik' => ['required', 'string', 'regex:/^[0-9]{16}$/', 'unique:anggota,nik,' . $id],
             'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
-            'tempat_lahir' => 'required|string|max:100',
+            'tempat_lahir' => 'required|string|max:25',
             'tanggal_lahir' => 'required|date',
-            'alamat_lengkap' => 'required|string|max:255',
-            'rt' => 'nullable|string|max:10',
-            'dusun' => 'nullable|string|max:50',
-            'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,18}$/'],
-            'email' => 'nullable|email|max:100',
-            'pekerjaan' => 'nullable|string|max:30',
-            'pendidikan' => 'nullable|string|max:20',
-            'motivasi' => 'nullable|string',
-            'jabatan' => 'required|string|max:50',
+            'alamat_lengkap' => 'required|string|max:80',
+            'rt' => 'required|string|max:5',
+            'dusun' => 'required|string|max:8',
+            'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,13}$/'],
+            'email' => 'nullable|email|max:60',
+            'pekerjaan' => 'required|string|max:20',
+            'pendidikan' => 'required|string|max:10',
+            'motivasi' => 'required|string',
+            'jabatan' => 'required|string|max:20',
             'sumber' => 'required|in:Admin,Pendaftaran',
             'status' => 'required|in:menunggu,diterima,ditolak',
-        ], [
-            'nik.regex' => 'NIK wajib berupa 16 digit angka.',
-            'no_hp.regex' => 'Nomor HP / WhatsApp wajib diawali dengan 08 dan hanya boleh berisi angka.',
-        ]);
+        ], $messages);
 
         $anggota = Anggota::findOrFail($id);
         $anggota->update($request->all());

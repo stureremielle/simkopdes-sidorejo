@@ -153,17 +153,36 @@
     color: #0F172A;
     line-height: 1.35;
     margin: 0 0 16px 0;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .detail-body {
     font-size: 0.95rem;
     line-height: 1.7;
     color: #334155;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
-.detail-body p {
-    margin-top: 0;
-    margin-bottom: 16px;
+.detail-body p,
+.detail-body div,
+.detail-body span,
+.detail-body h1,
+.detail-body h2,
+.detail-body h3,
+.detail-body h4,
+.detail-body h5,
+.detail-body h6,
+.detail-body li {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
 }
 
 .modal-share-bar {

@@ -40,7 +40,6 @@
             </div>
         @endif
     </div>
-
     <!-- 1. Header Section -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div>
@@ -110,7 +109,7 @@
                 <tr>
                     <th style="width: 30%;">Nama File</th>
                     <th style="width: 12%; padding-left: 8px; padding-right: 8px;">Kategori</th>
-                    <th style="width: 25%;">Deskripsi</th>
+                    <th style="width: 25%;">Keterangan</th>
                     <th style="width: 10%; padding-left: 8px; padding-right: 8px;">Ukuran</th>
                     <th style="width: 10%; padding-left: 8px; padding-right: 8px;">Tanggal</th>
                     <th style="text-align: center; width: 13%; padding-left: 8px; padding-right: 8px;">Aksi</th>
@@ -123,10 +122,10 @@
                     @endphp
                     <tr class="file-row" data-nama="{{ strtolower($f->nama_asli) }}">
                         <!-- File type specific icon + name -->
-                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            <span style="display: inline-flex; align-items: center; gap: 10px; max-width: 100%;">
+                        <td style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+                            <span style="display: inline-flex; align-items: flex-start; gap: 10px; max-width: 100%;">
                                 @if ($ext === 'pdf')
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -134,7 +133,7 @@
                                         <polyline points="10 9 9 9 8 9"></polyline>
                                     </svg>
                                 @elseif (in_array($ext, ['xlsx', 'xls']))
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                         <line x1="8" y1="13" x2="16" y2="13"></line>
@@ -142,12 +141,12 @@
                                         <line x1="8" y1="9" x2="10" y2="9"></line>
                                     </svg>
                                 @else
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                     </svg>
                                 @endif
-                                <span style="font-weight: 700; color: #1E293B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ $f->nama_asli }}">{{ $f->nama_asli }}</span>
+                                <span style="font-weight: 700; color: #1E293B; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;" title="{{ $f->nama_asli }}">{{ $f->nama_asli }}</span>
                             </span>
                         </td>
                         <!-- Category Badge -->
@@ -155,7 +154,7 @@
                             <span class="category-item-badge">{{ $f->kategori }}</span>
                         </td>
                         <!-- Description -->
-                        <td class="desc-cell collapsed" onclick="toggleDesc(this)" style="color: #64748B;" title="{{ $f->keterangan }}">
+                        <td class="desc-cell" style="color: #64748B; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;" title="{{ $f->keterangan }}">
                             {{ $f->keterangan ?: '-' }}
                         </td>
                         <!-- Format Size standard format -->
@@ -170,15 +169,15 @@
                         <td style="text-align: center; white-space: nowrap; padding: 16px 4px;">
                             <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
                                 <!-- Download icon Link -->
-                                <a href="{{ route('admin.penyimpanan.download', $f->id) }}" class="btn-icon-action" title="Download">
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <a href="{{ asset('uploads/' . $f->nama_file) }}" download="{{ $f->nama_asli }}" class="btn-icon-action" title="Download">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="7 10 12 15 17 10"></polyline>
                                         <line x1="12" y1="15" x2="12" y2="3"></line>
                                     </svg>
                                 </a>
                                 <!-- Lihat File (Preview) icon trigger -->
-                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ route('admin.penyimpanan.preview', $f->id) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
+                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ asset('uploads/' . $f->nama_file) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
@@ -191,13 +190,17 @@
                                         <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                                     </svg>
                                 </button>
-                                <!-- Custom delete button -->
-                                <a href="javascript:void(0)" class="btn-icon-action btn-icon-delete" onclick="openDeleteModal('{{ route('admin.penyimpanan.destroy', $f->id) }}', '{{ addslashes($f->nama_asli) }}')" title="Hapus" style="text-decoration: none;">
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- Trash delete form trigger -->
+                                <button type="button" class="btn-icon-action btn-icon-delete" onclick="openHapusModal({{ $f->id }}, '{{ addslashes($f->nama_asli) }}')" title="Hapus">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="3 6 5 6 21 6"></polyline>
                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                     </svg>
-                                </a>
+                                </button>
+                                <form id="deleteForm-{{ $f->id }}" method="POST" action="{{ route('admin.penyimpanan.destroy', $f->id) }}" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -227,30 +230,36 @@
             
             <form method="POST" action="{{ route('admin.penyimpanan.upload') }}" enctype="multipart/form-data" onsubmit="return validatePenyimpananUploadForm(this)" style="margin: 0; display: flex; flex-direction: column; gap: 16px;">
                 @csrf
-                <div class="drag-drop-zone" onclick="document.getElementById('fileUploadInput').click()" id="dropZone" style="border: 2px dashed #CBD5E1; border-radius: 12px; padding: 24px 16px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; margin: 0;">
-                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <div style="font-weight: 600; color: #64748B; font-size: 0.88rem; margin-top: 4px;">Klik atau seret file ke sini</div>
-                    <div style="color: #94A3B8; font-size: 0.78rem;">PDF, XLSX, DOCX, dsb.</div>
-                    
-                    <input type="file" name="file_upload" id="fileUploadInput" required style="display: none;" onchange="handleFileUploadChange(this)">
-                    
-                    <input type="text" name="nama_file" id="namaFileDragInput" placeholder="Nama file (mis. dokumen.pdf)" 
-                           onclick="event.stopPropagation();" 
-                           onmousedown="event.stopPropagation();" 
-                           onmouseup="event.stopPropagation();" 
-                           onpointerdown="event.stopPropagation();" 
-                           onpointerup="event.stopPropagation();" 
-                           style="margin-top: 12px; display: inline-block; width: 90%; padding: 8px 12px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.88rem; outline: none; background: #FFFFFF; text-align: left; box-sizing: border-box; text-overflow: ellipsis; overflow: hidden;">
+                <div class="form-row" style="margin: 0;">
+                    <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">File <span style="color: #EF4444;">*</span></label>
+                    <div class="drag-drop-zone" onclick="document.getElementById('fileUploadInput').click()" id="dropZone" style="border: 2px dashed #CBD5E1; border-radius: 12px; padding: 24px 16px; text-align: center; background: #FFFFFF; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; margin: 0;">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <div style="font-weight: 600; color: #64748B; font-size: 0.88rem; margin-top: 4px;">Klik atau seret file ke sini</div>
+                        <div style="color: #94A3B8; font-size: 0.78rem;">PDF, DOCX, XLSX, JPG, PNG, dsb.</div>
+                        
+                        <input type="file" name="file_upload" id="fileUploadInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.webp" required style="display: none;" onchange="handleFileUploadChange(this)">
+                        
+                        <input type="text" name="nama_file" id="namaFileDragInput" placeholder="Nama file (mis. dokumen.pdf)" 
+                               maxlength="150"
+                               onclick="event.stopPropagation();" 
+                               onmousedown="event.stopPropagation();" 
+                               onmouseup="event.stopPropagation();" 
+                               onpointerdown="event.stopPropagation();" 
+                               onpointerup="event.stopPropagation();" 
+                               style="margin-top: 12px; display: inline-block; width: 90%; padding: 8px 12px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.88rem; outline: none; background: #FFFFFF; text-align: left; box-sizing: border-box; text-overflow: ellipsis; overflow: hidden;">
+                    </div>
+                    <span class="js-error-msg" id="error-file_upload" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('file_upload') {{ $message }} @enderror</span>
                 </div>
 
                 <div class="form-row" style="margin: 0;">
-                    <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Kategori</label>
+                    <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Kategori <span style="color: #EF4444;">*</span></label>
                     <div style="position: relative; width: 100%;">
                         <select name="kategori" id="uploadKategoriSelect" required style="padding: 10px 14px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; width: 100%; appearance: none; -webkit-appearance: none;">
+                            <option value="" disabled selected>— Pilih Kategori —</option>
                             @foreach ($kategoriList as $k)
                                 <option value="{{ $k }}">{{ $k }}</option>
                             @endforeach
@@ -261,11 +270,13 @@
                             </svg>
                         </div>
                     </div>
+                    <span class="js-error-msg" id="error-uploadKategoriSelect" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('kategori') {{ $message }} @enderror</span>
                 </div>
 
                 <div class="form-row" style="margin: 0;">
-                    <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Deskripsi</label>
-                    <input type="text" name="keterangan" placeholder="Deskripsi singkat file..." style="padding: 10px 14px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; width: 100%;">
+                    <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Keterangan <span style="color: #EF4444;">*</span></label>
+                    <input type="text" name="keterangan" id="uploadKeteranganInput" required placeholder="Keterangan singkat file..." style="padding: 10px 14px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; width: 100%;">
+                    <span class="js-error-msg" id="error-uploadKeteranganInput" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('keterangan') {{ $message }} @enderror</span>
                 </div>
 
                 <div style="display: flex; gap: 12px; border-top: 1px solid #F1F5F9; padding-top: 16px; margin-top: 8px; justify-content: flex-end; align-items: center;">
@@ -315,8 +326,8 @@
                 </div>
 
                 <div class="form-row" style="margin: 0;">
-                    <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Deskripsi</label>
-                    <input type="text" name="keterangan" id="editKeterangan" placeholder="Deskripsi singkat file..." style="padding: 10px 14px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; width: 100%;">
+                    <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Keterangan</label>
+                    <input type="text" name="keterangan" id="editKeterangan" placeholder="Keterangan singkat file..." style="padding: 10px 14px; border: 1.5px solid #F1F5F9; border-radius: 8px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; width: 100%;">
                 </div>
 
                 <div class="form-row" style="margin: 0;">
@@ -332,35 +343,7 @@
         </div>
     </div>
 
-    <!-- MODAL 3: KONFIRMASI HAPUS FILE -->
-    <div class="custom-overlay" id="deleteModal">
-        <div class="modal-body" style="position: relative; max-width: 440px; padding: 24px; text-align: center;">
-            <div style="background-color: #FEE2E2; color: #DC2626; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-            </div>
-            
-            <h3 style="font-weight: 800; font-size: 1.25rem; color: #0F172A; margin: 0 0 8px 0;">Hapus Dokumen?</h3>
-            <p style="margin: 0 0 24px 0; color: #64748B; font-size: 0.9rem; line-height: 1.5; font-weight: 500;">
-                Apakah Anda yakin ingin menghapus berkas <strong id="deleteFileName" style="color: #0F172A; word-break: break-all;">-</strong> secara permanen? Tindakan ini tidak dapat dibatalkan.
-            </p>
-            
-            <form id="deleteForm" method="POST" action="" style="margin: 0;">
-                @csrf
-                @method('DELETE')
-                
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <button type="button" class="btn-cancel-custom" onclick="closeDeleteModal()" style="flex: 1; padding: 11px 24px; font-size: 0.9rem; border-radius: 8px; border: 1.5px solid #E2E8F0; background: #FFFFFF; color: #475569; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='#FFFFFF'">Batal</button>
-                    <button type="submit" class="btn-submit-custom" style="flex: 1; padding: 11px 24px; font-size: 0.9rem; border-radius: 8px; background-color: #DC2626; border: none; color: white; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">Ya, Hapus</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL 4: KELOLA KATEGORI -->
+    <!-- MODAL 3: KELOLA KATEGORI -->
     <div class="custom-overlay" id="categoriesModal">
         <div class="modal-body" style="position: relative; max-width: 440px; padding: 24px; border-radius: 20px;">
             <!-- Header -->
@@ -385,7 +368,7 @@
             <div style="margin-bottom: 20px;">
                 <form id="addCategoryForm" onsubmit="submitNewCategory(event)">
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <input type="text" id="newCategoryInput" placeholder="Nama kategori baru..." required style="flex: 1; padding: 12px 16px; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; height: 46px;">
+                        <input type="text" id="newCategoryInput" placeholder="Nama kategori baru..." maxlength="20" required style="flex: 1; padding: 12px 16px; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.9rem; outline: none; background: #FAFAFA; box-sizing: border-box; height: 46px;">
                         <button type="submit" style="width: 46px; height: 46px; border-radius: 12px; background-color: #DC2626; border: none; color: white; font-size: 1.5rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; padding: 0;" onmouseover="this.style.backgroundColor='#B91C1C'" onmouseout="this.style.backgroundColor='#DC2626'">
                             +
                         </button>
@@ -417,6 +400,36 @@
         </div>
     </div>
 
+    <!-- MODAL: HAPUS FILE -->
+    <div class="custom-overlay" id="hapusModal">
+        <div class="modal-body" style="max-width: 420px; border-radius: 20px; padding: 28px 28px 24px;">
+            <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <!-- Icon -->
+                <div style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #FEE2E2; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <!-- Text -->
+                <div style="flex: 1; min-width: 0; text-align: left;">
+                    <h3 style="font-size: 1.05rem; font-weight: 800; color: #0F172A; margin: 0 0 8px;">Hapus File?</h3>
+                    <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.6;">
+                        Anda akan menghapus file:<br>
+                        <strong id="hapusNama" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word; color: #0F172A; font-weight: 700; margin: 4px 0 6px 0; line-height: 1.45; max-height: 4.35em;"></strong>
+                        Tindakan ini tidak dapat dibatalkan.
+                    </p>
+                </div>
+            </div>
+            <!-- Buttons -->
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+                <button onclick="closeHapusModal()" class="btn-cancel-custom" style="flex: none; width: auto; padding: 9px 22px;">Batal</button>
+                <button onclick="submitHapus()" class="btn-submit-custom" style="flex: none; width: auto; padding: 9px 22px;">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL 4: PRATINJAU FILE -->
     <div class="custom-overlay" id="previewModal">
         <div class="modal-body" style="position: relative; max-width: 800px; width: 90%; max-height: 90vh; display: flex; flex-direction: column; padding: 24px; border-radius: 20px;">
@@ -440,7 +453,7 @@
 
             <!-- Content Area -->
             <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #F8FAFC; border-radius: 12px; border: 1px solid #E2E8F0; min-height: 300px; padding: 12px; box-sizing: border-box;">
-                <img id="previewImage" src="" alt="Pratinjau Gambar" style="max-width: 100%; max-height: 60vh; object-fit: contain; border-radius: 8px; display: none;">
+                <img id="previewImage" style="display: none; max-width: 100%; max-height: 400px; border-radius: 8px;" src="" alt="Pratinjau Gambar">
                 <div id="previewFallbackMessage" style="text-align: center; color: #64748B; font-size: 0.95rem; font-weight: 500; display: none;">
                     <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 12px; display: block;">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -523,17 +536,6 @@
             document.getElementById('editModal').classList.remove('active');
         }
 
-        // Delete Modal control
-        function openDeleteModal(actionUrl, fileName) {
-            document.getElementById('deleteForm').action = actionUrl;
-            document.getElementById('deleteFileName').textContent = fileName;
-            document.getElementById('deleteModal').classList.add('active');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
-        }
-
         function handleFileUploadChange(input) {
             if (input.files && input.files[0]) {
                 document.getElementById('namaFileDragInput').value = input.files[0].name;
@@ -544,6 +546,10 @@
             const newCat = prompt("Masukkan nama Kategori baru:");
             if (newCat && newCat.trim() !== "") {
                 const trimmedCat = newCat.trim();
+                if (trimmedCat.length > 20) {
+                    alert("Nama kategori tidak boleh lebih dari 20 karakter.");
+                    return;
+                }
                 
                 fetch("{{ route('admin.penyimpanan.kategori.store') }}", {
                     method: "POST",
@@ -659,11 +665,11 @@
         document.getElementById('editModal').addEventListener('click', e => {
             if (e.target === document.getElementById('editModal')) closeEditModal();
         });
-        document.getElementById('deleteModal').addEventListener('click', e => {
-            if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
-        });
         document.getElementById('categoriesModal').addEventListener('click', e => {
             if (e.target === document.getElementById('categoriesModal')) closeCategoriesModal();
+        });
+        document.getElementById('hapusModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('hapusModal')) closeHapusModal();
         });
         document.getElementById('previewModal').addEventListener('click', e => {
             if (e.target === document.getElementById('previewModal')) closePreviewModal();
@@ -690,49 +696,132 @@
             });
         }
 
-        function validatePenyimpananUploadForm(form) {
-            const input = document.getElementById('fileUploadInput');
+        function handleFileUploadChange(input) {
+            const errorFile = document.getElementById('error-file_upload');
+            const dropZone = document.getElementById('dropZone');
+            const nameInput = document.getElementById('namaFileDragInput');
+            const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'webp'];
+
             if (input && input.files && input.files[0]) {
-                const fileSize = input.files[0].size;
-                const maxBytes = 20 * 1024 * 1024; // 20 MB limit
-                if (fileSize > maxBytes) {
-                    alert('Ukuran file terlalu besar! Maksimal 20 MB.');
-                    return false;
+                const file = input.files[0];
+                const fileName = file.name;
+                const fileExt = fileName.split('.').pop().toLowerCase();
+
+                if (nameInput) nameInput.value = fileName;
+
+                if (!allowedExtensions.includes(fileExt)) {
+                    if (errorFile) {
+                        errorFile.textContent = 'Format file tidak didukung. Hanya file PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, JPEG, PNG, dan WEBP yang diizinkan.';
+                        errorFile.style.display = 'block';
+                    }
+                    if (dropZone) dropZone.style.borderColor = '#EF4444';
+                } else {
+                    if (errorFile) errorFile.textContent = '';
+                    if (dropZone) dropZone.style.borderColor = '#CBD5E1';
                 }
             }
-            return true;
+        }
+
+        function validatePenyimpananUploadForm(form) {
+            let valid = true;
+            const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'webp'];
+
+            // 1. File Upload validation
+            const fileInput = document.getElementById('fileUploadInput');
+            const errorFile = document.getElementById('error-file_upload');
+            const dropZone = document.getElementById('dropZone');
+
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                valid = false;
+                if (errorFile) {
+                    errorFile.textContent = 'File wajib diunggah.';
+                    errorFile.style.display = 'block';
+                }
+                if (dropZone) dropZone.style.borderColor = '#EF4444';
+            } else {
+                const file = fileInput.files[0];
+                const fileName = file.name;
+                const fileExt = fileName.split('.').pop().toLowerCase();
+
+                if (!allowedExtensions.includes(fileExt)) {
+                    valid = false;
+                    if (errorFile) {
+                        errorFile.textContent = 'Format file tidak didukung. Hanya file PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, JPEG, PNG, dan WEBP yang diizinkan.';
+                        errorFile.style.display = 'block';
+                    }
+                    if (dropZone) dropZone.style.borderColor = '#EF4444';
+                } else {
+                    if (errorFile) errorFile.textContent = '';
+                    if (dropZone) dropZone.style.borderColor = '#CBD5E1';
+                }
+            }
+
+            // 2. Kategori validation
+            const katSelect = document.getElementById('uploadKategoriSelect');
+            const errorKat = document.getElementById('error-uploadKategoriSelect');
+            if (!katSelect || !katSelect.value || katSelect.value.trim() === '') {
+                valid = false;
+                if (errorKat) {
+                    errorKat.textContent = 'Kategori wajib dipilih.';
+                    errorKat.style.display = 'block';
+                }
+                if (katSelect) katSelect.style.borderColor = '#EF4444';
+            } else {
+                if (errorKat) errorKat.textContent = '';
+                if (katSelect) katSelect.style.borderColor = '#F1F5F9';
+            }
+
+            // 3. Deskripsi validation
+            const ketInput = document.getElementById('uploadKeteranganInput');
+            const errorKet = document.getElementById('error-uploadKeteranganInput');
+            if (!ketInput || !ketInput.value.trim()) {
+                valid = false;
+                if (errorKet) {
+                    errorKet.textContent = 'Keterangan wajib diisi.';
+                    errorKet.style.display = 'block';
+                }
+                if (ketInput) ketInput.style.borderColor = '#EF4444';
+            } else {
+                if (errorKet) errorKet.textContent = '';
+                if (ketInput) ketInput.style.borderColor = '#F1F5F9';
+            }
+
+            return valid;
+        }
+
+        // Hapus Modal
+        var _hapusTargetId = null;
+        function openHapusModal(id, nama) {
+            _hapusTargetId = id;
+            document.getElementById('hapusNama').innerText = nama;
+            document.getElementById('hapusModal').classList.add('active');
+        }
+        function closeHapusModal() {
+            document.getElementById('hapusModal').classList.remove('active');
+        }
+        function submitHapus() {
+            if (_hapusTargetId !== null) {
+                document.getElementById('deleteForm-' + _hapusTargetId).submit();
+            }
         }
 
         function previewFile(url, fileName) {
             const ext = fileName.split('.').pop().toLowerCase();
-            const imgExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
-            
+
             if (ext === 'pdf') {
                 window.open(url, '_blank');
-            } else if (imgExtensions.includes(ext)) {
-                // Show Image modal
-                document.getElementById('previewModalTitle').innerText = fileName;
-                const img = document.getElementById('previewImage');
-                img.src = url;
-                img.style.display = 'block';
-                document.getElementById('previewFallbackMessage').style.display = 'none';
-                
-                document.getElementById('previewModal').classList.add('active');
             } else {
-                // Fallback for unsupported files
+                // Fallback untuk DOC, DOCX, XLS, XLSX
                 document.getElementById('previewModalTitle').innerText = fileName;
-                document.getElementById('previewImage').style.display = 'none';
                 document.getElementById('previewFallbackText').innerText = 'Pratinjau tidak tersedia untuk format berkas ini. Silakan unduh dokumen untuk melihat.';
                 document.getElementById('previewFallbackMessage').style.display = 'block';
-                
+
                 document.getElementById('previewModal').classList.add('active');
             }
         }
 
         function closePreviewModal() {
             document.getElementById('previewModal').classList.remove('active');
-            // Clear image source to avoid loading lag next time
-            document.getElementById('previewImage').src = '';
         }
 
         function toggleDesc(el) {

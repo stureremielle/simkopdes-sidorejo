@@ -25,7 +25,7 @@
         <div class="stats-card">
             <span class="stats-card-value">{{ $fotoGaleri }}</span>
             <span class="stats-card-label">Foto Galeri</span>
-            <span class="stats-card-trend">4 kategori</span>
+            <span class="stats-card-trend">{{ $kategoriGaleriCount }} kategori</span>
         </div>
     </div>
 

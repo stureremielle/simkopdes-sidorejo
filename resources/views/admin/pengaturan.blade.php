@@ -127,6 +127,7 @@
                     <div style="font-weight: 600; color: #64748B; font-size: 0.88rem; margin-top: 4px;" id="heroFileNameText">Klik untuk pilih foto</div>
                     <div style="color: #cbd5e1; font-size: 0.75rem;">JPG, PNG, WebP (maks. 5 MB)</div>
                     <input type="file" name="hero_upload" id="heroFileInput" style="display: none;" onchange="handleHeroChange(this)">
+                    <div id="heroPhotoError" style="color:#EF4444;font-size:0.78rem;margin-top:4px;font-weight:600;display:none;"></div>
                 </div>
 
                 <!-- Mode 2: Input URL -->
@@ -230,6 +231,7 @@
                     <div style="font-weight: 600; color: #475569; font-size: 0.88rem;" id="orgFileNameText">Klik untuk pilih gambar bagan</div>
                     <div style="color: #94A3B8; font-size: 0.75rem;">JPG, PNG, WebP &mdash; orientasi landscape disarankan</div>
                     <input type="file" name="org_upload" id="orgFileInput" style="display: none;" onchange="handleOrgChange(this)">
+                    <div id="orgPhotoError" style="color:#EF4444;font-size:0.78rem;margin-top:4px;font-weight:600;display:none;"></div>
                 </div>
 
                 <!-- Gunakan URL Container -->
@@ -364,9 +366,32 @@
         }
 
         function handleHeroChange(input) {
+            const errorEl = document.getElementById('heroPhotoError');
             if (input.files && input.files[0]) {
-                document.getElementById('heroFileNameText').textContent = input.files[0].name;
+                const file = input.files[0];
+                const ext = file.name.split('.').pop().toLowerCase();
+                const allowed = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+
+                if (!allowed.includes(ext)) {
+                    if (errorEl) {
+                        errorEl.textContent = 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.';
+                        errorEl.style.display = 'block';
+                    }
+                    input.value = '';
+                    document.getElementById('heroFileNameText').textContent = 'Klik untuk pilih foto';
+                    return;
+                } else {
+                    if (errorEl) {
+                        errorEl.textContent = '';
+                        errorEl.style.display = 'none';
+                    }
+                }
+                document.getElementById('heroFileNameText').textContent = file.name;
             } else {
+                if (errorEl) {
+                    errorEl.textContent = '';
+                    errorEl.style.display = 'none';
+                }
                 document.getElementById('heroFileNameText').textContent = 'Klik untuk pilih foto';
             }
         }
@@ -441,9 +466,32 @@
         }
 
         function handleOrgChange(input) {
+            const errorEl = document.getElementById('orgPhotoError');
             if (input.files && input.files[0]) {
-                document.getElementById('orgFileNameText').textContent = input.files[0].name;
+                const file = input.files[0];
+                const ext = file.name.split('.').pop().toLowerCase();
+                const allowed = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+
+                if (!allowed.includes(ext)) {
+                    if (errorEl) {
+                        errorEl.textContent = 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.';
+                        errorEl.style.display = 'block';
+                    }
+                    input.value = '';
+                    document.getElementById('orgFileNameText').textContent = 'Klik untuk pilih gambar bagan';
+                    return;
+                } else {
+                    if (errorEl) {
+                        errorEl.textContent = '';
+                        errorEl.style.display = 'none';
+                    }
+                }
+                document.getElementById('orgFileNameText').textContent = file.name;
             } else {
+                if (errorEl) {
+                    errorEl.textContent = '';
+                    errorEl.style.display = 'none';
+                }
                 document.getElementById('orgFileNameText').textContent = 'Klik untuk pilih gambar bagan';
             }
         }
@@ -493,6 +541,7 @@
                 `;
             }
         }
+
         // Initialize mission list from PHP. If empty, start with empty array.
         let missionList = [];
         @php

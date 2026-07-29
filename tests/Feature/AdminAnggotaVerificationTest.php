@@ -45,6 +45,9 @@ class AdminAnggotaVerificationTest extends TestCase
             'rt' => 'RT 06',
             'dusun' => 'Dusun I',
             'no_hp' => '0812',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Motivasi',
             'jabatan' => 'Anggota',
             'status' => 'diterima',
         ]);
@@ -58,6 +61,9 @@ class AdminAnggotaVerificationTest extends TestCase
             'rt' => 'RT 06',
             'dusun' => 'Dusun I',
             'no_hp' => '0812',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Motivasi',
             'jabatan' => 'Anggota',
             'status' => 'diterima',
         ]);
@@ -73,6 +79,9 @@ class AdminAnggotaVerificationTest extends TestCase
             'rt' => 'RT 06',
             'dusun' => 'Dusun I',
             'no_hp' => '0812',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Motivasi',
             'jabatan' => 'Anggota',
             'status' => 'menunggu',
         ]);
@@ -88,6 +97,9 @@ class AdminAnggotaVerificationTest extends TestCase
             'rt' => 'RT 06',
             'dusun' => 'Dusun I',
             'no_hp' => '0812',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Motivasi',
             'jabatan' => 'Anggota',
             'status' => 'ditolak',
         ]);
@@ -178,6 +190,9 @@ class AdminAnggotaVerificationTest extends TestCase
             'rt' => 'RT01',
             'dusun' => 'Dusun I',
             'no_hp' => '081234567890',
+            'pekerjaan' => 'Petani',
+            'pendidikan' => 'SMA/SMK',
+            'motivasi' => 'Motivasi',
             'jabatan' => 'Anggota',
             'status' => 'diterima',
         ]);

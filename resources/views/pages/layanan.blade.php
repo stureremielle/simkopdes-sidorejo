@@ -47,11 +47,15 @@
         <div class="product-grid" id="productGrid">
             @forelse ($layananList as $item)
                 @php
-                    $imgUrl = $item->gambar_url ? (str_starts_with($item->gambar_url, 'http') ? $item->gambar_url : asset($item->gambar_url)) : 'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=600&fit=crop&q=80';
+                    $imgSrc = $item->gambar
+                        ? (str_starts_with($item->gambar, 'http') ? $item->gambar : asset($item->gambar))
+                        : null;
                 @endphp
                 <div class="product-card" data-cat="{{ strtolower($item->kategori) }}">
                     <div class="card-img-wrapper">
-                        <img src="{{ $imgUrl }}" alt="{{ $item->nama }}">
+                        @if($imgSrc)
+                            <img src="{{ $imgSrc }}" alt="{{ $item->nama }}">
+                        @endif
                         <span class="card-badge">{{ $item->kategori }}</span>
                     </div>
                     <div class="card-body">

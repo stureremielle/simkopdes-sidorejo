@@ -16,51 +16,50 @@ class NewsLoadMoreVerificationTest extends TestCase
         // 1. Clear database berita table
         Berita::truncate();
 
-        // 2. Create 1 featured article + 14 standard active articles
-        $featured = new Berita([
-            'judul' => 'Featured Article',
-            'kategori' => 'Pertanian',
-            'isi' => 'Content...',
-            'penulis' => 'Author',
-            'is_featured' => 1,
-            'status' => 'tayang',
+        // 2. Create 1 featured article (latest tanggal_publikasi) + 14 standard articles
+        //    Featured article has the most recent tanggal_publikasi so it becomes the hero.
+        $featured = Berita::create([
+            'judul'              => 'Featured Article',
+            'kategori'           => 'Pertanian',
+            'isi'                => 'Content...',
+            'penulis'            => 'Author',
+            'status'             => 'tayang',
+            'tanggal_publikasi'  => now()->addDays(5)->toDateString(),
         ]);
-        $featured->created_at = now()->addDays(5);
-        $featured->save();
 
+        // Standard articles 1-14, each with a different tanggal_publikasi (newer = higher number).
+        // Order by COALESCE(tanggal_publikasi, DATE(created_at)) DESC, id DESC:
+        // Article 14 (now+14m), 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1.
         for ($i = 1; $i <= 14; $i++) {
-            $art = new Berita([
-                'judul' => 'Standard Article ' . $i,
-                'kategori' => 'Pertanian',
-                'isi' => 'Content of article ' . $i,
-                'penulis' => 'Author',
-                'is_featured' => 0,
-                'status' => 'tayang',
+            Berita::create([
+                'judul'             => 'Standard Article ' . $i,
+                'kategori'          => 'Pertanian',
+                'isi'               => 'Content of article ' . $i,
+                'penulis'           => 'Author',
+                'status'            => 'tayang',
+                'tanggal_publikasi' => now()->addMinutes($i)->toDateString(),
             ]);
-            $art->created_at = now()->addMinutes($i);
-            $art->save();
         }
 
-        // Total standard articles: 14.
-        // Order by created_at desc, id desc:
-        // Standard Article 14 (now + 14m), 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1.
+        // Total standard articles: 14. Featured excluded from list.
+        // Initial view loads first 6: Article 14, 13, 12, 11, 10, 9.
+        // offset=6 loads next batch: Article 8, 7, 6, 5, 4, 3.
+        // offset=12 loads last 2:   Article 2, 1.
 
-        // 3. Make mock AJAX request with offset = 6 (First page ends at 6 articles: 14 to 9 are loaded in initial view)
-        // Skip 6 loads: 8, 7, 6, 5, 4, 3
+        // 3. AJAX request offset=6 — expect articles 8 and 7
         $response = $this->getJson(route('berita', ['offset' => 6]), [
             'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
         ]);
 
         $response->assertStatus(200);
         $response->assertJsonStructure(['html', 'has_more']);
-        
+
         $data = $response->json();
         $this->assertTrue($data['has_more']);
-        $this->assertStringContainsString('Standard Article 7', $data['html']);
         $this->assertStringContainsString('Standard Article 8', $data['html']);
+        $this->assertStringContainsString('Standard Article 7', $data['html']);
 
-        // 4. Make mock AJAX request with offset = 12 (Second page: 14 to 3 are skipped)
-        // Skip 12 loads: 2, 1. has_more is false.
+        // 4. AJAX request offset=12 — expect articles 2 and 1, no more after
         $response = $this->getJson(route('berita', ['offset' => 12]), [
             'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'
         ]);
@@ -68,7 +67,7 @@ class NewsLoadMoreVerificationTest extends TestCase
         $response->assertStatus(200);
         $data = $response->json();
         $this->assertFalse($data['has_more']);
-        $this->assertStringContainsString('Standard Article 1', $data['html']);
         $this->assertStringContainsString('Standard Article 2', $data['html']);
+        $this->assertStringContainsString('Standard Article 1', $data['html']);
     }
 }

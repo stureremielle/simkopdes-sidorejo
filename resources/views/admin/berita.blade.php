@@ -91,13 +91,10 @@
             <tbody>
                 @forelse ($beritaList as $b)
                 <tr>
-                    <td>
+                    <td style="max-width: 0;">
                         <div>
-                            <span class="article-title-text" style="font-weight: 700; color: #0f172a; font-size: 0.95rem; text-decoration: none;">{{ $b->judul }}</span>
-                            @if ($b->is_featured)
-                                <span class="featured-star" style="color: #fbbf24; margin-left: 6px;" title="Artikel Pilihan">★</span>
-                            @endif
-                            <div style="font-size: 0.76rem; color: #94A3B8; margin-top: 4px; font-weight: 400; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <span class="article-title-text" style="font-weight: 700; color: #0f172a; font-size: 0.95rem; text-decoration: none; display: block; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; max-width: 100%;">{{ $b->judul }}</span>
+                            <div style="font-size: 0.76rem; color: #94A3B8; margin-top: 4px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 {{ Str::limit(strip_tags($b->isi), 50) }}
                             </div>
                         </div>
@@ -177,10 +174,20 @@
             <form method="POST" action="{{ route('admin.berita.store') }}" id="beritaForm" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
-                
+
+                @if ($errors->any())
+                <div style="background:#fee2e2;color:#dc2626;padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:0.83rem;font-weight:600;">
+                    @foreach ($errors->all() as $err)
+                        <div>✗ {{ $err }}</div>
+                    @endforeach
+                </div>
+                @endif
+
                 <div class="form-field">
                     <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Judul Artikel <span style="color: #EF4444;">*</span></label>
-                    <input type="text" name="judul" id="fJudul" required placeholder="Judul artikel yang menarik..." style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; transition: border-color 0.15s;">
+                    <input type="text" name="judul" id="fJudul" required maxlength="80" placeholder="Judul artikel yang menarik..." value="{{ old('judul') }}" style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; transition: border-color 0.15s;">
+                    <small style="color: #94a3b8; font-size: 0.75rem;">Maks. 80 karakter</small>
+                    @error('judul')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
@@ -196,9 +203,10 @@
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </div>
+                        @error('kategori')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-field">
-                        <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Status</label>
+                        <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Status <span style="color: #EF4444;">*</span></label>
                         <div style="position: relative;">
                             <select name="status" id="fStatus" required style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; appearance: none; -webkit-appearance: none; padding-right: 36px;">
                                 <option value="draft">Draft</option>
@@ -208,24 +216,27 @@
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </div>
+                        @error('status')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                     <div class="form-field">
                         <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Penulis <span style="color: #EF4444;">*</span></label>
-                        <input type="text" name="penulis" id="fPenulis" required value="Admin" placeholder="Nama penulis" style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none;">
+                        <input type="text" name="penulis" id="fPenulis" required value="{{ old('penulis', 'Admin') }}" placeholder="Nama penulis" maxlength="20" style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none;">
+                        @error('penulis')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-field">
                         <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Tanggal Publikasi <span style="color: #EF4444;">*</span></label>
                         <div style="position: relative;">
-                            <input type="date" name="tanggal_publikasi" id="fTanggal" required style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none;">
+                            <input type="date" name="tanggal_publikasi" id="fTanggal" required value="{{ old('tanggal_publikasi') }}" style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none;">
                         </div>
+                        @error('tanggal_publikasi')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
                 </div>
 
                 <div class="form-field">
-                    <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Foto Artikel (opsional)</label>
+                    <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Foto Artikel <span style="color:#94A3B8;font-weight:400;">(Opsional)</span></label>
                     <div onclick="document.getElementById('fGambarFile').click()" style="border: 2px dashed #CBD5E1; border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; background: #FAFAFA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.borderColor='#DC2626'; this.style.background='#FFF1F2';" onmouseout="this.style.borderColor='#CBD5E1'; this.style.background='#FAFAFA';">
                         <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="pictureOutlineIcon">
                             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -236,17 +247,15 @@
                         <span id="uploadSubtextParagraph" style="font-size: 0.76rem; color: #94A3B8;">JPG, PNG (maks. 3 MB)</span>
                     </div>
                     <input type="file" name="gambar_file" id="fGambarFile" accept="image/*" style="display:none;" onchange="handleFileSelect(this)">
-                    <input type="hidden" name="gambar_url" id="fGambar" value="">
+                    <input type="hidden" name="gambar" id="fGambar" value="">
+                    <div id="beritaPhotoError" style="color:#EF4444;font-size:0.78rem;margin-top:4px;font-weight:600;display:none;"></div>
+                    @error('gambar_file')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-field">
-                    <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Ringkasan / Excerpt</label>
-                    <input type="text" name="excerpt_temp" id="fExcerpt" placeholder="Ringkasan singkat (tampil di daftar artikel)..." style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 10px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none;">
-                </div>
-
-                <div class="form-field">
-                    <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Isi Artikel</label>
-                    <textarea name="isi" id="fIsi" required placeholder="Tulis isi artikel di sini..." style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 12px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; min-height: 140px; resize: vertical; font-family: inherit;"></textarea>
+                    <label style="font-weight: 600; color: #334155; font-size: 0.85rem; margin-bottom: 6px; display: block;">Isi Artikel <span style="color: #EF4444;">*</span></label>
+                    <textarea name="isi" id="fIsi" required placeholder="Tulis isi artikel di sini..." style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 8px; padding: 12px 14px; font-size: 0.88rem; width: 100%; box-sizing: border-box; outline: none; min-height: 140px; resize: vertical; font-family: inherit;">{{ old('isi') }}</textarea>
+                    @error('isi')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="modal-footer">
@@ -267,7 +276,7 @@
             </div>
             
             <!-- Title -->
-            <h2 id="detJudul" style="margin-top: 16px; margin-bottom: 8px; font-size: 1.25rem; font-weight: 800; color: #0F172A; line-height: 1.4; font-family: inherit;"></h2>
+            <h2 id="detJudul" style="margin-top: 16px; margin-bottom: 8px; font-size: 1.25rem; font-weight: 800; color: #0F172A; line-height: 1.4; font-family: inherit; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; max-width: 100%;"></h2>
             
             <!-- Metadata -->
             <div id="detMeta" style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 20px; font-family: inherit;"></div>
@@ -304,7 +313,7 @@
             
             <!-- Input Row -->
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <input type="text" id="newCategoryInput" placeholder="Nama kategori baru..." style="flex: 1; padding: 10px 14px; border: 1.5px solid #DC2626; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; background-color: #FFFFFF;">
+                <input type="text" id="newCategoryInput" placeholder="Nama kategori baru..." maxlength="20" style="flex: 1; padding: 10px 14px; border: 1.5px solid #DC2626; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; background-color: #FFFFFF;">
                 <button type="button" onclick="addNewCategory()" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background-color: #FFF1F2; color: #DC2626; font-size: 1.25rem; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#FEE2E2'" onmouseout="this.style.background='#FFF1F2'">
                     +
                 </button>
@@ -338,7 +347,7 @@
                 <div style="flex: 1;">
                     <h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin: 0 0 8px; font-family: inherit;">Hapus Berita?</h3>
                     <p style="font-size: 0.9rem; color: #475569; margin: 0; line-height: 1.6; font-family: inherit;">
-                        Anda akan menghapus data anggota <strong id="hapusJudul"></strong>.
+                        Anda akan menghapus berita <strong id="hapusJudul" style="color: #0F172A; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;"></strong>.
                     </p>
                 </div>
             </div>
@@ -367,7 +376,6 @@
             document.getElementById('beritaForm').reset();
             document.getElementById('fPenulis').value = 'Admin';
             document.getElementById('fKategori').value = categories[0] || '';
-            document.getElementById('fExcerpt').value = '';
             document.getElementById('fTanggal').value = "{{ date('Y-m-d') }}";
             resetUploadArea();
             document.getElementById('beritaModal').classList.add('active');
@@ -383,7 +391,7 @@
             document.getElementById('fKategori').value = data.kategori;
             document.getElementById('fPenulis').value = data.penulis;
             document.getElementById('fIsi').value = data.isi;
-            document.getElementById('fGambar').value = data.gambar_url || '';
+            document.getElementById('fGambar').value = data.gambar || '';
             document.getElementById('fStatus').value = data.status;
             
             let pubDate = data.tanggal_publikasi;
@@ -392,13 +400,12 @@
             }
             document.getElementById('fTanggal').value = pubDate || "{{ date('Y-m-d') }}";
             
-            if (data.gambar_url) {
-                setUploadAreaFile(data.gambar_url);
+            if (data.gambar) {
+                setUploadAreaFile(data.gambar);
             } else {
                 resetUploadArea();
             }
             
-            document.getElementById('fExcerpt').value = stripHtml(data.isi).substring(0, 70);
             document.getElementById('beritaModal').classList.add('active');
         }
 
@@ -409,6 +416,18 @@
         document.getElementById('beritaModal').addEventListener('click', e => {
             if (e.target === document.getElementById('beritaModal')) closeModal();
         });
+
+        // Auto-open article modal if validation errors exist on page load
+        @if ($errors->any())
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('modalTitle').textContent = 'Tambah Artikel Baru';
+                document.getElementById('formMethod').value = 'POST';
+                document.getElementById('beritaForm').action = "{{ route('admin.berita.store') }}";
+                const btnSave = document.getElementById('btnSubmitArticle');
+                if (btnSave) btnSave.textContent = 'Terbitkan Artikel';
+                document.getElementById('beritaModal').classList.add('active');
+            });
+        @endif
 
         function openDetailModal(data) {
             document.getElementById('detKategori').textContent = data.kategori || 'Umum';
@@ -443,8 +462,26 @@
         });
 
         function handleFileSelect(input) {
+            const errorEl = document.getElementById('beritaPhotoError');
             if (input.files && input.files[0]) {
                 const file = input.files[0];
+                const ext = file.name.split('.').pop().toLowerCase();
+                const allowed = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+
+                if (!allowed.includes(ext)) {
+                    if (errorEl) {
+                        errorEl.textContent = 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.';
+                        errorEl.style.display = 'block';
+                    }
+                    resetUploadArea();
+                    return;
+                } else {
+                    if (errorEl) {
+                        errorEl.textContent = '';
+                        errorEl.style.display = 'none';
+                    }
+                }
+
                 setUploadAreaFile(file.name);
                 document.getElementById('fGambar').value = '/assets/images/upload/' + file.name;
             }
@@ -652,5 +689,14 @@
 
         // Initialize categories on load
         window.addEventListener('DOMContentLoaded', initCategories);
+
+        // Expandable article title: click to expand/collapse
+        document.querySelector('.berita-table tbody').addEventListener('click', function (e) {
+            const titleSpan = e.target.closest('.article-title-text');
+            if (!titleSpan) return;
+            // Prevent triggering row actions
+            e.stopPropagation();
+            titleSpan.classList.toggle('article-title-expanded');
+        });
     </script>
 @endsection

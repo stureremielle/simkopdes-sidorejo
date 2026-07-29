@@ -34,14 +34,14 @@ class PenyimpananCategoryTest extends TestCase
         $this->actingAs($this->adminUser, 'admin');
 
         $response = $this->postJson(route('admin.penyimpanan.kategori.store'), [
-            'kategori' => 'Kategori Baru Penyimpanan'
+            'kategori' => 'Kategori Baru File'
         ]);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
 
         $categories = KategoriPenyimpanan::pluck('nama')->toArray();
-        $this->assertContains('Kategori Baru Penyimpanan', $categories);
+        $this->assertContains('Kategori Baru File', $categories);
     }
 
     /** @test */

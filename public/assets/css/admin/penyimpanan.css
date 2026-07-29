@@ -238,24 +238,22 @@
     background: #B91C1C;
 }
 
-/* Description column expand/collapse styling */
+/* Description column word wrap styling */
 .desc-cell {
-    cursor: pointer;
-    user-select: none;
-    transition: max-height 0.25s ease;
+    white-space: normal !important;
+    word-break: break-word;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
-.desc-cell.collapsed {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
+.desc-cell.collapsed,
 .desc-cell.expanded {
     white-space: normal !important;
     overflow: visible !important;
     text-overflow: clip !important;
     word-break: break-word;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Date column styling */
@@ -264,6 +262,7 @@
     padding-left: 8px !important;
     padding-right: 8px !important;
     font-size: 0.82rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 /* Slightly smaller action icons for Aksi column */

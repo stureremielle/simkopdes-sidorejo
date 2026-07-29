@@ -50,8 +50,11 @@ class PengaturanController extends Controller
                 'password_baru' => 'required|min:6',
                 'password_konfirmasi' => 'required|same:password_baru',
             ], [
-                'password_konfirmasi.same' => 'Konfirmasi password tidak cocok.',
-                'password_baru.min' => 'Password baru minimal 6 karakter.'
+                'password_lama.required'        => 'Password lama wajib diisi.',
+                'password_baru.required'        => 'Password baru wajib diisi.',
+                'password_baru.min'             => 'Password baru minimal 6 karakter.',
+                'password_konfirmasi.required'  => 'Konfirmasi password wajib diisi.',
+                'password_konfirmasi.same'      => 'Konfirmasi password tidak cocok.',
             ]);
 
             $admin = Auth::guard('admin')->user();
@@ -76,6 +79,13 @@ class PengaturanController extends Controller
     public function saveHeroBg(Request $request)
     {
         if ($request->input('action') === 'reset') {
+            $oldValue = Pengaturan::getValue('hero_background', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http')) {
+                $oldPath = public_path('uploads/' . $oldValue);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
             Pengaturan::where('key_name', 'hero_background')->delete();
             return redirect()->route('admin.pengaturan')->with('success', 'Background Beranda diset kembali ke default.');
         }
@@ -85,7 +95,8 @@ class PengaturanController extends Controller
                 'hero_upload' => 'required|image|mimes:jpeg,png,webp,jpg|max:5120',
             ], [
                 'hero_upload.max' => 'Ukuran file maksimal 5 MB.',
-                'hero_upload.image' => 'File harus berupa gambar.',
+                'hero_upload.image' => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+                'hero_upload.mimes' => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
             ]);
 
             $file = $request->file('hero_upload');
@@ -95,6 +106,16 @@ class PengaturanController extends Controller
             }
 
             $safeName = 'hero_' . time() . '.' . $file->getClientOriginalExtension();
+
+            // Delete old file
+            $oldValue = Pengaturan::getValue('hero_background', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http') && $oldValue !== $safeName) {
+                $oldPath = public_path('uploads/' . $oldValue);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+
             $file->move($uploadPath, $safeName);
 
             Pengaturan::updateOrCreate(
@@ -111,6 +132,15 @@ class PengaturanController extends Controller
             ], [
                 'hero_url.url' => 'Format URL tidak valid.',
             ]);
+
+            // Delete old file
+            $oldValue = Pengaturan::getValue('hero_background', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http')) {
+                $oldPath = public_path('uploads/' . $oldValue);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
 
             Pengaturan::updateOrCreate(
                 ['key_name' => 'hero_background'],
@@ -129,6 +159,13 @@ class PengaturanController extends Controller
     public function saveOrgChart(Request $request)
     {
         if ($request->input('action') === 'reset') {
+            $oldValue = Pengaturan::getValue('org_chart', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http')) {
+                $oldPath = public_path('uploads/' . $oldValue);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
             Pengaturan::where('key_name', 'org_chart')->delete();
             return redirect()->route('admin.pengaturan')->with('success', 'Struktur Organisasi diset kembali ke default.');
         }
@@ -138,7 +175,8 @@ class PengaturanController extends Controller
                 'org_upload' => 'required|image|mimes:jpeg,png,webp,jpg|max:5120',
             ], [
                 'org_upload.max' => 'Ukuran file maksimal 5 MB.',
-                'org_upload.image' => 'File harus berupa gambar.',
+                'org_upload.image' => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+                'org_upload.mimes' => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
             ]);
 
             $file = $request->file('org_upload');
@@ -148,6 +186,16 @@ class PengaturanController extends Controller
             }
 
             $safeName = 'org_' . time() . '.' . $file->getClientOriginalExtension();
+
+            // Delete old file
+            $oldValue = Pengaturan::getValue('org_chart', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http') && $oldValue !== $safeName) {
+                $oldPath = public_path('uploads/' . $oldValue);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+
             $file->move($uploadPath, $safeName);
 
             Pengaturan::updateOrCreate(
@@ -164,6 +212,15 @@ class PengaturanController extends Controller
             ], [
                 'org_url.url' => 'Format URL tidak valid.',
             ]);
+
+            // Delete old file
+            $oldValue = Pengaturan::getValue('org_chart', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http')) {
+                $oldPath = public_path('uploads/' . $oldValue);
+                if (file_exists($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
 
             Pengaturan::updateOrCreate(
                 ['key_name' => 'org_chart'],
@@ -186,8 +243,11 @@ class PengaturanController extends Controller
             'new_password' => 'required|min:6',
             'confirm_password' => 'required|same:new_password',
         ], [
-            'confirm_password.same' => 'Konfirmasi password tidak cocok.',
-            'new_password.min' => 'Password baru minimal 6 karakter.'
+            'old_password.required'     => 'Password lama wajib diisi.',
+            'new_password.required'     => 'Password baru wajib diisi.',
+            'new_password.min'          => 'Password baru minimal 6 karakter.',
+            'confirm_password.required' => 'Konfirmasi password wajib diisi.',
+            'confirm_password.same'     => 'Konfirmasi password tidak cocok.',
         ]);
 
         $admin = Auth::guard('admin')->user();

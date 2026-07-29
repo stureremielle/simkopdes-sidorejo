@@ -34,6 +34,7 @@
 
 .members-data-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     font-size: 0.88rem;
 }
@@ -290,4 +291,11 @@
 
 .btn-submit-custom:hover {
     background: #B91C1C;
+}
+
+#deletePromoTitle {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }

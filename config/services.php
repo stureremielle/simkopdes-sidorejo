@@ -35,9 +35,4 @@ return [
         ],
     ],
 
-    'nas' => [
-        'url' => env('NAS_API_URL'),
-        'key' => env('NAS_API_KEY'),
-    ],
-
 ];

@@ -291,15 +291,24 @@
             <form method="POST" action="{{ route('admin.layanan.store') }}" id="productForm" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_method" id="modalMethod" value="POST">
-                <input type="hidden" name="gambar_url" id="formGambar">
+                <input type="hidden" name="gambar" id="formGambar">
+
+                @if ($errors->any())
+                <div style="background:#fee2e2;color:#dc2626;padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:0.83rem;font-weight:600;">
+                    @foreach ($errors->all() as $err)
+                        <div>✗ {{ $err }}</div>
+                    @endforeach
+                </div>
+                @endif
 
                 <div class="form-row">
-                    <label>Nama Produk</label>
-                    <input type="text" name="nama" id="formNama" required placeholder="Nama produk...">
+                    <label>Nama Produk <span style="color:#EF4444;">*</span></label>
+                    <input type="text" name="nama" id="formNama" required placeholder="Nama produk..." maxlength="30" value="{{ old('nama') }}">
+                    @error('nama')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-row">
-                    <label style="font-weight: 600; color: #475569; font-size: 0.85rem; margin-bottom: 6px; display: block;">Foto Produk (opsional)</label>
+                    <label style="font-weight: 600; color: #475569; font-size: 0.85rem; margin-bottom: 6px; display: block;">Foto Produk <span style="color:#94A3B8;font-weight:400;">(Opsional)</span></label>
                     <div onclick="document.getElementById('formGambarFile').click()" style="border: 2px dashed #CBD5E1; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: #FAFAFA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.borderColor='#DC2626'; this.style.background='#FFF1F2';" onmouseout="this.style.borderColor='#CBD5E1'; this.style.background='#FAFAFA';">
                         <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="pictureOutlineIcon">
                             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -310,40 +319,47 @@
                         <span id="uploadSubtextParagraph" style="font-size: 0.76rem; color: #94A3B8;">JPG, PNG (maks. 3 MB)</span>
                     </div>
                     <input type="file" name="gambar_file" id="formGambarFile" accept="image/*" style="display:none;" onchange="handleFileSelect(this)">
+                    <div id="layananPhotoError" style="color:#EF4444;font-size:0.78rem;margin-top:4px;font-weight:600;display:none;"></div>
+                    @error('gambar_file')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-row">
-                    <label>Kategori</label>
+                    <label>Kategori <span style="color:#EF4444;">*</span></label>
                     <select name="kategori" id="formKategori" required>
                         @foreach ($categories as $cat)
                             <option value="{{ $cat }}">{{ $cat }}</option>
                         @endforeach
                     </select>
+                    @error('kategori')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-row">
-                    <label>Status</label>
+                    <label>Status <span style="color:#EF4444;">*</span></label>
                     <select name="status" id="formStatus">
                         <option value="aktif">Aktif</option>
                         <option value="nonaktif">Nonaktif</option>
                     </select>
+                    @error('status')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <!-- Form vertikal 2 kolom untuk Harga dan Satuan -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px;">
                     <div class="form-row" style="margin-bottom: 0;">
-                        <label>Harga (Rp)</label>
-                        <input type="number" name="harga" id="formHarga" min="0" required value="0">
+                        <label>Harga (Rp) <span style="color:#EF4444;">*</span></label>
+                        <input type="number" name="harga" id="formHarga" min="0" required value="{{ old('harga', 0) }}">
+                        @error('harga')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-row" style="margin-bottom: 0;">
-                        <label>Satuan</label>
-                        <input type="text" name="satuan" id="formSatuan" required value="kg" placeholder="e.g. kg, ekor">
+                        <label>Satuan <span style="color:#EF4444;">*</span></label>
+                        <input type="text" name="satuan" id="formSatuan" required value="{{ old('satuan', 'kg') }}" placeholder="e.g. kg, ekor" maxlength="10">
+                        @error('satuan')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <label>Deskripsi</label>
-                    <textarea name="deskripsi" id="formDesc" required placeholder="Tulis deskripsi produk..." style="min-height: 80px;"></textarea>
+                    <label>Deskripsi <span style="color:#EF4444;">*</span></label>
+                    <textarea name="deskripsi" id="formDesc" required placeholder="Tulis deskripsi produk..." style="min-height: 80px;">{{ old('deskripsi') }}</textarea>
+                    @error('deskripsi')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="modal-buttons">
@@ -362,7 +378,7 @@
                 @csrf
                 <div class="form-row" style="margin-bottom: 24px;">
                     <label>Nama Kategori *</label>
-                    <input type="text" name="kategori" required placeholder="Hortikultura">
+                    <input type="text" name="kategori" required placeholder="Hortikultura" maxlength="20">
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel-custom" onclick="closeCategoryModal()">Batal</button>
@@ -444,8 +460,26 @@
         }
 
         function handleFileSelect(input) {
-            const file = input.files[0];
-            if (file) {
+            const errorEl = document.getElementById('layananPhotoError');
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const ext = file.name.split('.').pop().toLowerCase();
+                const allowed = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+
+                if (!allowed.includes(ext)) {
+                    if (errorEl) {
+                        errorEl.textContent = 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.';
+                        errorEl.style.display = 'block';
+                    }
+                    resetUploadArea();
+                    return;
+                } else {
+                    if (errorEl) {
+                        errorEl.textContent = '';
+                        errorEl.style.display = 'none';
+                    }
+                }
+
                 setUploadAreaFile(file.name);
                 document.getElementById('formGambar').value = 'uploads/layanan/' + file.name;
             }
@@ -504,11 +538,11 @@
             document.getElementById('formDesc').value = data.deskripsi || '';
             document.getElementById('formHarga').value = Math.round(data.harga) || 0;
             document.getElementById('formSatuan').value = data.satuan || 'kg';
-            document.getElementById('formGambar').value = data.gambar_url || '';
+            document.getElementById('formGambar').value = data.gambar || '';
             document.getElementById('formStatus').value = data.status;
 
-            if (data.gambar_url) {
-                setUploadAreaFile(data.gambar_url);
+            if (data.gambar) {
+                setUploadAreaFile(data.gambar);
             } else {
                 resetUploadArea();
             }
@@ -552,6 +586,7 @@
         const featuredSaveUrl = "{{ route('admin.layanan.featured') }}";
         const featuredCsrfToken = document.querySelector('meta[name="csrf-token"]')?.content
             || "{{ csrf_token() }}";
+
         function clickFeaturedCard(card) {
             const isActive = card.classList.contains('active');
             const targetId = card.getAttribute('data-id');
@@ -615,14 +650,6 @@
             }
         }
 
-        // Table checkbox clicked toggle handler
-        function toggleUnggulanFromTable(id) {
-            const card = document.querySelector(`.featured-item-card[data-id="${id}"]`);
-            if (card) {
-                clickFeaturedCard(card);
-            }
-        }
-
         // Close when clicking outside modal body
         document.getElementById('productModal').addEventListener('click', e => {
             if (e.target === document.getElementById('productModal')) closeProductModal();
@@ -633,5 +660,16 @@
         document.getElementById('hapusModal').addEventListener('click', e => {
             if (e.target === document.getElementById('hapusModal')) closeHapusModal();
         });
+
+        // Auto-open product modal if validation errors exist on page load
+        @if ($errors->any())
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('modalTitleLabel').textContent = 'Tambah Produk';
+                document.getElementById('modalMethod').value = 'POST';
+                document.getElementById('productForm').action = "{{ route('admin.layanan.store') }}";
+                document.getElementById('btnSubmitLabel').textContent = 'Tambah Produk';
+                document.getElementById('productModal').classList.add('active');
+            });
+        @endif
     </script>
 @endsection

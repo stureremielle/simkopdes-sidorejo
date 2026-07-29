@@ -88,12 +88,12 @@
         <table class="members-data-table">
             <thead>
                 <tr>
-                    <th style="width: 30%;">Nama</th>
-                    <th style="width: 15%;">Jabatan</th>
-                    <th style="width: 20%;">RT/Dusun</th>
-                    <th style="width: 15%;">Sumber</th>
-                    <th style="width: 10%;">Status</th>
-                    <th style="width: 10%; text-align: center;">Aksi</th>
+                    <th style="width: 32%;">Nama</th>
+                    <th style="width: 13%;">Jabatan</th>
+                    <th style="width: 16%;">RT/Dusun</th>
+                    <th style="width: 13%;">Sumber</th>
+                    <th style="width: 11%;">Status</th>
+                    <th style="width: 15%; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,24 +107,18 @@
                         }
                         $initials = substr($initials, 0, 2);
 
-                        // Match exact colors from mockup
-                        $bgColor = '#8B5CF6'; 
-                        if (trim($a->nama_lengkap) === 'Budi Santoso') {
-                            $bgColor = '#12B76A'; 
-                        } elseif (trim($a->nama_lengkap) === 'Siti Rahma') {
-                            $bgColor = '#2E90FA'; 
-                        } elseif (trim($a->nama_lengkap) === 'Ahmad Fauzi') {
-                            $bgColor = '#7A5AF8'; 
-                        }
+                        // Deterministic color rotation based on member ID
+                        $avatarColors = ['#8B5CF6', '#12B76A', '#2E90FA', '#7A5AF8', '#F59E0B', '#EF4444'];
+                        $bgColor = $avatarColors[$a->id % count($avatarColors)];
 
                         // Determine source
                         $sumber = $a->sumber ?? 'Pendaftaran';
                     @endphp
                     <tr>
                         <td>
-                            <div>
-                                <div style="font-weight: 700; color: #0F172A; font-size: 0.92rem; margin-bottom: 2px;">{{ $a->nama_lengkap }}</div>
-                                <div style="font-size: 0.78rem; color: #94A3B8;">{{ $a->nik }}</div>
+                            <div style="overflow-wrap: break-word; word-wrap: break-word; word-break: normal; white-space: normal;">
+                                <div style="font-weight: 700; color: #0F172A; font-size: 0.92rem; margin-bottom: 2px; line-height: 1.35; overflow-wrap: break-word; word-wrap: break-word; word-break: normal; white-space: normal;">{{ $a->nama_lengkap }}</div>
+                                <div style="font-size: 0.78rem; color: #94A3B8; white-space: nowrap;">{{ $a->nik }}</div>
                             </div>
                         </td>
                         <td style="color: #475569; font-weight: 500;">
@@ -145,8 +139,8 @@
                                 <span class="status-pill-rejected">Ditolak</span>
                             @endif
                         </td>
-                        <td style="text-align: center; white-space: nowrap;">
-                            <div style="display: inline-flex; gap: 10px; align-items: center;">
+                        <td style="text-align: center; white-space: nowrap; padding: 14px 4px;">
+                            <div style="display: inline-flex; gap: 4px; align-items: center; justify-content: center;">
                                 <!-- Detail button -->
                                 <button onclick="openDetailModal({{ json_encode($a) }})" class="btn-icon-action" title="Detail">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -232,51 +226,51 @@
             <div style="flex: 1; overflow-y: auto; padding-right: 8px;">
                 <!-- Profile summary header box -->
                 <div style="margin-bottom: 24px;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                        <span id="detailNamaLengkap" style="font-size: 1.4rem; font-weight: 800; color: #0F172A;">Budi Santoso</span>
-                        <span id="detailJabatanBadge" class="role-pill-badge" style="vertical-align: middle;">Anggota</span>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                        <span id="detailNamaLengkap" style="font-size: 1.4rem; font-weight: 800; color: #0F172A; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">-</span>
+                        <span id="detailJabatanBadge" class="role-pill-badge" style="vertical-align: middle;">-</span>
                     </div>
-                    <span id="detailNik" style="font-size: 0.88rem; color: #94A3B8; font-family: monospace;">6401010101010001</span>
+                    <span id="detailNik" style="font-size: 0.88rem; color: #94A3B8; font-family: monospace;">-</span>
                 </div>
 
                 <!-- Two-column grid -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px;">
                     <div>
                         <div class="detail-label">Jenis Kelamin</div>
-                        <div class="detail-val" id="detailJenisKelamin">Laki-laki</div>
+                        <div class="detail-val" id="detailJenisKelamin">-</div>
 
                         <div class="detail-label">RT</div>
-                        <div class="detail-val" id="detailRt">RT01</div>
+                        <div class="detail-val" id="detailRt">-</div>
 
                         <div class="detail-label">No HP</div>
-                        <div class="detail-val" id="detailNoHp">08123456789</div>
+                        <div class="detail-val" id="detailNoHp">-</div>
 
                         <div class="detail-label">Pekerjaan</div>
-                        <div class="detail-val" id="detailPekerjaan">Petani</div>
+                        <div class="detail-val" id="detailPekerjaan">-</div>
                     </div>
 
                     <div>
                         <div class="detail-label">Tanggal Lahir</div>
-                        <div class="detail-val" id="detailTanggalLahir">Paser, 1990-01-12</div>
+                        <div class="detail-val" id="detailTanggalLahir">-</div>
 
                         <div class="detail-label">Dusun</div>
-                        <div class="detail-val" id="detailDusun">Dusun I</div>
+                        <div class="detail-val" id="detailDusun">-</div>
 
                         <div class="detail-label">Email</div>
-                        <div class="detail-val" id="detailEmail">budi@gmail.com</div>
+                        <div class="detail-val" id="detailEmail">-</div>
 
                         <div class="detail-label">Pendidikan</div>
-                        <div class="detail-val" id="detailPendidikan">SMA</div>
+                        <div class="detail-val" id="detailPendidikan">-</div>
                     </div>
                 </div>
 
                 <!-- Full width fields -->
                 <div style="margin-top: 8px;">
                     <div class="detail-label">Alamat</div>
-                    <div class="detail-val" id="detailAlamatLengkap" style="margin-bottom: 16px;">Jl. Melati No. 12</div>
+                    <div class="detail-val" id="detailAlamatLengkap" style="margin-bottom: 16px;">-</div>
 
                     <div class="detail-label">Motivasi Bergabung</div>
-                    <div class="detail-val" id="detailMotivasi" style="margin-bottom: 0;">Ingin mengembangkan usaha pertanian</div>
+                    <div class="detail-val" id="detailMotivasi" style="margin-bottom: 0; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word;">-</div>
                 </div>
             </div>
             
@@ -308,33 +302,39 @@
                     <div class="modal-section-title" style="margin-top: 0;">Data Diri</div>
                     
                     <div class="form-row">
-                        <label>Nama Lengkap</label>
-                        <input type="text" name="nama_lengkap" required placeholder="Contoh: Budi Santoso">
+                        <label>Nama Lengkap <span style="color:#EF4444">*</span></label>
+                        <input type="text" name="nama_lengkap" required maxlength="40" placeholder="Contoh: Budi Santoso" value="{{ old('nama_lengkap') }}">
+                        @error('nama_lengkap')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>NIK</label>
-                            <input type="text" name="nik" pattern="\d{16}" required placeholder="Contoh: 6401010101010001">
+                            <label>NIK <span style="color:#EF4444">*</span></label>
+                            <input type="text" name="nik" id="tambahNik" required maxlength="16" placeholder="Contoh: 6401010101010001" value="{{ old('nik') }}">
+                            <div id="tambahNikError" style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;display:none;"></div>
+                            @error('nik')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-row">
-                            <label>Jenis Kelamin</label>
+                            <label>Jenis Kelamin <span style="color:#EF4444">*</span></label>
                             <select name="jenis_kelamin" required>
-                                <option value="" disabled selected>Pilih</option>
-                                <option value="Laki-Laki">Laki-Laki</option>
-                                <option value="Perempuan">Perempuan</option>
+                                <option value="" disabled {{ old('jenis_kelamin') ? '' : 'selected' }}>Pilih</option>
+                                <option value="Laki-Laki" {{ old('jenis_kelamin') === 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                <option value="Perempuan" {{ old('jenis_kelamin') === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                             </select>
+                            @error('jenis_kelamin')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>Tempat Lahir</label>
-                            <input type="text" name="tempat_lahir" required placeholder="Contoh: Paser">
+                            <label>Tempat Lahir <span style="color:#EF4444">*</span></label>
+                            <input type="text" name="tempat_lahir" required maxlength="25" placeholder="Contoh: Paser" value="{{ old('tempat_lahir') }}">
+                            @error('tempat_lahir')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-row">
-                            <label>Tanggal Lahir</label>
-                            <input type="date" name="tanggal_lahir" required>
+                            <label>Tanggal Lahir <span style="color:#EF4444">*</span></label>
+                            <input type="date" name="tanggal_lahir" required value="{{ old('tanggal_lahir') }}">
+                            @error('tanggal_lahir')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                     </div>
 
@@ -342,32 +342,35 @@
                     <div class="modal-section-title">Alamat</div>
 
                     <div class="form-row">
-                        <label>Alamat</label>
-                        <textarea name="alamat_lengkap" rows="2" required placeholder="Tulis alamat lengkap..."></textarea>
+                        <label>Alamat <span style="color:#EF4444">*</span></label>
+                        <textarea name="alamat_lengkap" rows="2" required maxlength="80" placeholder="Tulis alamat lengkap...">{{ old('alamat_lengkap') }}</textarea>
+                        @error('alamat_lengkap')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>RT</label>
+                            <label>RT <span style="color:#EF4444">*</span></label>
                             <select name="rt" required>
-                                <option value="" disabled selected>Pilih RT</option>
-                                <option value="RT01">RT01</option>
-                                <option value="RT02">RT02</option>
-                                <option value="RT03">RT03</option>
-                                <option value="RT04">RT04</option>
-                                <option value="RT05">RT05</option>
-                                <option value="RT06">RT06</option>
-                                <option value="RT07">RT07</option>
-                                <option value="RT08">RT08</option>
+                                <option value="" disabled {{ old('rt') ? '' : 'selected' }}>Pilih RT</option>
+                                <option value="RT01" {{ old('rt') === 'RT01' ? 'selected' : '' }}>RT01</option>
+                                <option value="RT02" {{ old('rt') === 'RT02' ? 'selected' : '' }}>RT02</option>
+                                <option value="RT03" {{ old('rt') === 'RT03' ? 'selected' : '' }}>RT03</option>
+                                <option value="RT04" {{ old('rt') === 'RT04' ? 'selected' : '' }}>RT04</option>
+                                <option value="RT05" {{ old('rt') === 'RT05' ? 'selected' : '' }}>RT05</option>
+                                <option value="RT06" {{ old('rt') === 'RT06' ? 'selected' : '' }}>RT06</option>
+                                <option value="RT07" {{ old('rt') === 'RT07' ? 'selected' : '' }}>RT07</option>
+                                <option value="RT08" {{ old('rt') === 'RT08' ? 'selected' : '' }}>RT08</option>
                             </select>
+                            @error('rt')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-row">
-                            <label>Dusun</label>
+                            <label>Dusun <span style="color:#EF4444">*</span></label>
                             <select name="dusun" required>
-                                <option value="" disabled selected>Pilih Dusun</option>
-                                <option value="Dusun I">Dusun I</option>
-                                <option value="Dusun II">Dusun II</option>
+                                <option value="" disabled {{ old('dusun') ? '' : 'selected' }}>Pilih Dusun</option>
+                                <option value="Dusun I" {{ old('dusun') === 'Dusun I' ? 'selected' : '' }}>Dusun I</option>
+                                <option value="Dusun II" {{ old('dusun') === 'Dusun II' ? 'selected' : '' }}>Dusun II</option>
                             </select>
+                            @error('dusun')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                     </div>
 
@@ -376,12 +379,15 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>No HP</label>
-                            <input type="tel" name="no_hp" required pattern="08[0-9]{8,18}" title="Nomor HP wajib diawali dengan 08, hanya berisi angka, dan panjang 10-20 digit" placeholder="Contoh: 08123456789">
+                            <label>No HP <span style="color:#EF4444">*</span></label>
+                            <input type="tel" name="no_hp" id="tambahNoHp" required maxlength="15" placeholder="Contoh: 08123456789" value="{{ old('no_hp') }}">
+                            <div id="tambahNoHpError" style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;display:none;"></div>
+                            @error('no_hp')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-row">
-                            <label>Email</label>
-                            <input type="email" name="email" placeholder="Contoh: budi@gmail.com">
+                            <label>Email <span style="color:#94A3B8;font-weight:400;">(Opsional)</span></label>
+                            <input type="email" name="email" maxlength="60" placeholder="Contoh: budi@gmail.com" value="{{ old('email') }}">
+                            @error('email')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                     </div>
 
@@ -390,31 +396,35 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>Pekerjaan</label>
-                            <input type="text" name="pekerjaan" required placeholder="Contoh: Petani">
+                            <label>Pekerjaan <span style="color:#EF4444">*</span></label>
+                            <input type="text" name="pekerjaan" required maxlength="20" placeholder="Contoh: Petani" value="{{ old('pekerjaan') }}">
+                            @error('pekerjaan')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-row">
-                            <label>Pendidikan Terakhir</label>
+                            <label>Pendidikan Terakhir <span style="color:#EF4444">*</span></label>
                             <select name="pendidikan" required>
-                                <option value="" disabled selected>Pilih</option>
-                                <option value="SD">SD</option>
-                                <option value="SMP">SMP</option>
-                                <option value="SMA">SMA</option>
-                                <option value="S1">S1</option>
-                                <option value="S2">S2</option>
+                                <option value="" disabled {{ old('pendidikan') ? '' : 'selected' }}>— Pilih —</option>
+                                <option value="SD" {{ old('pendidikan') === 'SD' ? 'selected' : '' }}>SD</option>
+                                <option value="SMP" {{ old('pendidikan') === 'SMP' ? 'selected' : '' }}>SMP</option>
+                                <option value="SMA/SMK" {{ old('pendidikan') === 'SMA/SMK' ? 'selected' : '' }}>SMA/SMK</option>
+                                <option value="D3" {{ old('pendidikan') === 'D3' ? 'selected' : '' }}>D3</option>
+                                <option value="S1" {{ old('pendidikan') === 'S1' ? 'selected' : '' }}>S1</option>
+                                <option value="S2/S3" {{ old('pendidikan') === 'S2/S3' ? 'selected' : '' }}>S2/S3</option>
                             </select>
+                            @error('pendidikan')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-row">
-                            <label>Jabatan di Koperasi</label>
+                            <label>Jabatan di Koperasi <span style="color:#EF4444">*</span></label>
                             <select name="jabatan" required>
-                                <option value="Anggota">Anggota</option>
-                                <option value="Ketua">Ketua</option>
-                                <option value="Wakil Ketua">Wakil Ketua</option>
-                                <option value="Sekretaris">Sekretaris</option>
-                                <option value="Bendahara">Bendahara</option>
-                                <option value="Kepala Unit">Kepala Unit</option>
-                                <option value="Pengawas">Pengawas</option>
+                                <option value="Anggota" {{ old('jabatan') === 'Anggota' ? 'selected' : '' }}>Anggota</option>
+                                <option value="Ketua" {{ old('jabatan') === 'Ketua' ? 'selected' : '' }}>Ketua</option>
+                                <option value="Wakil Ketua" {{ old('jabatan') === 'Wakil Ketua' ? 'selected' : '' }}>Wakil Ketua</option>
+                                <option value="Sekretaris" {{ old('jabatan') === 'Sekretaris' ? 'selected' : '' }}>Sekretaris</option>
+                                <option value="Bendahara" {{ old('jabatan') === 'Bendahara' ? 'selected' : '' }}>Bendahara</option>
+                                <option value="Kepala Unit" {{ old('jabatan') === 'Kepala Unit' ? 'selected' : '' }}>Kepala Unit</option>
+                                <option value="Pengawas" {{ old('jabatan') === 'Pengawas' ? 'selected' : '' }}>Pengawas</option>
                             </select>
+                            @error('jabatan')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                     </div>
 
@@ -422,7 +432,9 @@
                     <div class="modal-section-title">Motivasi Bergabung</div>
 
                     <div class="form-row">
-                        <textarea name="motivasi" rows="2" placeholder="Tulis motivasi bergabung..."></textarea>
+                        <label>Motivasi Bergabung <span style="color:#EF4444">*</span></label>
+                        <textarea name="motivasi" rows="2" required placeholder="Tulis motivasi bergabung...">{{ old('motivasi') }}</textarea>
+                        @error('motivasi')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                     </div>
 
                     <!-- Status Keanggotaan -->
@@ -430,19 +442,21 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>Status</label>
+                            <label>Status <span style="color:#EF4444">*</span></label>
                             <select name="status" required>
-                                <option value="diterima">Aktif</option>
-                                <option value="menunggu">Pending</option>
-                                <option value="ditolak">Ditolak</option>
+                                <option value="diterima" {{ old('status') === 'diterima' ? 'selected' : '' }}>Aktif</option>
+                                <option value="menunggu" {{ old('status') === 'menunggu' ? 'selected' : '' }}>Pending</option>
+                                <option value="ditolak" {{ old('status') === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                             </select>
+                            @error('status')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                         <div class="form-row">
-                            <label>Sumber Data</label>
+                            <label>Sumber Data <span style="color:#EF4444">*</span></label>
                             <select name="sumber" required>
-                                <option value="Admin">Admin</option>
-                                <option value="Pendaftaran">Pendaftaran</option>
+                                <option value="Admin" {{ old('sumber') === 'Admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="Pendaftaran" {{ old('sumber') === 'Pendaftaran' ? 'selected' : '' }}>Pendaftaran</option>
                             </select>
+                            @error('sumber')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                         </div>
                     </div>
                 </div>
@@ -477,17 +491,18 @@
                     <div class="modal-section-title" style="margin-top: 0;">Data Diri</div>
                     
                     <div class="form-row">
-                        <label>Nama Lengkap</label>
-                        <input type="text" name="nama_lengkap" id="editNamaLengkap" required>
+                        <label>Nama Lengkap <span style="color:#EF4444">*</span></label>
+                        <input type="text" name="nama_lengkap" id="editNamaLengkap" required maxlength="40">
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>NIK</label>
-                            <input type="text" name="nik" id="editNikVal" pattern="\d{16}" required>
+                            <label>NIK <span style="color:#EF4444">*</span></label>
+                            <input type="text" name="nik" id="editNikVal" required maxlength="16">
+                            <div id="editNikError" style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;display:none;"></div>
                         </div>
                         <div class="form-row">
-                            <label>Jenis Kelamin</label>
+                            <label>Jenis Kelamin <span style="color:#EF4444">*</span></label>
                             <select name="jenis_kelamin" id="editJenisKelamin" required>
                                 <option value="Laki-Laki">Laki-Laki</option>
                                 <option value="Perempuan">Perempuan</option>
@@ -497,11 +512,11 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>Tempat Lahir</label>
-                            <input type="text" name="tempat_lahir" id="editTempatLahir" required>
+                            <label>Tempat Lahir <span style="color:#EF4444">*</span></label>
+                            <input type="text" name="tempat_lahir" id="editTempatLahir" required maxlength="25">
                         </div>
                         <div class="form-row">
-                            <label>Tanggal Lahir</label>
+                            <label>Tanggal Lahir <span style="color:#EF4444">*</span></label>
                             <input type="date" name="tanggal_lahir" id="editTanggalLahir" required>
                         </div>
                     </div>
@@ -510,13 +525,13 @@
                     <div class="modal-section-title">Alamat</div>
 
                     <div class="form-row">
-                        <label>Alamat</label>
-                        <textarea name="alamat_lengkap" id="editAlamatLengkap" rows="2" required></textarea>
+                        <label>Alamat <span style="color:#EF4444">*</span></label>
+                        <textarea name="alamat_lengkap" id="editAlamatLengkap" rows="2" required maxlength="80"></textarea>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>RT</label>
+                            <label>RT <span style="color:#EF4444">*</span></label>
                             <select name="rt" id="editRtVal" required>
                                 <option value="RT01">RT01</option>
                                 <option value="RT02">RT02</option>
@@ -529,7 +544,7 @@
                             </select>
                         </div>
                         <div class="form-row">
-                            <label>Dusun</label>
+                            <label>Dusun <span style="color:#EF4444">*</span></label>
                             <select name="dusun" id="editDusunVal" required>
                                 <option value="Dusun I">Dusun I</option>
                                 <option value="Dusun II">Dusun II</option>
@@ -542,12 +557,13 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>No HP</label>
-                            <input type="tel" name="no_hp" id="editNoHp" required pattern="08[0-9]{8,18}" title="Nomor HP wajib diawali dengan 08, hanya berisi angka, dan panjang 10-20 digit">
+                            <label>No HP <span style="color:#EF4444">*</span></label>
+                            <input type="tel" name="no_hp" id="editNoHp" required maxlength="15">
+                            <div id="editNoHpError" style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;display:none;"></div>
                         </div>
                         <div class="form-row">
-                            <label>Email</label>
-                            <input type="email" name="email" id="editEmailVal">
+                            <label>Email <span style="color:#94A3B8;font-weight:400;">(Opsional)</span></label>
+                            <input type="email" name="email" id="editEmailVal" maxlength="60">
                         </div>
                     </div>
 
@@ -556,21 +572,23 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>Pekerjaan</label>
-                            <input type="text" name="pekerjaan" id="editPekerjaanVal" required>
+                            <label>Pekerjaan <span style="color:#EF4444">*</span></label>
+                            <input type="text" name="pekerjaan" id="editPekerjaanVal" required maxlength="20">
                         </div>
                         <div class="form-row">
-                            <label>Pendidikan Terakhir</label>
+                            <label>Pendidikan Terakhir <span style="color:#EF4444">*</span></label>
                             <select name="pendidikan" id="editPendidikanVal" required>
+                                <option value="" disabled>— Pilih —</option>
                                 <option value="SD">SD</option>
                                 <option value="SMP">SMP</option>
-                                <option value="SMA">SMA</option>
+                                <option value="SMA/SMK">SMA/SMK</option>
+                                <option value="D3">D3</option>
                                 <option value="S1">S1</option>
-                                <option value="S2">S2</option>
+                                <option value="S2/S3">S2/S3</option>
                             </select>
                         </div>
                         <div class="form-row">
-                            <label>Jabatan di Koperasi</label>
+                            <label>Jabatan di Koperasi <span style="color:#EF4444">*</span></label>
                             <select name="jabatan" id="editJabatan" required>
                                 <option value="Anggota">Anggota</option>
                                 <option value="Ketua">Ketua</option>
@@ -587,7 +605,8 @@
                     <div class="modal-section-title">Motivasi Bergabung</div>
 
                     <div class="form-row">
-                        <textarea name="motivasi" id="editMotivasi" rows="2"></textarea>
+                        <label>Motivasi Bergabung <span style="color:#EF4444">*</span></label>
+                        <textarea name="motivasi" id="editMotivasi" rows="2" required placeholder="Tulis motivasi bergabung..."></textarea>
                     </div>
 
                     <!-- Status Keanggotaan -->
@@ -595,7 +614,7 @@
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-row">
-                            <label>Status</label>
+                            <label>Status <span style="color:#EF4444">*</span></label>
                             <select name="status" id="editStatus" required>
                                 <option value="diterima">Aktif</option>
                                 <option value="menunggu">Pending</option>
@@ -603,7 +622,7 @@
                             </select>
                         </div>
                         <div class="form-row">
-                            <label>Sumber Data</label>
+                            <label>Sumber Data <span style="color:#EF4444">*</span></label>
                             <select name="sumber" id="editSumber" required>
                                 <option value="Admin">Admin</option>
                                 <option value="Pendaftaran">Pendaftaran</option>
@@ -636,7 +655,7 @@
                 <div style="flex: 1;">
                     <h3 style="font-size: 1.05rem; font-weight: 800; color: #0F172A; margin: 0 0 8px;">Tolak Pendaftaran?</h3>
                     <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.6;">
-                        Anda akan menolak pendaftaran <strong id="tolakNama"></strong>.<br>
+                        Anda akan menolak pendaftaran <strong id="tolakNama" style="word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;"></strong>.<br>
                         Status akan berubah menjadi "Ditolak".
                     </p>
                 </div>
@@ -670,7 +689,7 @@
                 <div style="flex: 1;">
                     <h3 style="font-size: 1.05rem; font-weight: 800; color: #0F172A; margin: 0 0 8px;">Hapus Anggota?</h3>
                     <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.6;">
-                        Anda akan menghapus data anggota <strong id="hapusNama"></strong>.<br>
+                        Anda akan menghapus data anggota <strong id="hapusNama" style="word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;"></strong>.<br>
                         Tindakan ini tidak dapat dibatalkan.
                     </p>
                 </div>
@@ -686,6 +705,12 @@
 
 @section('scripts')
     <script>
+        @if ($errors->any())
+            document.addEventListener('DOMContentLoaded', function() {
+                openTambahModal();
+            });
+        @endif
+
         // Modal functions
         function openTambahModal() {
             document.getElementById('tambahModal').classList.add('active');
@@ -730,7 +755,7 @@
             document.getElementById('editNoHp').value = a.no_hp;
             document.getElementById('editEmailVal').value = a.email || '';
             document.getElementById('editPekerjaanVal').value = a.pekerjaan || '';
-            document.getElementById('editPendidikanVal').value = a.pendidikan || 'SMA';
+            document.getElementById('editPendidikanVal').value = a.pendidikan || '';
             document.getElementById('editAlamatLengkap').value = a.alamat_lengkap;
             document.getElementById('editMotivasi').value = a.motivasi || '';
             document.getElementById('editJabatan').value = a.jabatan || 'Anggota';
@@ -789,11 +814,11 @@
             if (e.target === document.getElementById('hapusModal')) closeHapusModal();
         });
 
-        // Phone number input restriction (numbers only) & 08 prefix custom validation bubble
+        // Phone number input restriction (numbers only) & 08 prefix custom validation without browser popups
         document.addEventListener('DOMContentLoaded', function() {
-            const addNoHp = document.querySelector('#tambahModal input[name="no_hp"]');
+            const addNoHp = document.getElementById('tambahNoHp');
             const editNoHp = document.getElementById('editNoHp');
-            const addNik = document.querySelector('#tambahModal input[name="nik"]');
+            const addNik = document.getElementById('tambahNik');
             const editNik = document.getElementById('editNikVal');
 
             function restrictNonDigits(inputEl) {
@@ -803,71 +828,79 @@
                 });
             }
 
-            function restrictNoHp(inputEl) {
-                if (!inputEl) return;
-                inputEl.addEventListener('input', function() {
-                    let val = this.value.replace(/[^0-9]/g, '');
-                    if (val.length > 0 && val[0] !== '0') {
-                        val = '';
-                    } else if (val.length > 1 && val[1] !== '8') {
-                        val = '0';
-                    }
-                    this.value = val;
-                });
-            }
-
             restrictNonDigits(addNik);
             restrictNonDigits(editNik);
-            restrictNoHp(addNoHp);
-            restrictNoHp(editNoHp);
+            restrictNonDigits(addNoHp);
+            restrictNonDigits(editNoHp);
 
-            function validatePhone(inputEl) {
-                if (!inputEl) return true;
-                const val = inputEl.value;
-                if (!/^08[0-9]{8,18}$/.test(val)) {
-                    inputEl.setCustomValidity('Nomor HP wajib diawali dengan 08.');
-                    return false;
-                } else {
-                    inputEl.setCustomValidity('');
-                    return true;
-                }
+            function showInlineError(errorEl, message) {
+                if (!errorEl) return;
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
             }
 
-            function validateNik(inputEl) {
+            function clearInlineError(errorEl) {
+                if (!errorEl) return;
+                errorEl.textContent = '';
+                errorEl.style.display = 'none';
+            }
+
+            function validatePhone(inputEl, errorEl) {
                 if (!inputEl) return true;
                 const val = inputEl.value;
+                if (!val) {
+                    showInlineError(errorEl, 'Nomor HP / WhatsApp wajib diisi.');
+                    return false;
+                }
+                if (!/^08[0-9]{8,13}$/.test(val)) {
+                    showInlineError(errorEl, 'Nomor HP / WhatsApp wajib diawali dengan 08 dan berisi 10-15 angka.');
+                    return false;
+                }
+                clearInlineError(errorEl);
+                return true;
+            }
+
+            function validateNik(inputEl, errorEl) {
+                if (!inputEl) return true;
+                const val = inputEl.value;
+                if (!val) {
+                    showInlineError(errorEl, 'NIK wajib diisi.');
+                    return false;
+                }
                 if (val.length !== 16) {
-                    inputEl.setCustomValidity('NIK harus tepat 16 digit angka.');
+                    showInlineError(errorEl, 'NIK wajib berupa 16 digit angka.');
                     return false;
-                } else {
-                    inputEl.setCustomValidity('');
-                    return true;
                 }
+                clearInlineError(errorEl);
+                return true;
             }
+
+            const tambahNikError = document.getElementById('tambahNikError');
+            const tambahNoHpError = document.getElementById('tambahNoHpError');
+            const editNikError = document.getElementById('editNikError');
+            const editNoHpError = document.getElementById('editNoHpError');
 
             if (addNoHp) {
-                addNoHp.addEventListener('input', () => validatePhone(addNoHp));
+                addNoHp.addEventListener('input', () => validatePhone(addNoHp, tambahNoHpError));
             }
             if (editNoHp) {
-                editNoHp.addEventListener('input', () => validatePhone(editNoHp));
+                editNoHp.addEventListener('input', () => validatePhone(editNoHp, editNoHpError));
             }
             if (addNik) {
-                addNik.addEventListener('input', () => validateNik(addNik));
+                addNik.addEventListener('input', () => validateNik(addNik, tambahNikError));
             }
             if (editNik) {
-                editNik.addEventListener('input', () => validateNik(editNik));
+                editNik.addEventListener('input', () => validateNik(editNik, editNikError));
             }
 
             const tambahForm = document.querySelector('#tambahModal form');
             if (tambahForm) {
                 tambahForm.addEventListener('submit', function(e) {
                     let valid = true;
-                    if (!validatePhone(addNoHp)) {
-                        addNoHp.reportValidity();
+                    if (!validatePhone(addNoHp, tambahNoHpError)) {
                         valid = false;
                     }
-                    if (!validateNik(addNik)) {
-                        addNik.reportValidity();
+                    if (!validateNik(addNik, tambahNikError)) {
                         valid = false;
                     }
                     if (!valid) {
@@ -880,12 +913,10 @@
             if (editForm) {
                 editForm.addEventListener('submit', function(e) {
                     let valid = true;
-                    if (!validatePhone(editNoHp)) {
-                        editNoHp.reportValidity();
+                    if (!validatePhone(editNoHp, editNoHpError)) {
                         valid = false;
                     }
-                    if (!validateNik(editNik)) {
-                        editNik.reportValidity();
+                    if (!validateNik(editNik, editNikError)) {
                         valid = false;
                     }
                     if (!valid) {

@@ -42,7 +42,7 @@ class GalleryCategoryFilterVerificationTest extends TestCase
         Galeri::create([
             'judul' => 'Kegiatan A',
             'kategori' => 'Kategori A',
-            'gambar_url' => 'assets/images/placeholder.jpg',
+            'gambar' => 'assets/images/placeholder.jpg',
             'keterangan' => 'Keterangan A',
             'status' => 'aktif',
         ]);
@@ -51,7 +51,7 @@ class GalleryCategoryFilterVerificationTest extends TestCase
         Galeri::create([
             'judul' => 'Kegiatan B',
             'kategori' => 'Kategori B',
-            'gambar_url' => 'assets/images/placeholder.jpg',
+            'gambar' => 'assets/images/placeholder.jpg',
             'keterangan' => 'Keterangan B',
             'status' => 'nonaktif',
         ]);
@@ -104,7 +104,7 @@ class GalleryCategoryFilterVerificationTest extends TestCase
         Galeri::create([
             'judul' => 'Kegiatan A',
             'kategori' => 'Kategori A',
-            'gambar_url' => 'assets/images/placeholder.jpg',
+            'gambar' => 'assets/images/placeholder.jpg',
             'keterangan' => 'Keterangan A',
             'status' => 'aktif',
         ]);
@@ -113,7 +113,7 @@ class GalleryCategoryFilterVerificationTest extends TestCase
         $gallery = Galeri::create([
             'judul' => 'Kegiatan B',
             'kategori' => 'Kategori B',
-            'gambar_url' => 'assets/images/placeholder.jpg',
+            'gambar' => 'assets/images/placeholder.jpg',
             'keterangan' => 'Keterangan B',
             'status' => 'aktif',
         ]);
@@ -136,6 +136,45 @@ class GalleryCategoryFilterVerificationTest extends TestCase
         $responsePublic->assertStatus(200);
         $responsePublic->assertSee('Kategori A');
         $responsePublic->assertDontSee('data-filter="Kategori B"', false);
+    }
+
+    /** @test */
+    public function it_displays_newly_added_gallery_items_at_the_very_top()
+    {
+        Galeri::query()->delete();
+
+        // 1. Create old item
+        $old = Galeri::create([
+            'judul' => 'Kegiatan Lama',
+            'kategori' => 'Kategori A',
+            'gambar' => 'assets/images/placeholder.jpg',
+            'keterangan' => 'Keterangan Lama',
+            'status' => 'aktif',
+        ]);
+
+        // 2. Create new item
+        $new = Galeri::create([
+            'judul' => 'Kegiatan Baru Paling Atas',
+            'kategori' => 'Kategori A',
+            'gambar' => 'assets/images/placeholder.jpg',
+            'keterangan' => 'Keterangan Baru',
+            'status' => 'aktif',
+        ]);
+
+        // Check Admin view
+        $this->actingAs($this->adminUser, 'admin');
+        $responseAdmin = $this->get('/admin/galeri');
+        $responseAdmin->assertStatus(200);
+
+        $adminGalleries = $responseAdmin->viewData('galeriList');
+        $this->assertEquals($new->id, $adminGalleries->first()->id);
+
+        // Check Public view
+        $responsePublic = $this->get('/galeri');
+        $responsePublic->assertStatus(200);
+
+        $publicGalleries = $responsePublic->viewData('galeriList');
+        $this->assertEquals($new->id, $publicGalleries->first()->id);
     }
 }
 

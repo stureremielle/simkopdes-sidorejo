@@ -35,8 +35,8 @@
             @forelse ($pengumumanList as $index => $p)
                 <tr>
                     <td>
-                        <div>
-                            <span style="font-weight: 600; color: #0F172A; font-size: 0.95rem;">{{ $p->judul }}</span>
+                        <div style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+                            <span style="font-weight: 600; color: #0F172A; font-size: 0.95rem; display: block; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">{{ $p->judul }}</span>
                             <div style="font-size: 0.76rem; color: #94A3B8; margin-top: 4px; font-weight: 400; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 {{ Str::limit(strip_tags($p->isi), 50) }}
                             </div>
@@ -100,8 +100,8 @@
             <!-- Text -->
             <div style="flex: 1; text-align: left;">
                 <h3 style="font-size: 1.05rem; font-weight: 800; color: #0F172A; margin: 0 0 8px;">Hapus Pengumuman?</h3>
-                <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.6;">
-                    Anda akan menghapus pengumuman <strong id="deletePromoTitle"></strong>.<br>
+                <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.6; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+                    Anda akan menghapus pengumuman <strong id="deletePromoTitle" style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;"></strong>.<br>
                     Tindakan ini tidak dapat dibatalkan.
                 </p>
             </div>
@@ -131,58 +131,48 @@
             </button>
         </div>
 
-        <form method="POST" action="{{ route('admin.pengumuman.store') }}" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
+        <form id="tambahForm" method="POST" action="{{ route('admin.pengumuman.store') }}" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
             @csrf
 
             <!-- Scrollable form container inside modal -->
             <div style="flex: 1; overflow-y: auto; padding-right: 8px;">
                 {{-- Judul Pengumuman --}}
                 <div class="form-row">
-                    <label for="judul">Judul Pengumuman</label>
-                    <input type="text" name="judul" id="judul" value="{{ old('judul') }}" required placeholder="Contoh: Koperasi libur operasional...">
-                    @error('judul')
-                        <span style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">{{ $message }}</span>
-                    @enderror
+                    <label for="judul">Judul Pengumuman <span style="color: #EF4444;">*</span></label>
+                    <input type="text" name="judul" id="judul" value="{{ old('judul') }}" maxlength="80" required placeholder="Contoh: Koperasi libur operasional...">
+                    <span class="js-error-msg" id="error-judul" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('judul') {{ $message }} @enderror</span>
                 </div>
 
                 {{-- Tanggal Mulai dan Selesai --}}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="form-row">
-                        <label for="tanggal_mulai">Tanggal Mulai</label>
+                        <label for="tanggal_mulai">Tanggal Mulai <span style="color: #EF4444;">*</span></label>
                         <input type="date" name="tanggal_mulai" id="tanggal_mulai" value="{{ old('tanggal_mulai') }}" required>
-                        @error('tanggal_mulai')
-                            <span style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">{{ $message }}</span>
-                        @enderror
+                        <span class="js-error-msg" id="error-tanggal_mulai" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('tanggal_mulai') {{ $message }} @enderror</span>
                     </div>
                     
                     <div class="form-row">
                         <label for="tanggal_selesai">Tanggal Selesai (Opsional)</label>
                         <input type="date" name="tanggal_selesai" id="tanggal_selesai" value="{{ old('tanggal_selesai') }}">
-                        @error('tanggal_selesai')
-                            <span style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">{{ $message }}</span>
-                        @enderror
+                        <span class="js-error-msg" id="error-tanggal_selesai" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('tanggal_selesai') {{ $message }} @enderror</span>
                     </div>
                 </div>
 
                 {{-- Isi Pengumuman --}}
                 <div class="form-row">
-                    <label for="isi">Isi Pengumuman</label>
+                    <label for="isi">Isi Pengumuman <span style="color: #EF4444;">*</span></label>
                     <textarea name="isi" id="isi" rows="5" required placeholder="Tulis isi pengumuman secara detail...">{{ old('isi') }}</textarea>
-                    @error('isi')
-                        <span style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">{{ $message }}</span>
-                    @enderror
+                    <span class="js-error-msg" id="error-isi" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('isi') {{ $message }} @enderror</span>
                 </div>
 
                 {{-- Status --}}
                 <div class="form-row">
-                    <label for="status">Status</label>
+                    <label for="status">Status <span style="color: #EF4444;">*</span></label>
                     <select name="status" id="status" required>
                         <option value="Aktif" {{ old('status', 'Aktif') === 'Aktif' ? 'selected' : '' }}>Aktif</option>
                         <option value="Tidak Aktif" {{ old('status') === 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif</option>
                     </select>
-                    @error('status')
-                        <span style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">{{ $message }}</span>
-                    @enderror
+                    <span class="js-error-msg" id="error-status" style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">@error('status') {{ $message }} @enderror</span>
                 </div>
             </div>
 
@@ -217,7 +207,7 @@
                 {{-- Judul Pengumuman --}}
                 <div class="form-row">
                     <label for="editJudul">Judul Pengumuman</label>
-                    <input type="text" name="judul" id="editJudul" required placeholder="Contoh: Koperasi libur operasional...">
+                    <input type="text" name="judul" id="editJudul" maxlength="80" required placeholder="Contoh: Koperasi libur operasional...">
                     @error('judul')
                         <span style="color: #EF4444; font-size: 0.8rem; font-weight: 500; margin-top: 4px; display: block;">{{ $message }}</span>
                     @enderror
@@ -332,5 +322,37 @@
     document.getElementById('confirmDeleteModal').addEventListener('click', e => {
         if (e.target === document.getElementById('confirmDeleteModal')) closeConfirmDelete();
     });
+
+    const tambahForm = document.getElementById('tambahForm');
+    if (tambahForm) {
+        tambahForm.addEventListener('submit', function(e) {
+            let valid = true;
+            const fields = [
+                { id: 'judul', errorId: 'error-judul', msg: 'Judul pengumuman wajib diisi.' },
+                { id: 'tanggal_mulai', errorId: 'error-tanggal_mulai', msg: 'Tanggal mulai wajib diisi.' },
+                { id: 'isi', errorId: 'error-isi', msg: 'Isi pengumuman wajib diisi.' },
+                { id: 'status', errorId: 'error-status', msg: 'Status wajib dipilih.' }
+            ];
+
+            fields.forEach(f => {
+                const el = document.getElementById(f.id);
+                const errEl = document.getElementById(f.errorId);
+                if (el && errEl) {
+                    if (!el.value.trim()) {
+                        valid = false;
+                        errEl.textContent = f.msg;
+                        el.style.borderColor = '#EF4444';
+                    } else {
+                        errEl.textContent = '';
+                        el.style.borderColor = '';
+                    }
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+    }
 </script>
 @endsection

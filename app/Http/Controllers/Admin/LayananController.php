@@ -61,16 +61,30 @@ class LayananController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:50',
-            'kategori' => 'required|string|max:50',
-            'deskripsi' => 'nullable|string',
-            'harga' => 'nullable|numeric|min:0',
-            'satuan' => 'nullable|string|max:20',
+            'nama' => 'required|string|max:30',
+            'kategori' => 'required|string|max:20',
+            'deskripsi' => 'required|string',
+            'harga' => 'required|numeric|min:0',
+            'satuan' => 'required|string|max:10',
             'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:3072',
             'status' => 'required|in:aktif,nonaktif',
+        ], [
+            'nama.required'      => 'Nama produk wajib diisi.',
+            'nama.max'           => 'Nama produk maksimal 30 karakter.',
+            'kategori.required'  => 'Kategori wajib dipilih.',
+            'deskripsi.required' => 'Deskripsi wajib diisi.',
+            'harga.required'     => 'Harga wajib diisi.',
+            'harga.numeric'      => 'Harga harus berupa angka.',
+            'harga.min'          => 'Harga tidak boleh negatif.',
+            'satuan.required'    => 'Satuan wajib diisi.',
+            'satuan.max'         => 'Satuan maksimal 10 karakter.',
+            'status.required'    => 'Status wajib dipilih.',
+            'gambar_file.image'  => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.mimes'  => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.max'    => 'Ukuran foto maksimal 3 MB.',
         ]);
 
-        $gambarUrl = '';
+        $gambar = '';
         if ($request->hasFile('gambar_file')) {
             $file = $request->file('gambar_file');
             $safeName = time() . '_img_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $file->getClientOriginalName());
@@ -80,7 +94,7 @@ class LayananController extends Controller
                 File::makeDirectory($uploadPath, 0755, true, true);
             }
             $file->move($uploadPath, $safeName);
-            $gambarUrl = 'uploads/layanan/' . $safeName;
+            $gambar = 'uploads/layanan/' . $safeName;
         }
 
         Layanan::create([
@@ -89,7 +103,7 @@ class LayananController extends Controller
             'deskripsi' => $request->deskripsi ?? '',
             'harga' => $request->harga ?? 0,
             'satuan' => $request->satuan ?? 'unit',
-            'gambar_url' => $gambarUrl,
+            'gambar' => $gambar,
             'status' => $request->status,
         ]);
 
@@ -102,21 +116,35 @@ class LayananController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:50',
-            'kategori' => 'required|string|max:50',
-            'deskripsi' => 'nullable|string',
-            'harga' => 'nullable|numeric|min:0',
-            'satuan' => 'nullable|string|max:20',
+            'nama' => 'required|string|max:30',
+            'kategori' => 'required|string|max:20',
+            'deskripsi' => 'required|string',
+            'harga' => 'required|numeric|min:0',
+            'satuan' => 'required|string|max:10',
             'gambar_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:3072',
             'status' => 'required|in:aktif,nonaktif',
+        ], [
+            'nama.required'      => 'Nama produk wajib diisi.',
+            'nama.max'           => 'Nama produk maksimal 30 karakter.',
+            'kategori.required'  => 'Kategori wajib dipilih.',
+            'deskripsi.required' => 'Deskripsi wajib diisi.',
+            'harga.required'     => 'Harga wajib diisi.',
+            'harga.numeric'      => 'Harga harus berupa angka.',
+            'harga.min'          => 'Harga tidak boleh negatif.',
+            'satuan.required'    => 'Satuan wajib diisi.',
+            'satuan.max'         => 'Satuan maksimal 10 karakter.',
+            'status.required'    => 'Status wajib dipilih.',
+            'gambar_file.image'  => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.mimes'  => 'Foto harus berupa file dengan format JPG, JPEG, PNG, GIF, SVG, atau WEBP.',
+            'gambar_file.max'    => 'Ukuran foto maksimal 3 MB.',
         ]);
 
         $layanan = Layanan::findOrFail($id);
-        $gambarUrl = $layanan->gambar_url;
+        $gambar = $layanan->gambar;
 
         if ($request->hasFile('gambar_file')) {
-            if ($layanan->gambar_url) {
-                $oldPath = public_path($layanan->gambar_url);
+            if ($layanan->gambar) {
+                $oldPath = public_path($layanan->gambar);
                 if (File::isFile($oldPath)) {
                     File::delete($oldPath);
                 }
@@ -130,7 +158,7 @@ class LayananController extends Controller
                 File::makeDirectory($uploadPath, 0755, true, true);
             }
             $file->move($uploadPath, $safeName);
-            $gambarUrl = 'uploads/layanan/' . $safeName;
+            $gambar = 'uploads/layanan/' . $safeName;
         }
 
         $layanan->update([
@@ -139,7 +167,7 @@ class LayananController extends Controller
             'deskripsi' => $request->deskripsi ?? '',
             'harga' => $request->harga ?? 0,
             'satuan' => $request->satuan ?? 'unit',
-            'gambar_url' => $gambarUrl,
+            'gambar' => $gambar,
             'status' => $request->status,
         ]);
 
@@ -164,8 +192,8 @@ class LayananController extends Controller
     public function destroy($id)
     {
         $layanan = Layanan::findOrFail($id);
-        if ($layanan->gambar_url) {
-            $oldPath = public_path($layanan->gambar_url);
+        if ($layanan->gambar) {
+            $oldPath = public_path($layanan->gambar);
             if (File::isFile($oldPath)) {
                 File::delete($oldPath);
             }
@@ -201,7 +229,7 @@ class LayananController extends Controller
     public function storeCategory(Request $request)
     {
         $request->validate([
-            'kategori' => 'required|string|max:50',
+            'kategori' => 'required|string|max:20',
         ]);
 
         $newCat = trim($request->kategori);
