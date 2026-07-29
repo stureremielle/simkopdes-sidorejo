@@ -169,7 +169,7 @@
                         <td style="text-align: center; white-space: nowrap; padding: 16px 4px;">
                             <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
                                 <!-- Download icon Link -->
-                                <a href="{{ asset('uploads/' . $f->nama_file) }}" download="{{ $f->nama_asli }}" class="btn-icon-action" title="Download">
+                                <a href="{{ route('admin.penyimpanan.download', $f->id) }}" class="btn-icon-action" title="Download">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -177,7 +177,7 @@
                                     </svg>
                                 </a>
                                 <!-- Lihat File (Preview) icon trigger -->
-                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ asset('uploads/' . $f->nama_file) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
+                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ route('admin.penyimpanan.preview', $f->id) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
