@@ -30,7 +30,7 @@ class Galeri extends Model
 
     public function getKategoriAttribute()
     {
-        return $this->kategoriRelation?->nama ?? 'Kegiatan';
+        return $this->kategoriRelation?->nama ?? '';
     }
 
     public function setKategoriAttribute($value)

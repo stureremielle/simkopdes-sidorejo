@@ -544,3 +544,26 @@
     color: #94A3B8;
     margin-top: 4px;
 }
+
+@media (max-width: 576px) {
+    .daftar-hero-title {
+        font-size: 1.75rem;
+    }
+
+    .daftar-form-card {
+        padding: 24px 16px;
+        border-radius: 16px;
+        margin-top: -40px;
+    }
+
+    .syarat-keanggotaan-section {
+        padding: 20px 16px;
+        margin: -24px -16px 24px -16px;
+    }
+
+    .btn-submit {
+        width: 100%;
+        min-width: 0;
+        padding: 14px 20px;
+    }
+}

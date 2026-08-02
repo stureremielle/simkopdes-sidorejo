@@ -274,3 +274,51 @@ body {
 .text-sm {
     font-size: 0.875rem;
 }
+
+/* Enhanced Mobile & Tablet Responsiveness */
+@media (max-width: 768px) {
+    .layanan-container {
+        padding: 100px 16px 40px 16px;
+    }
+
+    .layanan-hero {
+        padding: 40px 16px 24px 16px;
+    }
+
+    .layanan-hero-title {
+        font-size: 2rem;
+    }
+
+    .layanan-hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .category-pills {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        width: 100%;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .pill {
+        flex-shrink: 0;
+        padding: 10px 18px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .layanan-hero-title {
+        font-size: 1.75rem;
+    }
+
+    .grid-section {
+        padding: 0 16px 60px 16px;
+    }
+
+    .card-body {
+        padding: 18px;
+    }
+}

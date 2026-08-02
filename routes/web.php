@@ -16,20 +16,20 @@ Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
 Route::get('/daftar', [HomeController::class, 'daftar'])->name('daftar');
 Route::post('/daftar', [HomeController::class, 'prosesDaftar'])->name('daftar.store');
 
-// Admin Guest Routes (Login)
+// Rute Tamu Admin (Login)
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-// Admin Protected Routes (Guarded by auth:admin)
+// Rute Terproteksi Admin (Menggunakan middleware auth:admin)
 Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Logout
+    // Keluar (Logout)
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Dashboard
+    // Dasbor Utama
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::post('/anggota/verifikasi', [AdminController::class, 'verifyAnggota'])->name('anggota.verifikasi');
 
-    // CRUD Pages
+    // Rute Halaman Pengelolaan Data (CRUD)
     Route::get('/layanan', [\App\Http\Controllers\Admin\LayananController::class, 'index'])->name('layanan');
     Route::post('/layanan', [\App\Http\Controllers\Admin\LayananController::class, 'store'])->name('layanan.store');
     Route::post('/layanan/kategori', [\App\Http\Controllers\Admin\LayananController::class, 'storeCategory'])->name('kategori.store');
@@ -66,8 +66,6 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::post('/penyimpanan', [\App\Http\Controllers\Admin\PenyimpananController::class, 'upload'])->name('penyimpanan.upload');
     Route::put('/penyimpanan/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'update'])->name('penyimpanan.update');
     Route::delete('/penyimpanan/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'destroy'])->name('penyimpanan.destroy');
-    Route::get('/penyimpanan/download/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'download'])->name('penyimpanan.download');
-    Route::get('/penyimpanan/preview/{id}', [\App\Http\Controllers\Admin\PenyimpananController::class, 'preview'])->name('penyimpanan.preview');
 
     Route::resource('pengumuman', \App\Http\Controllers\Admin\PengumumanController::class);
 
@@ -78,5 +76,5 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::post('/pengaturan/ubah-password', [\App\Http\Controllers\Admin\PengaturanController::class, 'changePassword'])->name('pengaturan.password');
 });
 
-// Backward compatibility or alternative logout
+// Rute kompatibilitas logout alternatif
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

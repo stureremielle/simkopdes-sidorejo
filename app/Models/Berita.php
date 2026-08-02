@@ -41,7 +41,7 @@ class Berita extends Model
 
     public function getKategoriAttribute()
     {
-        return $this->kategoriRelation?->nama ?? 'Umum';
+        return $this->kategoriRelation?->nama ?? '';
     }
 
     public function setKategoriAttribute($value)

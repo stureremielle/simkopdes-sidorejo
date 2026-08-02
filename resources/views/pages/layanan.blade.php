@@ -11,27 +11,27 @@
 
 @section('content')
     <div class="layanan-container">
-        <!-- 2. HERO TITLE BLOCK (Clean pure white background, no banner images) -->
+        <!-- 2. BLOK JUDUL UTAMA (HERO) -->
         <section class="layanan-hero">
             <h1 class="layanan-hero-title">Produk Unggulan Daerah Kami</h1>
             <p class="layanan-hero-subtitle">Temukan berbagai hasil pertanian dan peternakan berkualitas terbaik yang dihasilkan langsung dari Desa Sidorejo.</p>
         </section>
 
-        <!-- 3. CONTROLS BAR ROW -->
+        <!-- 3. BARIS KONTROL KATEGORI & PENCARIAN -->
         <div class="filter-search-row">
             <div class="category-pills">
-                <!-- Semua (Active) -->
+                <!-- Semua (Aktif) -->
                 <div class="pill {{ !$kategori ? 'pill-active' : 'pill-inactive' }}" data-category="semua">
                     <span>Semua</span>
                 </div>
-                <!-- Dynamic categories from database -->
+                <!-- Kategori dinamis dari database -->
                 @foreach ($kategoriList as $kat)
                 <div class="pill {{ strtolower($kategori) === strtolower($kat) ? 'pill-active' : 'pill-inactive' }}" data-category="{{ strtolower($kat) }}">
                     <span>{{ $kat }}</span>
                 </div>
                 @endforeach
             </div>
-            <!-- Search Input -->
+            <!-- Input Pencarian -->
             <div class="search-container">
                 <div class="search-icon">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <!-- 4. DYNAMIC PRODUCTS GRID -->
+        <!-- 4. KISI-KISI PRODUK DINAMIS -->
         <div class="product-grid" id="productGrid">
             @forelse ($layananList as $item)
                 @php
@@ -80,7 +80,7 @@
 @endsection
 
 @section('scripts')
-    <!-- Interactive Filtering and Search Logic -->
+    <!-- Logika Pencarian dan Penyaringan Interaktif -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const pills = document.querySelectorAll('.pill');
@@ -107,10 +107,10 @@
                 });
             }
 
-            // Run initial filter in case page reloads with active class or query parameter
+            // Jalankan penyaringan awal saat halaman dimuat
             filterProducts();
 
-            // Category Pill Clicking
+            // Penanganan klik pada tombol pilihan kategori
             pills.forEach(pill => {
                 pill.addEventListener('click', function () {
                     pills.forEach(p => {
@@ -125,7 +125,7 @@
                 });
             });
 
-            // Search input handler
+            // Penanganan input pencarian
             searchInput.addEventListener('input', function (e) {
                 searchQuery = e.target.value.toLowerCase().trim();
                 filterProducts();

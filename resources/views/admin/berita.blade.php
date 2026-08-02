@@ -40,10 +40,10 @@
     </div>
     @endif
 
-    <!-- Search and Filter Controls -->
+    <!-- Kontrol Pencarian dan Penyaringan -->
     <div class="filter-controls-row">
         <form method="GET" action="{{ route('admin.berita') }}" class="left-filters" id="filterForm">
-            <!-- Hidden status filter -->
+            <!-- Filter status tersembunyi -->
             <input type="hidden" name="status" id="statusFilterVal" value="{{ $statusFilter ?? 'semua' }}">
 
             <div class="search-input-wrapper">
@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <!-- Articles Table -->
+    <!-- Tabel Daftar Berita & Informasi -->
     <div class="berita-table-wrapper">
         <table class="berita-table">
             <thead>
@@ -284,7 +284,7 @@
             <!-- Content Body -->
             <div id="detIsi" style="font-size: 0.9rem; color: #475569; line-height: 1.6; font-family: inherit; margin-bottom: 28px; white-space: pre-wrap; word-break: break-word;"></div>
             
-            <!-- Bottom Button -->
+            <!-- Tombol Bawah -->
             <button type="button" onclick="closeDetailModal()" style="width: 100%; text-align: center; background: #FFFFFF; color: #475569; border: 1.5px solid #E2E8F0; padding: 11px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.15s; font-family: inherit;" onmouseover="this.style.background='#F8FAFC'; this.style.borderColor='#CBD5E1';" onmouseout="this.style.background='#FFFFFF'; this.style.borderColor='#E2E8F0';">
                 Tutup
             </button>
@@ -311,7 +311,7 @@
                 </button>
             </div>
             
-            <!-- Input Row -->
+            <!-- Baris Input -->
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <input type="text" id="newCategoryInput" placeholder="Nama kategori baru..." maxlength="20" style="flex: 1; padding: 10px 14px; border: 1.5px solid #DC2626; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; background-color: #FFFFFF;">
                 <button type="button" onclick="addNewCategory()" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background-color: #FFF1F2; color: #DC2626; font-size: 1.25rem; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#FEE2E2'" onmouseout="this.style.background='#FFF1F2'">
@@ -324,7 +324,7 @@
                 <!-- Category items will be rendered here dynamically -->
             </div>
             
-            <!-- Bottom Button -->
+            <!-- Tombol Bawah -->
             <button type="button" onclick="closeKategoriModal()" style="width: 100%; text-align: center; background: #DC2626; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#B91C1C'" onmouseout="this.style.backgroundColor='#DC2626'">
                 Selesai
             </button>
@@ -417,7 +417,7 @@
             if (e.target === document.getElementById('beritaModal')) closeModal();
         });
 
-        // Auto-open article modal if validation errors exist on page load
+        // Membuka modal artikel secara otomatis jika terdapat error validasi saat halaman dimuat
         @if ($errors->any())
             document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('modalTitle').textContent = 'Tambah Artikel Baru';
@@ -690,7 +690,7 @@
         // Initialize categories on load
         window.addEventListener('DOMContentLoaded', initCategories);
 
-        // Expandable article title: click to expand/collapse
+        // Judul artikel yang dapat diperluas: klik untuk membuka/menutup
         document.querySelector('.berita-table tbody').addEventListener('click', function (e) {
             const titleSpan = e.target.closest('.article-title-text');
             if (!titleSpan) return;

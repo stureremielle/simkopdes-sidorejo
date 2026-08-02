@@ -30,13 +30,13 @@
     line-height: 1.65;
 }
 
-/* 2. Featured Post Section */
-.featured-section {
+/* 2. Berita Utama Section */
+.berita-utama-section {
     padding: 40px 0 0 0;
     background-color: #FFFFFF;
 }
 
-.featured-card {
+.berita-utama-card {
     background-color: #FFFFFF;
     border-radius: 16px;
     overflow: hidden;
@@ -47,42 +47,44 @@
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.featured-card:hover {
+.berita-utama-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: 768px) {
-    .featured-card {
+    .berita-utama-card {
         flex-direction: row;
+        align-items: stretch;
+        min-height: 350px;
     }
 }
 
-.featured-img-wrapper {
+.berita-utama-img-wrapper {
     position: relative;
     width: 100%;
-    height: 280px;
+    height: 260px;
     overflow: hidden;
     flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
-    .featured-img-wrapper {
-        width: 50%;
+    .berita-utama-img-wrapper {
+        width: 45%;
         height: auto;
-        min-height: 360px;
+        min-height: 350px;
     }
 }
 
-.featured-img-wrapper img {
+.berita-utama-img-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
 }
 
-/* "PILIHAN" badge — bright red capsule */
-.featured-badge {
+/* Badge kategori — kapsul merah */
+.berita-utama-badge {
     position: absolute;
     top: 20px;
     left: 20px;
@@ -94,9 +96,10 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.6px;
+    z-index: 2;
 }
 
-.featured-content {
+.berita-utama-content {
     padding: 30px;
     display: flex;
     flex-direction: column;
@@ -105,9 +108,9 @@
 }
 
 @media (min-width: 768px) {
-    .featured-content {
+    .berita-utama-content {
         padding: 40px 44px;
-        width: 50%;
+        width: 55%;
     }
 }
 
@@ -132,7 +135,7 @@
     height: 15px;
 }
 
-.featured-title {
+.berita-utama-title {
     font-size: 1.85rem;
     font-weight: 800;
     color: #111111;
@@ -146,19 +149,19 @@
 }
 
 @media (max-width: 768px) {
-    .featured-title {
+    .berita-utama-title {
         font-size: 1.5rem;
     }
 }
 
-.featured-desc {
+.berita-utama-desc {
     font-size: 0.97rem;
     color: #555555;
     line-height: 1.65;
     margin-bottom: 24px;
 }
 
-.featured-link {
+.berita-utama-link {
     font-size: 0.925rem;
     font-weight: 650;
     color: #DC2626;
@@ -169,7 +172,7 @@
     transition: gap 0.2s ease, color 0.2s ease;
 }
 
-.featured-link:hover {
+.berita-utama-link:hover {
     color: #B91C1C;
     gap: 9px;
 }

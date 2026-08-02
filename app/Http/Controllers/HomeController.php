@@ -13,33 +13,27 @@ use App\Models\Pengumuman;
 class HomeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan halaman utama (beranda).
      */
     public function index()
     {
-        // Featured news: always the latest published article by date
-        $featured = Berita::where('status', 'tayang')
-            ->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')
-            ->orderBy('id', 'desc')
-            ->first();
-
-        // Featured products selected by admin, fallback to 3 latest active
-        $products = Layanan::where('is_featured', true)->where('status', 'aktif')->get();
-        if ($products->isEmpty()) {
-            $products = Layanan::where('status', 'aktif')->orderBy('id', 'desc')->take(3)->get();
+        // Layanan unggulan yang dipilih admin, opsi cadangan ke 3 layanan aktif terbaru
+        $layananList = Layanan::where('is_featured', true)->where('status', 'aktif')->take(3)->get();
+        if ($layananList->isEmpty()) {
+            $layananList = Layanan::where('status', 'aktif')->orderBy('id', 'desc')->take(3)->get();
         }
 
-        // Active announcements sorted by latest date (all active data)
-        $announcements = Pengumuman::where('status', 'Aktif')
+        // Pengumuman aktif yang diurutkan berdasarkan tanggal terbaru
+        $pengumumanList = Pengumuman::where('status', 'Aktif')
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('pages.index', compact('featured', 'products', 'announcements'));
+        return view('pages.index', compact('layananList', 'pengumumanList'));
     }
 
     /**
-     * Announcement detail page.
+     * Halaman detail pengumuman.
      */
     public function detailPengumuman($id)
     {
@@ -49,7 +43,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Services page.
+     * Halaman daftar layanan dan produk.
      */
     public function layanan(Request $request)
     {
@@ -76,23 +70,15 @@ class HomeController extends Controller
     }
 
     /**
-     * News page.
+     * Halaman daftar berita & informasi.
      */
     public function berita(Request $request)
     {
-        $featured = Berita::where('status', 'tayang')
-            ->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')
-            ->orderBy('id', 'desc')
-            ->first();
-
         $query = Berita::where('status', 'tayang');
-        if ($featured) {
-            $query->where('id', '!=', $featured->id);
-        }
 
         $totalCount = (clone $query)->count();
 
-        // If AJAX request, load more articles based on offset
+        // Jika permintaan AJAX, muat berita tambahan berdasarkan offset
         if ($request->ajax()) {
             $offset = (int) $request->input('offset', 6);
             $limit = 6;
@@ -107,7 +93,7 @@ class HomeController extends Controller
             
             $html = '';
             foreach ($additionalArticles as $a) {
-                // Card image url
+                // URL gambar kartu berita
                 $cardGambar = $a->gambar;
                 $cardGambarSrc = '';
                 if ($cardGambar) {
@@ -121,7 +107,7 @@ class HomeController extends Controller
                 <article class="berita-card">
                      <div class="card-img-wrapper">
                           <img src="' . $cardGambarSrc . '" alt="' . e($a->judul) . '">
-                         <span class="card-badge">' . e($a->kategori) . '</span>
+                          <span class="card-badge">' . e($a->kategori) . '</span>
                      </div>
                     <div class="card-body">
                         <div class="card-meta">
@@ -144,20 +130,15 @@ class HomeController extends Controller
             ]);
         }
 
-        $artikel = $query->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')->orderBy('id', 'desc')->take(6)->get();
+        $semuaBerita  = $query->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')->orderBy('id', 'desc')->take(6)->get();
+        $beritaUtama  = $semuaBerita->first();
+        $daftarBerita = $semuaBerita->slice(1);
 
-        $badgeColors = [
-            'Pertanian' => 'badge-pertanian',
-            'Kerajinan' => 'badge-kerajinan',
-            'Keuangan' => 'badge-keuangan',
-            'Umum' => 'badge-umum'
-        ];
-
-        return view('pages.berita', compact('featured', 'artikel', 'badgeColors'));
+        return view('pages.berita', compact('beritaUtama', 'daftarBerita'));
     }
 
     /**
-     * Gallery page.
+     * Halaman galeri kegiatan.
      */
     public function galeri()
     {
@@ -180,7 +161,7 @@ class HomeController extends Controller
     }
 
     /**
-     * About page.
+     * Halaman tentang kami (profil koperasi).
      */
     public function tentang()
     {
@@ -190,12 +171,12 @@ class HomeController extends Controller
             $settings[$row->key_name] = $row->value;
         }
 
-        // Fetch dynamic metrics for "Persebaran Anggota"
+        // Mengambil metrik dinamis untuk statistik persebaran anggota
         $activeMembers = Anggota::where('status', 'diterima')->get();
         $totalAnggota = $activeMembers->count();
 
-        // 1. Calculate active RT count (Jumlah RT)
-        // Normalize RT names to find the unique ones
+        // 1. Menghitung jumlah RT aktif
+        // Normalisasi nama RT untuk menemukan RT unik
         $normalizeRt = function($rt) {
             $clean = preg_replace('/[^A-Za-z0-9]/', '', $rt);
             $clean = strtoupper($clean);
@@ -211,16 +192,16 @@ class HomeController extends Controller
                 $uniqueRts[$normalizeRt($m->rt)] = true;
             }
         }
-        $jumlahRt = max(8, count($uniqueRts)); // Fallback to min 8 RTs as in list or count actual ones
+        $jumlahRt = max(8, count($uniqueRts)); // Opsi cadangan minimal 8 RT sesuai daftar atau hitung jumlah aktual
 
-        // 2. Count "Anggota Baru" (in current year, e.g. 2026 or whatever current year is)
+        // 2. Menghitung jumlah anggota baru pada tahun berjalan
         $currentYear = date('Y');
         $anggotaBaru = Anggota::where('status', 'diterima')
             ->whereYear('created_at', $currentYear)
             ->count();
 
-        // 3. RT breakdown data
-        // Pre-populate RT 01 to RT 08 with default values
+        // 3. Data rincian per RT
+        // Menyiapkan data awal RT 01 hingga RT 08 dengan nilai bawaan
         $rtData = [];
         for ($i = 1; $i <= 8; $i++) {
             $rtName = 'RT ' . str_pad($i, 2, '0', STR_PAD_LEFT);
@@ -233,7 +214,7 @@ class HomeController extends Controller
             ];
         }
 
-        // Helper to normalize dusun
+        // Fungsi pembantu untuk normalisasi nama dusun
         $normalizeDusun = function($dusun) {
             $dusun = trim($dusun);
             if (strcasecmp($dusun, 'DI') === 0 || strcasecmp($dusun, 'Dusun I') === 0) {
@@ -248,7 +229,7 @@ class HomeController extends Controller
             return $dusun;
         };
 
-        // Populate with database counts
+        // Mengisi data berdasarkan jumlah dari database
         foreach ($activeMembers as $m) {
             if ($m->rt) {
                 $normRt = $normalizeRt($m->rt);
@@ -269,7 +250,7 @@ class HomeController extends Controller
             }
         }
 
-        // Calculate percentages
+        // Menghitung persentase
         foreach ($rtData as $rtName => &$data) {
             if ($totalAnggota > 0) {
                 $data['pct'] = round(($data['count'] / $totalAnggota) * 100);
@@ -279,14 +260,14 @@ class HomeController extends Controller
         }
         unset($data);
 
-        // Sort by RT name so RT 01 comes first, then RT 02, etc.
+        // Mengurutkan berdasarkan nama RT agar RT 01 berada di urutan pertama
         ksort($rtData);
 
         return view('pages.tentang', compact('settings', 'totalAnggota', 'jumlahRt', 'anggotaBaru', 'currentYear', 'rtData'));
     }
 
     /**
-     * Contact page.
+     * Halaman kontak.
      */
     public function kontak()
     {
@@ -294,7 +275,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Registration form.
+     * Halaman formulir pendaftaran anggota.
      */
     public function daftar()
     {
@@ -302,7 +283,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Store registration.
+     * Memproses dan menyimpan data pendaftaran anggota.
      */
     public function prosesDaftar(Request $request)
     {
@@ -351,42 +332,19 @@ class HomeController extends Controller
             'status' => 'menunggu',
         ]);
 
-        $successMessage = "Pendaftaran atas nama <strong>" . htmlspecialchars($request->namaLengkap) . "</strong> berhasil dikirim! Kami akan memverifikasi dan menghubungi Anda segera.";
-
-        return redirect()->route('daftar')->with('success', $successMessage);
+        return redirect()->route('daftar')->with('success', true);
     }
 
     /**
-     * News detail page.
+     * Halaman detail berita.
      */
     public function detailBerita($id)
     {
         $berita = Berita::where('status', 'tayang')->findOrFail($id);
-        $related = Berita::where('status', 'tayang')
-            ->where('id', '!=', $id)
-            ->inRandomOrder()
-            ->take(3)
-            ->get();
-
-        // Fetch news background elements
-        $featured = Berita::where('status', 'tayang')
-            ->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')
-            ->orderBy('id', 'desc')
-            ->first();
 
         $query = Berita::where('status', 'tayang');
-        if ($featured) {
-            $query->where('id', '!=', $featured->id);
-        }
-        $artikel = $query->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')->orderBy('id', 'desc')->take(6)->get();
+        $beritaTerkait = $query->orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')->orderBy('id', 'desc')->take(6)->get();
 
-        $badgeColors = [
-            'Pertanian' => 'badge-pertanian',
-            'Kerajinan' => 'badge-kerajinan',
-            'Keuangan' => 'badge-keuangan',
-            'Umum' => 'badge-umum'
-        ];
-
-        return view('pages.detail-berita', compact('berita', 'related', 'featured', 'artikel', 'badgeColors'));
+        return view('pages.detail-berita', compact('berita', 'beritaTerkait'));
     }
 }

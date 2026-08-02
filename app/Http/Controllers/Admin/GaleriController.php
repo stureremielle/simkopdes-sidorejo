@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 class GaleriController extends Controller
 {
     /**
-     * Display a listing of activities.
+     * Menampilkan daftar galeri kegiatan.
      */
     public function index(Request $request)
     {
@@ -33,10 +33,10 @@ class GaleriController extends Controller
 
         $galeriList = $query->orderBy('id', 'desc')->get();
 
-        // Get unique categories for filter row
+        // Mengambil daftar nama kategori unik untuk pilihan filter
         $kategoriList = \App\Models\KategoriGaleri::pluck('nama')->toArray();
 
-        // Stats
+        // Perhitungan statistik ringkasan galeri
         $statTotal = Galeri::count();
         $statHasFile = Galeri::whereNotNull('materi')->where('materi', '<>', '')->count();
 
@@ -72,13 +72,13 @@ class GaleriController extends Controller
     }
 
     /**
-     * Remove the specified category.
+     * Menghapus kategori galeri yang dipilih.
      */
     public function destroyCategory($kategori)
     {
         $catToDelete = $kategori;
 
-        // Check if there are any activities using this category
+        // Memeriksa apakah terdapat kegiatan yang menggunakan kategori ini
         $cat = \App\Models\KategoriGaleri::where('nama', $catToDelete)->first();
         if ($cat) {
             $hasActivities = Galeri::where('kategori_id', $cat->id)->count();
@@ -93,14 +93,14 @@ class GaleriController extends Controller
     }
 
     /**
-     * Store a newly created activity.
+     * Memproses dan menyimpan data galeri kegiatan baru.
      */
     public function store(Request $request)
     {
         $hasMateri = $request->input('has_materi') == '1' || $request->hasFile('materi_file') || $request->filled('keterangan');
 
         $rules = [
-            'judul'       => 'required|string|max:50',
+            'judul'       => 'required|string|max:80',
             'kategori'    => 'required|string|max:20',
             'periode'     => 'required|string',
             'gambar_file' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:5120',
@@ -117,7 +117,7 @@ class GaleriController extends Controller
 
         $messages = [
             'judul.required'       => 'Judul kegiatan wajib diisi.',
-            'judul.max'            => 'Judul kegiatan maksimal 50 karakter.',
+            'judul.max'            => 'Judul kegiatan maksimal 80 karakter.',
             'kategori.required'    => 'Kategori wajib dipilih.',
             'periode.required'     => 'Tanggal kegiatan wajib diisi.',
             'gambar_file.required' => 'Foto kegiatan wajib diisi.',
@@ -190,11 +190,11 @@ class GaleriController extends Controller
             'created_at' => $createdAt,
         ]);
 
-        return redirect()->route('admin.galeri')->with('success', 'Kegiatan baru berhasil ditambahkan.');
+        return redirect()->route('admin.galeri');
     }
 
     /**
-     * Update the specified activity.
+     * Memproses dan memperbarui data galeri kegiatan.
      */
     public function update(Request $request, $id)
     {
@@ -206,7 +206,7 @@ class GaleriController extends Controller
         $hasPhoto = $request->hasFile('gambar_file') || ($item->gambar && $request->input('remove_gambar') != '1');
 
         $rules = [
-            'judul'    => 'required|string|max:50',
+            'judul'    => 'required|string|max:80',
             'kategori' => 'required|string|max:20',
             'periode'  => 'required|string',
             'status'   => 'required|in:aktif,nonaktif',
@@ -232,7 +232,7 @@ class GaleriController extends Controller
 
         $messages = [
             'judul.required'       => 'Judul kegiatan wajib diisi.',
-            'judul.max'            => 'Judul kegiatan maksimal 50 karakter.',
+            'judul.max'            => 'Judul kegiatan maksimal 80 karakter.',
             'kategori.required'    => 'Kategori wajib dipilih.',
             'periode.required'     => 'Tanggal kegiatan wajib diisi.',
             'gambar_file.required' => 'Foto kegiatan wajib diisi.',
@@ -333,17 +333,17 @@ class GaleriController extends Controller
 
         $item->update($updateData);
 
-        return redirect()->route('admin.galeri')->with('success', 'Kegiatan berhasil diperbarui.');
+        return redirect()->route('admin.galeri');
     }
 
     /**
-     * Remove the specified activity.
+     * Menghapus data galeri kegiatan yang dipilih.
      */
     public function destroy($id)
     {
         $item = Galeri::findOrFail($id);
 
-        // Delete physical files
+        // Menghapus berkas fisik foto dan materi
         $oldPath = public_path($item->gambar);
         if (File::isFile($oldPath)) {
             File::delete($oldPath);
@@ -358,6 +358,6 @@ class GaleriController extends Controller
 
         $item->delete();
 
-        return redirect()->route('admin.galeri')->with('success', 'Kegiatan berhasil dihapus.');
+        return redirect()->route('admin.galeri');
     }
 }

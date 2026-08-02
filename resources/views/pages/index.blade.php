@@ -49,7 +49,7 @@
 
                 <!-- Isi Pengumuman -->
                 <div class="pengumuman-list">
-                    @forelse ($announcements as $announce)
+                    @forelse ($pengumumanList as $announce)
                         <div class="pengumuman-item">
                             <!-- [Icon Kalender] Tanggal -->
                             <div class="pengumuman-item-date-area">
@@ -139,7 +139,7 @@
                 </a>
             </div>
             <div class="products-grid">
-                @forelse ($products as $item)
+                @forelse ($layananList as $item)
                 <div class="product-card stagger-item">
                     <div class="product-image">
                         @if ($item->gambar)

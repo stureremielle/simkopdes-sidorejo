@@ -204,6 +204,7 @@
     font-weight: 800;
     color: #FFFFFF;
     opacity: 0.85;
+    background: linear-gradient(135deg, #DC2626, #991B1B);
 }
 
 /* Category badge */
@@ -216,6 +217,7 @@
     font-size: 0.72rem;
     font-weight: 700;
     color: #FFFFFF;
+    background-color: #DC2626;
     z-index: 2;
     backdrop-filter: blur(4px);
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sistem Informasi Manajemen Koperasi Desa Merah Putih') - Simkopdes</title>
     <meta name="description" content="@yield('meta_description', 'Simkopdes - Sistem Informasi Manajemen Koperasi Desa/Kelurahan Merah Putih. Pertanian berkelanjutan dan pemberdayaan ekonomi masyarakat desa.')">
-    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     @yield('styles')
 </head>
@@ -17,7 +17,7 @@
 
     @include('partials.footer')
 
-    <!-- Registration Modal -->
+    <!-- Modal Pendaftaran Anggota -->
     <div class="modal-wrapper" id="registerModal">
         <div class="modal-box">
             <button class="modal-close" id="closeRegisterModal">&times;</button>
@@ -34,7 +34,7 @@
     <script src="{{ asset('assets/js/script.js') }}"></script>
     @yield('scripts')
 
-    <!--Start of Tawk.to Script-->
+    <!-- Awal Skrip Tawk.to Live Chat -->
     <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
@@ -46,6 +46,6 @@
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    <!--End of Tawk.to Script-->
+    <!-- Akhir Skrip Tawk.to Live Chat -->
 </body>
 </html>

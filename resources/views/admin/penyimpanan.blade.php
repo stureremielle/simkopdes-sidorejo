@@ -9,37 +9,6 @@
 @endsection
 
 @section('content')
-    <div id="toast-container" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; max-width: 380px; width: calc(100% - 48px);">
-        @if (session('success'))
-            <div class="toast-alert success" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; color: #1E293B; padding: 16px 20px; border-radius: 12px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; transform: translateX(120%); opacity: 0; box-sizing: border-box; width: 100%;">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                <div style="flex: 1; line-height: 1.4; font-weight: 500; word-break: break-word; overflow-wrap: break-word;">
-                    {!! session('success') !!}
-                </div>
-                <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="toast-alert error" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; color: #1E293B; padding: 16px 20px; border-radius: 12px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; transform: translateX(120%); opacity: 0; box-sizing: border-box; width: 100%;">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <div style="flex: 1; line-height: 1.4; font-weight: 500; word-break: break-word; overflow-wrap: break-word;">
-                    {!! session('error') !!}
-                </div>
-                <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-        @endif
-    </div>
     <!-- 1. Header Section -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div>
@@ -47,7 +16,7 @@
             <p style="margin: 0; color: #64748B; font-size: 0.9rem; font-weight: 500;">Kelola dokumen dan arsip koperasi</p>
         </div>
         <div style="display: flex; gap: 12px; align-items: center;">
-            <!-- Category Management Button -->
+            <!-- Tombol Kelola Kategori -->
             <button onclick="openCategoriesModal()" style="background-color: #FFFFFF; color: #475569; border: 1.5px solid #E2E8F0; border-radius: 8px; padding: 10px 20px; font-size: 0.88rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; height: 42px; box-sizing: border-box;" onmouseover="this.style.backgroundColor='#F8FAFC'; this.style.borderColor='#CBD5E1';" onmouseout="this.style.backgroundColor='#FFFFFF'; this.style.borderColor='#E2E8F0';">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
@@ -56,14 +25,14 @@
                 <span>Kategori</span>
             </button>
 
-            <!-- Upload File button with upload icon -->
+            <!-- Tombol Unggah File -->
             <button onclick="openUploadModal()" class="btn-upload-file" style="height: 42px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 8px; padding: 0 20px;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="17 8 12 3 7 8"></polyline>
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                 </svg>
-                <span>Upload File</span>
+                <span>Unggah File</span>
             </button>
         </div>
     </div>
@@ -87,7 +56,7 @@
                 @endforeach
             </ul>
         </div>
-    @endif    <!-- 2. Kategori Tab Pills & Search -->
+    @endif    <!-- 2. Tab Kategori & Pencarian -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap; flex: 1; min-width: 0;">
             <a href="{{ route('admin.penyimpanan') }}" class="pill-btn {{ empty($filterKat) ? 'active' : '' }}" style="text-decoration: none;">Semua</a>
@@ -102,7 +71,7 @@
                 <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
         </div>
-    </div>    <!-- 3. Files table in horizontal scroll wrapper -->
+    </div>    <!-- Tabel daftar berkas dalam pembungkus gulir horizontal -->
     <div class="file-table-card-wrapper">
         <table class="clean-file-table">
             <thead>
@@ -121,7 +90,7 @@
                         $ext = strtolower(pathinfo($f->nama_asli, PATHINFO_EXTENSION));
                     @endphp
                     <tr class="file-row" data-nama="{{ strtolower($f->nama_asli) }}">
-                        <!-- File type specific icon + name -->
+                        <!-- Ikon tipe file spesifik + nama -->
                         <td style="white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
                             <span style="display: inline-flex; align-items: flex-start; gap: 10px; max-width: 100%;">
                                 @if ($ext === 'pdf')
@@ -149,48 +118,48 @@
                                 <span style="font-weight: 700; color: #1E293B; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;" title="{{ $f->nama_asli }}">{{ $f->nama_asli }}</span>
                             </span>
                         </td>
-                        <!-- Category Badge -->
+                        <!-- Lencana Kategori -->
                         <td style="white-space: nowrap; padding-left: 8px !important; padding-right: 8px !important;">
                             <span class="category-item-badge">{{ $f->kategori }}</span>
                         </td>
-                        <!-- Description -->
+                        <!-- Keterangan -->
                         <td class="desc-cell" style="color: #64748B; white-space: normal; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;" title="{{ $f->keterangan }}">
                             {{ $f->keterangan ?: '-' }}
                         </td>
-                        <!-- Format Size standard format -->
+                        <!-- Format ukuran standar -->
                         <td style="font-weight: 500; color: #1E293B; white-space: nowrap; padding-left: 8px !important; padding-right: 8px !important;">
                             {{ \App\Helpers\Helper::formatFileSize($f->ukuran) }}
                         </td>
-                        <!-- Formatted Date inside list -->
+                        <!-- Tanggal terformat dalam daftar -->
                         <td class="date-cell" style="color: #64748B;">
-                            {{ \Carbon\Carbon::parse($f->uploaded_at)->translatedFormat('d M Y') }}
+                            {{ \Carbon\Carbon::parse($f->uploaded_at)->setTimezone('Asia/Makassar')->translatedFormat('d M Y') }}
                         </td>
-                        <!-- Actions -->
+                        <!-- Aksi -->
                         <td style="text-align: center; white-space: nowrap; padding: 16px 4px;">
                             <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
-                                <!-- Download icon Link -->
-                                <a href="{{ route('admin.penyimpanan.download', $f->id) }}" class="btn-icon-action" title="Download">
+                                <!-- Ikon unduh -->
+                                <a href="{{ asset('uploads/' . $f->nama_file) }}" download="{{ $f->nama_asli }}" class="btn-icon-action" title="Download">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="7 10 12 15 17 10"></polyline>
                                         <line x1="12" y1="15" x2="12" y2="3"></line>
                                     </svg>
                                 </a>
-                                <!-- Lihat File (Preview) icon trigger -->
-                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ route('admin.penyimpanan.preview', $f->id) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
+                                <!-- Pemicu pratinjau file -->
+                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ asset('uploads/' . $f->nama_file) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                 </button>
-                                <!-- Pencil edit icon trigger -->
+                                <!-- Pemicu sunting -->
                                 <button class="btn-icon-action btn-icon-edit" onclick="openEditModal({{ json_encode($f) }})" title="Edit">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M12 20h9"></path>
                                         <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                                     </svg>
                                 </button>
-                                <!-- Trash delete form trigger -->
+                                <!-- Pemicu formulir hapus -->
                                 <button type="button" class="btn-icon-action btn-icon-delete" onclick="openHapusModal({{ $f->id }}, '{{ addslashes($f->nama_asli) }}')" title="Hapus">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="3 6 5 6 21 6"></polyline>
@@ -228,7 +197,7 @@
                 </button>
             </div>
             
-            <form method="POST" action="{{ route('admin.penyimpanan.upload') }}" enctype="multipart/form-data" onsubmit="return validatePenyimpananUploadForm(this)" style="margin: 0; display: flex; flex-direction: column; gap: 16px;">
+            <form method="POST" action="{{ route('admin.penyimpanan.upload') }}" enctype="multipart/form-data" onsubmit="return validatePenyimpananUnggahForm(this)" style="margin: 0; display: flex; flex-direction: column; gap: 16px;">
                 @csrf
                 <div class="form-row" style="margin: 0;">
                     <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">File <span style="color: #EF4444;">*</span></label>
@@ -349,7 +318,7 @@
             <!-- Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <!-- Red Tag Icon -->
+                    <!-- Ikon Label Merah -->
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
                         <line x1="7" y1="7" x2="7.01" y2="7"></line>
@@ -364,7 +333,7 @@
                 </button>
             </div>
 
-            <!-- Form Tambah Kategori -->
+            <!-- Formulir Tambah Kategori -->
             <div style="margin-bottom: 20px;">
                 <form id="addCategoryForm" onsubmit="submitNewCategory(event)">
                     <div style="display: flex; gap: 10px; align-items: center;">
@@ -391,7 +360,7 @@
                 @endforeach
             </div>
 
-            <!-- Selesai Button -->
+            <!-- Tombol Selesai -->
             <div style="border-top: 1px solid #F1F5F9; padding-top: 16px;">
                 <button type="button" onclick="closeCategoriesModal()" style="width: 100%; height: 46px; background-color: #B91C1C; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#991B1B'" onmouseout="this.style.backgroundColor='#B91C1C'">
                     Selesai
@@ -404,7 +373,7 @@
     <div class="custom-overlay" id="hapusModal">
         <div class="modal-body" style="max-width: 420px; border-radius: 20px; padding: 28px 28px 24px;">
             <div style="display: flex; align-items: flex-start; gap: 16px;">
-                <!-- Icon -->
+                <!-- Ikon -->
                 <div style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #FEE2E2; display: flex; align-items: center; justify-content: center;">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
@@ -412,7 +381,7 @@
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
                 </div>
-                <!-- Text -->
+                <!-- Teks -->
                 <div style="flex: 1; min-width: 0; text-align: left;">
                     <h3 style="font-size: 1.05rem; font-weight: 800; color: #0F172A; margin: 0 0 8px;">Hapus File?</h3>
                     <p style="font-size: 0.88rem; color: #475569; margin: 0; line-height: 1.6;">
@@ -422,7 +391,7 @@
                     </p>
                 </div>
             </div>
-            <!-- Buttons -->
+            <!-- Tombol -->
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
                 <button onclick="closeHapusModal()" class="btn-cancel-custom" style="flex: none; width: auto; padding: 9px 22px;">Batal</button>
                 <button onclick="submitHapus()" class="btn-submit-custom" style="flex: none; width: auto; padding: 9px 22px;">Ya, Hapus</button>
@@ -436,7 +405,7 @@
             <!-- Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; flex-shrink: 0;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <!-- Eye Icon -->
+                    <!-- Ikon Mata -->
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                         <circle cx="12" cy="12" r="3"></circle>
@@ -451,7 +420,7 @@
                 </button>
             </div>
 
-            <!-- Content Area -->
+            <!-- Area Konten -->
             <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #F8FAFC; border-radius: 12px; border: 1px solid #E2E8F0; min-height: 300px; padding: 12px; box-sizing: border-box;">
                 <img id="previewImage" style="display: none; max-width: 100%; max-height: 400px; border-radius: 8px;" src="" alt="Pratinjau Gambar">
                 <div id="previewFallbackMessage" style="text-align: center; color: #64748B; font-size: 0.95rem; font-weight: 500; display: none;">
@@ -474,7 +443,7 @@
 
 @section('scripts')
     <script>
-        // Real-time search filter function
+        // Fungsi penyaringan pencarian real-time
         function filterFiles() {
             const query = document.getElementById('fileSearch').value.toLowerCase();
             const rows = document.querySelectorAll('.file-row');
@@ -522,8 +491,10 @@
             
             if (file.uploaded_at) {
                 const date = new Date(file.uploaded_at);
-                const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
-                const formattedDate = months[date.getMonth()] + " " + date.getFullYear();
+                const padZero = (n) => String(n).padStart(2, '0');
+                const day = padZero(date.getDate());
+                const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                const formattedDate = day + " " + months[date.getMonth()] + " " + date.getFullYear();
                 document.getElementById('editTanggalField').value = formattedDate;
             } else {
                 document.getElementById('editTanggalField').value = '-';
@@ -722,7 +693,7 @@
             }
         }
 
-        function validatePenyimpananUploadForm(form) {
+        function validatePenyimpananUnggahForm(form) {
             let valid = true;
             const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'webp'];
 
@@ -827,38 +798,6 @@
         function toggleDesc(el) {
             el.classList.toggle('collapsed');
             el.classList.toggle('expanded');
-        }
-
-        // Toast notifications logic
-        document.addEventListener('DOMContentLoaded', function() {
-            const toasts = document.querySelectorAll('.toast-alert');
-            toasts.forEach((toast, idx) => {
-                // Slide in with delay
-                setTimeout(() => {
-                    toast.style.transform = 'translateX(0)';
-                    toast.style.opacity = '1';
-                }, 100 + (idx * 200));
-
-                // Auto dismiss after 4 seconds
-                setTimeout(() => {
-                    fadeAndRemoveToast(toast);
-                }, 4000 + (idx * 500));
-            });
-        });
-
-        function dismissToast(button) {
-            const toast = button.closest('.toast-alert');
-            if (toast) {
-                fadeAndRemoveToast(toast);
-            }
-        }
-
-        function fadeAndRemoveToast(toast) {
-            toast.style.transform = 'translateX(120%)';
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                toast.remove();
-            }, 300);
         }
     </script>
 @endsection

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/admin/anggota.css') }}?v={{ filemtime(public_path('assets/css/admin/anggota.css')) }}">
 @endsection
 
-    <!-- Header Section -->
+    <!-- Seksi Header -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div>
             <h1 class="page-title" style="margin: 0 0 4px 0;">Data Anggota</h1>
@@ -24,31 +24,31 @@
 
 
 
-    <!-- 4 Stats Matrix Cards -->
+    <!-- 4 Kartu Matriks Statistik -->
     <div class="stats-grid">
-        <!-- Card 1: Total Anggota -->
+        <!-- Kartu 1: Total Anggota -->
         <div class="stat-card">
             <span class="stat-card-title">Total Anggota</span>
             <span class="stat-card-number" style="color: #0F172A;">{{ $statTotal }}</span>
         </div>
-        <!-- Card 2: Anggota Aktif -->
+        <!-- Kartu 2: Anggota Aktif -->
         <div class="stat-card">
             <span class="stat-card-title">Anggota Aktif</span>
             <span class="stat-card-number" style="color: #DC2626;">{{ $statAktif }}</span>
         </div>
-        <!-- Card 3: Menunggu Verifikasi -->
+        <!-- Kartu 3: Menunggu Verifikasi -->
         <div class="stat-card">
             <span class="stat-card-title">Menunggu Verifikasi</span>
             <span class="stat-card-number" style="color: #D97706;">{{ $statMenunggu }}</span>
         </div>
-        <!-- Card 4: Ditolak -->
+        <!-- Kartu 4: Ditolak -->
         <div class="stat-card">
             <span class="stat-card-title">Ditolak</span>
             <span class="stat-card-number" style="color: #EF4444;">{{ $statDitolak }}</span>
         </div>
     </div>
 
-    <!-- Search & Filters Section Wrapper -->
+    <!-- Pembungkus Seksi Pencarian & Filter -->
     <div class="filter-section-wrapper">
         <form method="GET" action="{{ route('admin.data-anggota') }}" style="display: flex; flex: 1; align-items: center; gap: 16px; flex-wrap: wrap; width: 100%;">
             <div class="search-container">
@@ -99,7 +99,7 @@
             <tbody>
                 @forelse ($anggotaList as $a)
                     @php
-                        // Initials for avatar
+                        // Inisial nama untuk foto profil avatar
                         $initials = '';
                         $words = explode(' ', $a->nama_lengkap);
                         foreach ($words as $w) {
@@ -107,11 +107,11 @@
                         }
                         $initials = substr($initials, 0, 2);
 
-                        // Deterministic color rotation based on member ID
+                        // Rotasi warna deterministik berdasarkan ID anggota
                         $avatarColors = ['#8B5CF6', '#12B76A', '#2E90FA', '#7A5AF8', '#F59E0B', '#EF4444'];
                         $bgColor = $avatarColors[$a->id % count($avatarColors)];
 
-                        // Determine source
+                        // Tentukan sumber pendaftaran
                         $sumber = $a->sumber ?? 'Pendaftaran';
                     @endphp
                     <tr>
@@ -711,7 +711,7 @@
             });
         @endif
 
-        // Modal functions
+        // Fungsi-fungsi kontrol modal
         function openTambahModal() {
             document.getElementById('tambahModal').classList.add('active');
         }
@@ -750,7 +750,7 @@
             document.getElementById('editJenisKelamin').value = a.jenis_kelamin;
             document.getElementById('editTempatLahir').value = a.tempat_lahir;
             document.getElementById('editTanggalLahir').value = a.tanggal_lahir;
-            document.getElementById('editRtVal').value = a.rt || '';
+            document.getElementById('editRtVal').value = a.rt ? String(a.rt).replace(/\s+/g, '') : '';
             document.getElementById('editDusunVal').value = a.dusun || '';
             document.getElementById('editNoHp').value = a.no_hp;
             document.getElementById('editEmailVal').value = a.email || '';
@@ -769,7 +769,7 @@
             document.getElementById('editModal').classList.remove('active');
         }
 
-        // Tolak Modal
+        // Pengendali modal konfirmasi tolak pendaftaran
         var _tolakFormAction = "{{ route('admin.anggota.verifikasi') }}";
         function openTolakModal(id, nama) {
             document.getElementById('tolakNama').innerText = nama;
@@ -781,7 +781,7 @@
             document.getElementById('tolakModal').classList.remove('active');
         }
 
-        // Hapus Modal
+        // Pengendali modal konfirmasi hapus anggota
         var _hapusTargetId = null;
         function openHapusModal(id, nama) {
             _hapusTargetId = id;
@@ -814,7 +814,7 @@
             if (e.target === document.getElementById('hapusModal')) closeHapusModal();
         });
 
-        // Phone number input restriction (numbers only) & 08 prefix custom validation without browser popups
+        // Pembatasan input nomor telepon (hanya angka) dan validasi kustom awalan 08
         document.addEventListener('DOMContentLoaded', function() {
             const addNoHp = document.getElementById('tambahNoHp');
             const editNoHp = document.getElementById('editNoHp');

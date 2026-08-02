@@ -18,9 +18,9 @@
             <span class="stats-card-trend">+2 tahun ini</span>
         </div>
         <div class="stats-card">
-            <span class="stats-card-value">{{ $produkAktif }}</span>
-            <span class="stats-card-label">Produk Aktif</span>
-            <span class="stats-card-trend">{{ $kategoriProdukCount }} kategori</span>
+            <span class="stats-card-value">{{ $layananAktif }}</span>
+            <span class="stats-card-label">Layanan Aktif</span>
+            <span class="stats-card-trend">{{ $kategoriLayananCount }} kategori</span>
         </div>
         <div class="stats-card">
             <span class="stats-card-value">{{ $fotoGaleri }}</span>
@@ -29,25 +29,25 @@
         </div>
     </div>
 
-    {{-- Artikel Terbaru - Full Width --}}
+    {{-- Berita Terbaru - Full Width --}}
     <div class="widget-card">
         <div class="widget-header">
-            <h3 class="widget-title">Artikel Terbaru</h3>
+            <h3 class="widget-title">Berita Terbaru</h3>
             <a href="{{ route('admin.berita') }}" class="widget-link">Lihat semua</a>
         </div>
         <div>
-            @forelse($artikelList as $artikel)
+            @forelse($beritaTerbaru as $berita)
             <div class="article-row">
                 <div class="article-info">
-                    <span class="article-title">{{ Str::limit($artikel->judul, 80) }}</span>
-                    <span class="article-date">{{ $artikel->created_at ? \Carbon\Carbon::parse($artikel->created_at)->translatedFormat('d M Y') : '-' }}</span>
+                    <span class="article-title">{{ Str::limit($berita->judul, 80) }}</span>
+                    <span class="article-date">{{ \App\Helpers\Helper::formatTanggal($berita->tanggal_publikasi ?? ($berita->created_at ? $berita->created_at->toDateString() : date('Y-m-d'))) }}</span>
                 </div>
-                <span class="badge {{ $artikel->status === 'tayang' ? 'badge-tayang' : 'badge-draft' }}">
-                    {{ $artikel->status === 'tayang' ? 'Tayang' : 'Draft' }}
+                <span class="badge {{ $berita->status === 'tayang' ? 'badge-tayang' : 'badge-draft' }}">
+                    {{ $berita->status === 'tayang' ? 'Tayang' : 'Draft' }}
                 </span>
             </div>
             @empty
-            <div style="text-align:center;color:#94A3B8;padding:24px 0;font-size:0.88rem;">Belum ada artikel.</div>
+            <div style="text-align:center;color:#94A3B8;padding:24px 0;font-size:0.88rem;">Belum ada berita.</div>
             @endforelse
         </div>
     </div>

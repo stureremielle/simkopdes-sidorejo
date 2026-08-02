@@ -10,16 +10,16 @@ use Illuminate\Support\Facades\File;
 class LayananController extends Controller
 {
     /**
-     * Display a listing of services.
+     * Menampilkan daftar layanan dan produk.
      */
     public function index()
     {
         $layananList = Layanan::orderBy('kategori_id')->orderBy('nama')->get();
         
-        // 1. Fetch dynamic categories array from KategoriLayanan table
+        // 1. Mengambil array kategori dinamis dari tabel KategoriLayanan
         $categoriesArray = \App\Models\KategoriLayanan::pluck('nama')->toArray();
         
-        // 2. Fetch product count grouped by category_id
+        // 2. Mengambil jumlah produk berdasarkan kategori_id
         $counts = Layanan::selectRaw('kategori_id, count(*) as total, sum(case when status = "aktif" then 1 else 0 end) as active')
             ->groupBy('kategori_id')
             ->get()
@@ -27,7 +27,7 @@ class LayananController extends Controller
 
         $allCategories = \App\Models\KategoriLayanan::all()->keyBy('id');
 
-        // 3. Build category stats for Tab 2
+        // 3. Menyusun statistik kategori untuk Tab 2
         $categoriesWithStats = [];
         foreach ($categoriesArray as $catName) {
             $cat = $allCategories->first(fn($c) => strtolower($c->nama) === strtolower($catName));
@@ -56,7 +56,7 @@ class LayananController extends Controller
     }
 
     /**
-     * Store a newly created service.
+     * Memproses dan menyimpan data produk layanan baru.
      */
     public function store(Request $request)
     {
@@ -107,11 +107,11 @@ class LayananController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('admin.layanan')->with('success', 'Layanan berhasil ditambahkan.');
+        return redirect()->route('admin.layanan');
     }
 
     /**
-     * Update the specified service.
+     * Memproses dan memperbarui data produk layanan.
      */
     public function update(Request $request, $id)
     {
@@ -171,11 +171,11 @@ class LayananController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('admin.layanan')->with('success', 'Layanan berhasil diperbarui.');
+        return redirect()->route('admin.layanan');
     }
 
     /**
-     * Toggle active/inactive status.
+     * Mengubah status aktif/nonaktif produk layanan.
      */
     public function toggleStatus($id)
     {
@@ -183,11 +183,11 @@ class LayananController extends Controller
         $layanan->status = $layanan->status === 'aktif' ? 'nonaktif' : 'aktif';
         $layanan->save();
 
-        return redirect()->route('admin.layanan')->with('success', 'Status layanan berhasil diubah.');
+        return redirect()->route('admin.layanan');
     }
 
     /**
-     * Remove the specified service.
+     * Menghapus data produk layanan.
      */
     public function destroy($id)
     {
@@ -200,22 +200,22 @@ class LayananController extends Controller
         }
         $layanan->delete();
 
-        return redirect()->route('admin.layanan')->with('success', 'Layanan berhasil dihapus.');
+        return redirect()->route('admin.layanan');
     }
 
     /**
-     * Save featured products for homepage.
+     * Menyimpan pilihan produk unggulan untuk ditampilkan di halaman beranda.
      */
     public function saveFeatured(Request $request)
     {
         $ids = $request->input('featured_ids', []);
         $ids = array_map('intval', (array) $ids);
-        $ids = array_slice($ids, 0, 3); // max 3
+        $ids = array_slice($ids, 0, 3); // maks 3
 
-        // Reset all
+        // Menghapus status unggulan dari seluruh produk
         Layanan::query()->update(['is_featured' => false]);
 
-        // Mark selected
+        // Menandai produk terpilih sebagai unggulan
         if (!empty($ids)) {
             Layanan::whereIn('id', $ids)->update(['is_featured' => true]);
         }
@@ -224,7 +224,7 @@ class LayananController extends Controller
     }
 
     /**
-     * Store a newly created category.
+     * Memproses dan menyimpan kategori layanan baru.
      */
     public function storeCategory(Request $request)
     {
@@ -245,13 +245,13 @@ class LayananController extends Controller
     }
 
     /**
-     * Remove the specified category.
+     * Menghapus kategori layanan yang dipilih.
      */
     public function destroyCategory($kategori)
     {
         $catToDelete = $kategori;
 
-        // Check if there are any products using this category
+        // Memeriksa apakah terdapat produk yang menggunakan kategori ini
         $cat = \App\Models\KategoriLayanan::where('nama', $catToDelete)->first();
         if ($cat) {
             $hasProducts = Layanan::where('kategori_id', $cat->id)->count();

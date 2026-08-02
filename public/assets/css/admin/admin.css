@@ -651,12 +651,90 @@ a {
     }
 
     .dashboard-content {
-        padding: 24px;
+        padding: 20px 14px;
     }
 
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 16px;
+    }
+
+    /* Responsivitas Tabel Seluler */
+    .table-card-wrapper,
+    .list-table-container,
+    .berita-table-wrapper,
+    .file-table-card-wrapper,
+    .table-responsive,
+    .table-container {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .clean-table,
+    .members-data-table,
+    .berita-table,
+    .clean-file-table,
+    .verify-table,
+    .products-table {
+        min-width: 750px !important;
+    }
+
+    .date-cell,
+    td.date-cell {
+        white-space: nowrap !important;
+        padding-left: 12px !important;
+        padding-right: 18px !important;
+        min-width: 115px !important;
+    }
+
+    .clean-file-table td:last-child,
+    .clean-table td:last-child,
+    .members-data-table td:last-child,
+    .berita-table td:last-child,
+    .products-table td:last-child,
+    th:last-child {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        min-width: 110px !important;
+    }
+
+    /* Responsivitas Modal Seluler */
+    .modal-box,
+    .form-modal,
+    .modal-card,
+    .modal-content,
+    .modal-container {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        margin: 10px auto !important;
+        padding: 18px 14px !important;
+    }
+
+    /* Responsivitas Form & Tombol Seluler */
+    .form-row,
+    .form-group-row,
+    .filter-bar,
+    .search-add-wrapper {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+    }
+
+    .action-icons-wrapper,
+    .verify-actions {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+
+    .btn-verify,
+    .btn-add-product,
+    .btn-save-settings {
+        width: 100% !important;
+        justify-content: center !important;
     }
 }
 
@@ -1250,3 +1328,66 @@ a {
         grid-template-columns: 1fr;
     }
 }
+
+@media (max-width: 576px) {
+    .sidebar {
+        width: 60px !important;
+        padding: 12px 4px !important;
+    }
+
+    .main-wrapper {
+        margin-left: 60px !important;
+        width: calc(100% - 60px) !important;
+    }
+
+    .menu-item a,
+    .logout-link {
+        width: 40px !important;
+        height: 40px !important;
+        padding: 8px !important;
+    }
+
+    .dashboard-content {
+        padding: 14px 10px !important;
+    }
+
+    .top-nav {
+        padding: 10px 14px !important;
+    }
+
+    .breadcrumbs {
+        font-size: 0.8rem;
+    }
+
+    /* Force horizontal scroll container for admin data tables */
+    .table-card-wrapper,
+    .list-table-container,
+    .berita-table-wrapper,
+    .file-table-card-wrapper,
+    .table-responsive {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .clean-table,
+    .members-data-table,
+    .berita-table,
+    .clean-file-table,
+    .verify-table {
+        min-width: 640px !important;
+    }
+
+    /* Admin Modal Mobile Responsiveness */
+    .modal-box,
+    .form-modal,
+    .modal-card {
+        width: 95% !important;
+        max-width: 95% !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        margin: 20px auto !important;
+        padding: 20px 14px !important;
+    }
+}

@@ -23,7 +23,6 @@ class NewsDetailModalVerificationTest extends TestCase
             'isi' => '<p>Koperasi kami baru saja mengadakan pertemuan...</p><h3>Pengendalian Hama Alami</h3><blockquote>"Tanah yang sehat..."</blockquote>',
             'penulis' => 'Budi Santoso',
             'gambar' => 'featured_office_lounge.png',
-            'is_featured' => 1,
             'status' => 'tayang'
         ]);
 
@@ -34,7 +33,6 @@ class NewsDetailModalVerificationTest extends TestCase
             'isi' => 'Berkat cuaca yang mendukung...',
             'penulis' => 'Admin',
             'gambar' => 'panen.png',
-            'is_featured' => 0,
             'status' => 'tayang'
         ]);
 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 class BeritaController extends Controller
 {
     /**
-     * Display a listing of articles.
+     * Menampilkan daftar berita dan artikel.
      */
     public function index(Request $request)
     {
@@ -39,7 +39,7 @@ class BeritaController extends Controller
 
         $beritaList = $query->orderBy('created_at', 'desc')->get();
 
-        // Get unique categories for filter dropdown
+        // Mengambil daftar nama kategori unik untuk pilihan filter
         $kategoriList = \App\Models\KategoriBerita::pluck('nama')->toArray();
 
         return view('admin.berita', compact('beritaList', 'kategoriList', 'search', 'kategoriFilter', 'statusFilter'));
@@ -67,18 +67,18 @@ class BeritaController extends Controller
     }
 
     /**
-     * Remove the specified category.
+     * Menghapus kategori berita yang dipilih.
      */
     public function destroyCategory($kategori)
     {
         $catToDelete = $kategori;
 
-        // Check if there are any articles using this category
+        // Memeriksa apakah terdapat berita yang menggunakan kategori ini
         $cat = \App\Models\KategoriBerita::where('nama', $catToDelete)->first();
         if ($cat) {
             $hasArticles = Berita::where('kategori_id', $cat->id)->count();
             if ($hasArticles > 0) {
-                return response()->json(['success' => false, 'message' => 'Tidak dapat menghapus karena kategori ini masih digunakan pada artikel.'], 400);
+                return response()->json(['success' => false, 'message' => 'Tidak dapat menghapus karena kategori ini masih digunakan pada berita.'], 400);
             }
             $cat->delete();
             return response()->json(['success' => true]);
@@ -88,7 +88,7 @@ class BeritaController extends Controller
     }
 
     /**
-     * Store a newly created article.
+     * Memproses dan menyimpan data berita baru.
      */
     public function store(Request $request)
     {
@@ -101,10 +101,10 @@ class BeritaController extends Controller
             'status' => 'required|in:tayang,draft',
             'tanggal_publikasi' => 'required|date',
         ], [
-            'judul.required'           => 'Judul artikel wajib diisi.',
+            'judul.required'           => 'Judul berita wajib diisi.',
             'judul.max'                => 'Judul maksimal 80 karakter.',
             'kategori.required'        => 'Kategori wajib dipilih.',
-            'isi.required'             => 'Isi artikel wajib diisi.',
+            'isi.required'             => 'Isi berita wajib diisi.',
             'penulis.required'         => 'Nama penulis wajib diisi.',
             'penulis.max'              => 'Nama penulis maksimal 20 karakter.',
             'status.required'          => 'Status wajib dipilih.',
@@ -138,11 +138,11 @@ class BeritaController extends Controller
             'tanggal_publikasi' => $request->tanggal_publikasi,
         ]);
 
-        return redirect()->route('admin.berita')->with('success', 'Artikel berhasil ditambahkan.');
+        return redirect()->route('admin.berita');
     }
 
     /**
-     * Update the specified article.
+     * Memproses dan memperbarui data berita.
      */
     public function update(Request $request, $id)
     {
@@ -155,10 +155,10 @@ class BeritaController extends Controller
             'status' => 'required|in:tayang,draft',
             'tanggal_publikasi' => 'required|date',
         ], [
-            'judul.required'           => 'Judul artikel wajib diisi.',
+            'judul.required'           => 'Judul berita wajib diisi.',
             'judul.max'                => 'Judul maksimal 80 karakter.',
             'kategori.required'        => 'Kategori wajib dipilih.',
-            'isi.required'             => 'Isi artikel wajib diisi.',
+            'isi.required'             => 'Isi berita wajib diisi.',
             'penulis.required'         => 'Nama penulis wajib diisi.',
             'penulis.max'              => 'Nama penulis maksimal 20 karakter.',
             'status.required'          => 'Status wajib dipilih.',
@@ -201,11 +201,11 @@ class BeritaController extends Controller
             'tanggal_publikasi' => $request->tanggal_publikasi,
         ]);
 
-        return redirect()->route('admin.berita')->with('success', 'Artikel berhasil diperbarui.');
+        return redirect()->route('admin.berita');
     }
 
     /**
-     * Remove the specified article.
+     * Menghapus data berita yang dipilih.
      */
     public function destroy($id)
     {
@@ -218,6 +218,6 @@ class BeritaController extends Controller
         }
         $berita->delete();
 
-        return redirect()->route('admin.berita')->with('success', 'Artikel berhasil dihapus.');
+        return redirect()->route('admin.berita');
     }
 }

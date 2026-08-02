@@ -205,8 +205,13 @@
         padding: 20px;
     }
 
-    .verify-table thead th:nth-child(n+3),
-    .verify-table tbody td:nth-child(n+3) {
-        display: none;
+    .verify-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
     }
-}
+
+    .verify-table {
+        min-width: 500px;
+    }
+}

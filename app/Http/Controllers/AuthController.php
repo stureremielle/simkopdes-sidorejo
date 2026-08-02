@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Admin;
-use App\Models\Anggota;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     /**
-     * Show admin login form.
+     * Menampilkan formulir login admin.
      */
     public function showLoginForm()
     {
@@ -21,7 +20,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle admin login request.
+     * Memproses permintaan login admin.
      */
     public function login(Request $request)
     {
@@ -33,7 +32,7 @@ class AuthController extends Controller
         $username = $request->username;
         $password = $request->password;
 
-        // Find Admin
+        // Mencari data akun admin berdasarkan username
         $admin = Admin::where('username', $username)->first();
 
         if ($admin && ($admin->password === md5($password))) {
@@ -48,7 +47,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle admin logout request.
+     * Memproses permintaan logout admin.
      */
     public function logout(Request $request)
     {

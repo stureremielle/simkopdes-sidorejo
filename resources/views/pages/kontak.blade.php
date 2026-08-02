@@ -1,8 +1,8 @@
 @php
     $activePage = 'kontak';
-    $telepon    = \App\Models\Pengaturan::getValue('telepon', '+62 812 3456 7890');
-    $email      = \App\Models\Pengaturan::getValue('email', 'info@merahputih.co.id');
-    $alamat     = \App\Models\Pengaturan::getValue('alamat', 'Jl. Pariwisata RT 04 Dusun II Desa Sidorejo, Penajam');
+    $telepon    = \App\Models\Pengaturan::getValue('telepon', '');
+    $email      = \App\Models\Pengaturan::getValue('email', '');
+    $alamat     = \App\Models\Pengaturan::getValue('alamat', '');
     $phoneClean = preg_replace('/[^0-9+]/', '', $telepon);
 @endphp
 @extends('layouts.app')
@@ -23,7 +23,7 @@
 
     <section class="contact-details-section">
         <div class="container">
-            <!-- Overlapping Help Badge Card -->
+            <!-- Kartu Lencana Bantuan Melayang -->
             <div class="contact-badge-card">
                 <svg viewBox="0 0 24 24" class="chat-main-icon" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
@@ -39,9 +39,9 @@
                 </div>
             </div>
 
-            <!-- 3-Column Info Cards Grid -->
+            <!-- Kisi-kisi Kartu Informasi 3 Kolom -->
             <div class="contact-grid-info">
-                <!-- Card Telepon -->
+                <!-- Kartu Telepon -->
                 <div class="info-card-box">
                     <div class="card-icon-circle">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -52,7 +52,7 @@
                     <p class="card-text"><a href="tel:{{ $phoneClean }}">{{ $telepon }}</a></p>
                 </div>
 
-                <!-- Card Email -->
+                <!-- Kartu Email -->
                 <div class="info-card-box">
                     <div class="card-icon-circle">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -64,7 +64,7 @@
                     <p class="card-text"><a href="mailto:{{ $email }}">{{ $email }}</a></p>
                 </div>
 
-                <!-- Card Jam Operasional -->
+                <!-- Kartu Jam Operasional -->
                 <div class="info-card-box">
                     <div class="card-icon-circle">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- Full Width Location Card -->
+            <!-- Kartu Lokasi Lebar Penuh -->
             <div class="location-full-card">
                 <div class="location-card-header">
                     <div class="location-header-icon">
@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                <!-- Interactive Google Map Frame -->
+                <!-- Bingkai Peta Google Maps Interaktif -->
                 <div class="map-frame-wrapper">
                     <iframe loading="lazy" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"
                         src="https://maps.google.com/maps?q=-1.364274,116.683360&t=&z=17&ie=UTF8&iwloc=&output=embed">

@@ -8,20 +8,17 @@ use App\Models\Anggota;
 use App\Models\Layanan;
 use App\Models\Galeri;
 use App\Models\Berita;
-use App\Models\PenyimpananFile;
-use App\Models\Pengaturan;
-use App\Models\KategoriLayanan;
 
 class AdminController extends Controller
 {
     /**
-     * Display admin dashboard.
+     * Menampilkan dasbor admin.
      */
     public function dashboard()
     {
         $totalAnggota = Anggota::where('status', 'diterima')->count();
-        $produkAktif  = Layanan::where('status', 'aktif')->count();
-        $kategoriProdukCount = Layanan::where('status', 'aktif')
+        $layananAktif = Layanan::where('status', 'aktif')->count();
+        $kategoriLayananCount = Layanan::where('status', 'aktif')
             ->whereNotNull('kategori_id')
             ->distinct()
             ->count('kategori_id');
@@ -31,10 +28,10 @@ class AdminController extends Controller
             ->distinct()
             ->count('kategori_id');
 
-        // Latest news
-        $artikelList = Berita::orderBy('created_at', 'desc')->take(5)->get();
+        // Berita terbaru
+        $beritaTerbaru = Berita::orderByRaw('COALESCE(tanggal_publikasi, DATE(created_at)) DESC')->orderBy('id', 'desc')->take(5)->get();
 
-        // Pending verifications
+        // Daftar pendaftaran anggota yang menunggu verifikasi
         $pendaftaranList = Anggota::where('status', 'menunggu')
             ->orderBy('created_at', 'desc')
             ->take(5)
@@ -42,17 +39,17 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact(
             'totalAnggota',
-            'produkAktif',
-            'kategoriProdukCount',
+            'layananAktif',
+            'kategoriLayananCount',
             'fotoGaleri',
             'kategoriGaleriCount',
-            'artikelList',
+            'beritaTerbaru',
             'pendaftaranList'
         ));
     }
 
     /**
-     * Handle member verification accept/reject.
+     * Memproses verifikasi pendaftaran anggota (terima atau tolak).
      */
     public function verifyAnggota(Request $request)
     {
@@ -65,12 +62,11 @@ class AdminController extends Controller
         $anggota->status = $request->action === 'terima' ? 'diterima' : 'ditolak';
         $anggota->save();
 
-        $actionText = $request->action === 'terima' ? 'diterima' : 'ditolak';
-        return redirect()->back()->with('success', "Pendaftaran anggota '{$anggota->nama_lengkap}' berhasil {$actionText}.");
+        return redirect()->back();
     }
 
     /**
-     * Display membership list in admin panel.
+     * Menampilkan daftar data anggota pada panel admin.
      */
     public function anggota(Request $request)
     {
@@ -101,13 +97,13 @@ class AdminController extends Controller
             $query->where('jabatan', $jabatan);
         }
 
-        // Stats
+        // Perhitungan statistik ringkasan anggota
         $statTotal = Anggota::count();
         $statAktif = Anggota::where('status', 'diterima')->count();
         $statMenunggu = Anggota::where('status', 'menunggu')->count();
         $statDitolak = Anggota::where('status', 'ditolak')->count();
 
-        // Get unique dusun list (fallback if needed elsewhere)
+        // Mengambil daftar nama dusun unik
         $dusunList = Anggota::select('dusun')->distinct()->whereNotNull('dusun')->pluck('dusun')->toArray();
 
         $anggotaList = $query->orderBy('status', 'asc')->orderBy('created_at', 'desc')->paginate(10);
@@ -115,7 +111,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Store new member.
+     * Memproses dan menyimpan data anggota baru.
      */
     public function simpanAnggota(Request $request)
     {
@@ -166,11 +162,11 @@ class AdminController extends Controller
 
         Anggota::create($request->all());
 
-        return redirect()->route('admin.data-anggota')->with('success', 'Data anggota berhasil ditambahkan.');
+        return redirect()->route('admin.data-anggota');
     }
 
     /**
-     * Update member.
+     * Memproses pembaruan data anggota.
      */
     public function updateAnggota(Request $request, $id)
     {
@@ -222,17 +218,17 @@ class AdminController extends Controller
         $anggota = Anggota::findOrFail($id);
         $anggota->update($request->all());
 
-        return redirect()->route('admin.data-anggota')->with('success', 'Data anggota berhasil diperbarui.');
+        return redirect()->route('admin.data-anggota');
     }
 
     /**
-     * Delete a member.
+     * Menghapus data anggota.
      */
     public function hapusAnggota($id)
     {
         $anggota = Anggota::findOrFail($id);
         $anggota->delete();
 
-        return redirect()->route('admin.data-anggota')->with('success', 'Data anggota berhasil dihapus.');
+        return redirect()->route('admin.data-anggota');
     }
 }

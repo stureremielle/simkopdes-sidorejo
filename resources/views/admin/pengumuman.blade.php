@@ -20,7 +20,7 @@
 </div>
 
 
-<!-- Data Table Container -->
+<!-- Wadah Tabel Data Pengumuman -->
 <div class="list-table-container">
     <table class="members-data-table">
         <thead>
@@ -52,7 +52,7 @@
                     </td>
                     <td style="text-align: center; white-space: nowrap;">
                         <div style="display: inline-flex; gap: 8px; align-items: center;">
-                            <!-- Edit Button -->
+                            <!-- Tombol Edit -->
                             <button type="button" onclick="openEditModal({{ json_encode($p) }})" class="btn-icon-action btn-icon-edit" title="Edit">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 20h9"></path>
@@ -60,7 +60,7 @@
                                 </svg>
                             </button>
 
-                            <!-- Delete Button -->
+                            <!-- Tombol Hapus -->
                             <button type="button" onclick="openConfirmDelete({{ $p->id }}, '{{ addslashes($p->judul) }}')" class="btn-icon-action btn-icon-delete" title="Hapus">
                                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="3 6 5 6 21 6"></polyline>
@@ -134,7 +134,7 @@
         <form id="tambahForm" method="POST" action="{{ route('admin.pengumuman.store') }}" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
             @csrf
 
-            <!-- Scrollable form container inside modal -->
+            <!-- Pembungkus formulir yang dapat digulir di dalam modal -->
             <div style="flex: 1; overflow-y: auto; padding-right: 8px;">
                 {{-- Judul Pengumuman --}}
                 <div class="form-row">
@@ -202,7 +202,7 @@
             @csrf
             @method('PUT')
 
-            <!-- Scrollable form container inside modal -->
+            <!-- Pembungkus formulir yang dapat digulir di dalam modal -->
             <div style="flex: 1; overflow-y: auto; padding-right: 8px;">
                 {{-- Judul Pengumuman --}}
                 <div class="form-row">
@@ -307,12 +307,12 @@
     }
 
 
-    // Auto open Tambah Modal if there are validation errors on load
+    // Membuka modal tambah secara otomatis jika terdapat error validasi saat halaman dimuat
     @if ($errors->any())
         openTambahModal();
     @endif
 
-    // Close modal when clicking overlay backdrop
+    // Menutup modal saat mengklik di luar area badan modal
     document.getElementById('tambahModal').addEventListener('click', e => {
         if (e.target === document.getElementById('tambahModal')) closeTambahModal();
     });

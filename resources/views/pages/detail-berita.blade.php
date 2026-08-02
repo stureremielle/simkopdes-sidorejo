@@ -10,9 +10,9 @@
 @section('content')
     <div class="detail-page-overlay-wrapper">
 
-        {{-- ===== BACKGROUND LIST REPLICA (Dimmed) ===== --}}
+        {{-- ===== LATAR BELAKANG REDUP ===== --}}
         <div class="ambient-news-bg">
-            {{-- ===== PAGE HEADER ===== --}}
+            {{-- ===== HEADER HALAMAN ===== --}}
             <section class="berita-header-section" style="padding-top: 50px;">
                 <div class="container">
                     <h1 class="berita-page-title">Berita &amp; Informasi</h1>
@@ -20,52 +20,14 @@
                 </div>
             </section>
 
-            {{-- ===== FEATURED ARTICLE CARD ===== --}}
-            @if ($featured)
-            <section class="featured-section">
-                <div class="container">
-                    <div class="featured-card">
-                        <div class="featured-img-wrapper">
-                            @if ($featured->gambar)
-                                @php
-                                    $featGambar = $featured->gambar;
-                                    $featGambarSrc = Str::startsWith($featGambar, 'http') ? $featGambar : (Str::startsWith($featGambar, 'uploads/') || Str::startsWith($featGambar, 'storage/') || Str::startsWith($featGambar, '/') ? asset(ltrim($featGambar, '/')) : asset('assets/images/' . $featGambar));
-                                @endphp
-                                <img src="{{ $featGambarSrc }}" alt="{{ $featured->judul }}">
-                            @endif
-                            <span class="featured-badge">PILIHAN</span>
-                        </div>
-                        <div class="featured-content">
-                            <div class="post-meta">
-                                <div class="post-meta-item">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
-                                        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                                    </svg>
-                                    <span>{{ \App\Helpers\Helper::formatTanggal($featured->tanggal_publikasi ?? ($featured->created_at ? $featured->created_at->toDateString() : date('Y-m-d'))) }}</span>
-                                </div>
-                                <div class="post-meta-item">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                    </svg>
-                                    <span>{{ $featured->penulis }}</span>
-                                </div>
-                            </div>
-                            <h2 class="featured-title">{{ $featured->judul }}</h2>
-                            <p class="featured-desc">{{ Str::limit(strip_tags($featured->isi), 220) }}</p>
-                            <span class="featured-link" style="color: #64748B;">Baca Selengkapnya &rarr;</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            @endif
 
-            {{-- ===== ARTIKEL TERBARU GRID ===== --}}
+
+            {{-- ===== GRID BERITA TERBARU ===== --}}
             <section class="recent-section">
                 <div class="container">
-                    <h2 class="recent-title">Artikel Terbaru</h2>
+                    <h2 class="recent-title">Berita Terbaru</h2>
                     <div class="berita-grid">
-                        @foreach ($artikel as $a)
+                        @foreach ($beritaTerkait as $a)
                             <article class="berita-card">
                                  <div class="card-img-wrapper">
                                      @if ($a->gambar)
@@ -96,14 +58,14 @@
             </section>
         </div>
 
-        {{-- ===== TRANSLUCENT OVERLAY ===== --}}
+        {{-- ===== LAPISAN TRANSPARAN OVERLAY ===== --}}
         <div class="detail-modal-backdrop"></div>
 
-        {{-- ===== MODAL VIEWPORT CONTAINER ===== --}}
+        {{-- ===== WADAH MODAL VIEWPORT ===== --}}
         <div class="detail-modal-viewport">
             <div class="detail-modal-card">
 
-                {{-- Image Banner area with overlay close button and category --}}
+                {{-- Area Banner Gambar dengan tombol tutup dan lencana kategori --}}
                 <div class="modal-hero-banner">
                     @if ($berita->gambar)
                         @php
@@ -113,10 +75,10 @@
                         <img src="{{ $bannerImgSrc }}" alt="{{ $berita->judul }}">
                     @endif
 
-                    {{-- Coral Category Badge --}}
+                    {{-- Lencana Kategori --}}
                     <span class="modal-category-badge">{{ $berita->kategori }}</span>
 
-                    {{-- Circular close "X" button --}}
+                    {{-- Tombol Tutup Silang --}}
                     <a href="{{ route('berita') }}" class="modal-close-x-btn" title="Tutup detail berita">
                         <svg viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -125,10 +87,10 @@
                     </a>
                 </div>
 
-                {{-- Modal Body Content --}}
+                {{-- Isi Konten Utama Modal --}}
                 <div class="modal-content-inner">
 
-                    {{-- Metadata row --}}
+                    {{-- Baris Metadata --}}
                     <div class="modal-meta-row">
                         <div class="modal-meta-item">
                             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">

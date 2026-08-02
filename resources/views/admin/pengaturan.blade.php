@@ -130,7 +130,7 @@
                     <div id="heroPhotoError" style="color:#EF4444;font-size:0.78rem;margin-top:4px;font-weight:600;display:none;"></div>
                 </div>
 
-                <!-- Mode 2: Input URL -->
+                <!-- Mode 2: Input URL Gambar -->
                 <div id="hero-url-container" style="display: none;">
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <input type="text" name="hero_url" id="heroUrlInput" placeholder="URL Gambar" style="flex: 1; padding: 12px 16px; border: 1.5px solid #F1F5F9; border-radius: 10px; font-size: 0.9rem; outline: none; background: #FFFFFF; box-sizing: border-box; color: #1E293B;" onfocus="this.style.borderColor='#DC2626'" onblur="this.style.borderColor='#F1F5F9'">
@@ -177,7 +177,7 @@
                 </div>
             </div>
 
-            <!-- Preview Card Area -->
+            <!-- Area Kartu Pratinjau Gambar -->
             <div style="background: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 16px; padding: 24px; margin-bottom: 20px;">
                 <!-- Inner Image Preview Container -->
                 <div style="background: #FAFAFA; border: 1.5px solid #E2E8F0; border-radius: 12px; height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; position: relative; overflow: hidden;">
@@ -269,7 +269,7 @@
             <input type="hidden" name="telepon" value="{{ $settings['telepon'] ?? '' }}">
             <input type="hidden" name="email" value="{{ $settings['email'] ?? '' }}">
             
-            <!-- Hidden input to hold serialized mission points -->
+            <!-- Input tersembunyi untuk menyimpan serialisasi poin misi -->
             <input type="hidden" name="misi" id="misiHiddenInput" value="{{ $settings['misi'] ?? '' }}">
 
             <!-- Visi 2025 Heading -->
@@ -277,7 +277,7 @@
                 <span style="width: 8px; height: 8px; background: #DC2626; border-radius: 50%; display: inline-block; margin-right: 10px;"></span>
                 Visi 2025
             </h3>
-            <!-- Visi 2025 Card -->
+            <!-- Kartu Visi 2025 -->
             <div style="background: #FFFFFF; border: 1.5px solid #F1F5F9; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
                 <textarea name="visi" rows="4" style="font-family: inherit; background-color: #FAFAFA; border: 1.5px solid #F1F5F9; border-radius: 12px; font-size: 0.9rem; min-height: 90px; resize: vertical; padding: 20px; line-height: 1.6; color: #475569; width: 100%; box-sizing: border-box; outline: none; transition: all 0.2s;" onfocus="this.style.borderColor='#DC2626'; this.style.backgroundColor='#FFFFFF';">{{ $settings['visi'] ?? '' }}</textarea>
             </div>
@@ -289,7 +289,7 @@
                     Misi 2025
                 </h3>
  
-                <!-- Interactive card list container -->
+                <!-- Pembungkus daftar kartu interaktif -->
                 <div id="mission-list-container">
                     <!-- Loaded dynamically via JavaScript as nested cards -->
                 </div>
@@ -323,7 +323,7 @@
             document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('tab-' + id).classList.add('active');
             
-            // Find active tab header and set active class
+            // Cari header tab aktif dan atur kelas aktif
             document.querySelectorAll('.settings-tab').forEach(t => {
                 if (t.getAttribute('data-tab') === id) {
                     t.classList.add('active');
@@ -512,7 +512,7 @@
             const url = document.getElementById('orgUrlInput').value.trim();
             if (!url) return;
 
-            // Find or create the preview container inside the preview card
+            // Cari atau buat pembungkus pratinjau di dalam kartu pratinjau
             const previewBox = document.querySelector('#tab-struktur .settings-panel div[style*="height: 320px"], #tab-struktur div[style*="height: 320px"]');
             if (!previewBox) return;
 
@@ -542,7 +542,7 @@
             }
         }
 
-        // Initialize mission list from PHP. If empty, start with empty array.
+        // Inisialisasi daftar misi dari PHP. Jika kosong, mulai dengan array kosong.
         let missionList = [];
         @php
             $defaultMisi = [
@@ -678,7 +678,7 @@
                         ${subItemsHtml}
                     </ul>
 
-                    <!-- Input block inside card -->
+                    <!-- Blok input di dalam kartu -->
                     <div style="display: flex; gap: 12px; align-items: center; margin-top: 14px;">
                         <span class="check-icon-wrapper" style="display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #DC2626; color: #DC2626; flex-shrink: 0;">
                             <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
@@ -694,7 +694,7 @@
                 container.appendChild(card);
             });
 
-            // Update serialized hidden value for form submission
+            // Perbarui nilai tersembunyi terserialisasi untuk pengiriman formulir
             document.getElementById('misiHiddenInput').value = JSON.stringify(missionList);
         }
 
@@ -745,7 +745,7 @@
             return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
-        // Initial render on page load
+        // Rendisi awal saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
             renderMissionList();
 

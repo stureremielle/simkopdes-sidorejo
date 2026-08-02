@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <!-- Header: Judul (Bold, Gelap) and sub-judul -->
+    <!-- Header: Judul (Tebal, Gelap) dan sub-judul -->
     <div style="margin-bottom: 24px;">
         <h1 class="page-title" style="margin: 0 0 4px 0; font-size: 1.5rem; font-weight: 800; color: #0F172A;">Layanan &amp; Produk</h1>
         <p style="margin: 0; color: #64748B; font-size: 0.88rem;">Kelola produk, kategori, dan tampilan halaman layanan</p>
@@ -31,7 +31,7 @@
         @endphp
         <!-- Baris Kontrol -->
         <div class="controls-row">
-            <!-- Sebelah Kiri: Search input, Category select dynamic dropdown, and Status Pills -->
+            <!-- Sebelah Kiri: Input pencarian, dropdown dinamis kategori, dan tombol status -->
             <div class="left-filters">
                 <div class="search-wrapper">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -64,7 +64,7 @@
                 </div>
             </div>
             
-            <!-- Sebelah Kanan: Add Product Button -->
+            <!-- Sebelah Kanan: Tombol Tambah Produk -->
             <button onclick="openAddModal()" class="btn-tambah-new">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -74,7 +74,7 @@
             </button>
         </div>
 
-        <!-- Horizontal Scroll Table wrapper card -->
+        <!-- Kartu pembungkus tabel dengan gulir horizontal -->
         <div class="table-card-wrapper" style="overflow-x: visible;">
             <table class="clean-table" style="background-color: #FFFFFF; width: 100%; table-layout: fixed;">
                 <thead>
@@ -88,23 +88,23 @@
                         <th style="width: 10%; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
-                <tbody id="productTbody">
+                <tbody id="layananTbody">
                     @forelse ($layananList as $l)
                         <tr class="product-row" data-kategori="{{ $l->kategori }}" data-nama="{{ strtolower($l->nama) }}" data-status="{{ strtolower($l->status) }}">
-                            <!-- Kolom PRODUK: NO image, langsung teks nama dan deskripsi -->
+                            <!-- Kolom PRODUK: Tanpa gambar, langsung teks nama dan deskripsi -->
                             <td style="word-wrap: break-word; white-space: normal;">
                                 <div style="font-weight: 700; color: #1E293B; font-size: 0.95rem;">{{ $l->nama }}</div>
                                 <div style="font-size: 0.8rem; color: #64748B; margin-top: 3px; line-height: 1.35; white-space: normal; word-break: break-word;">{{ $l->deskripsi }}</div>
                             </td>
-                            <!-- Kolom KATEGORI: plain text gray bold-ish to match screenshot -->
+                            <!-- Kolom KATEGORI: Teks abu-abu sedang -->
                             <td style="color: #475569; font-weight: 500; font-size: 0.88rem;">
                                 {{ $l->kategori }}
                             </td>
-                            <!-- Kolom HARGA: teks biasa gelap align-left -->
+                            <!-- Kolom HARGA: Teks biasa gelap rata kiri -->
                             <td style="color: #1E293B; font-weight: 500; font-size: 0.88rem;">
                                 Rp {{ number_format($l->harga, 0, ',', '.') }}
                             </td>
-                            <!-- Kolom SATUAN: teks biasa gelap dengan prefix 'per ' -->
+                            <!-- Kolom SATUAN: Teks biasa gelap dengan awalan 'per ' -->
                             <td style="color: #64748B; font-weight: 500; font-size: 0.88rem;">
                                 @php
                                     $displaySatuan = strtolower($l->satuan);
@@ -117,20 +117,20 @@
                                 @endphp
                                 {{ $displaySatuan }}
                             </td>
-                            <!-- Kolom STATUS: Badge merah/pink bertuliskan "Aktif" atau abu-abu "Nonaktif" -->
+                            <!-- Kolom STATUS: Lencana merah/merah muda bertuliskan "Aktif" atau abu-abu "Nonaktif" -->
                             <td>
                                 <span class="status-badge {{ $l->status === 'aktif' ? '' : 'nonaktif' }}">
                                     {{ $l->status === 'aktif' ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </td>
-                            <!-- Kolom UNGGULAN: Custom checkbox warna merah jika dicentang -->
+                            <!-- Kolom UNGGULAN: Kotak centang khusus berwarna merah jika dipilih -->
                             <td style="text-align: center;">
                                 @php
                                     $isFeaturedSim = (bool) $l->is_featured;
                                 @endphp
                                 <span id="unggulanBox-{{ $l->id }}" class="unggulan-box {{ $isFeaturedSim ? 'checked' : '' }}" style="cursor: pointer;" onclick="toggleUnggulanFromTable({{ $l->id }})"></span>
                             </td>
-                            <!-- Kolom AKSI: Pencil and trash slate icons, minimal, no colorful backgrounds -->
+                            <!-- Kolom AKSI: Ikon pensil dan tempat sampah minimalis tanpa latar belakang berwarna -->
                             <td style="text-align: center; white-space: nowrap;">
                                 <div style="display: flex; gap: 12px; justify-content: center; align-items: center;">
                                     <button class="btn-icon-action btn-icon-edit" title="Edit" onclick="openEditModal({{ json_encode($l) }})">
@@ -256,10 +256,10 @@
                     $isFeaturedNode = (bool) $l->is_featured;
                 @endphp
                 <div class="featured-item-card {{ $isFeaturedNode ? 'active' : '' }}" data-id="{{ $l->id }}" onclick="clickFeaturedCard(this)">
-                    <!-- Icon checklist pojok kanan atas -->
+                    <!-- Ikon tanda centang di pojok kanan atas -->
                     <div class="chk-bubble">✓</div>
                     
-                    <!-- SVG Shopping Bag Icon top-left -->
+                    <!-- Ikon tas belanja di pojok kiri atas -->
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="item-icon">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -276,19 +276,19 @@
 
 
 
-    <!-- MODAL TAMBAH & EDIT PRODUCT -->
-    <div class="custom-overlay" id="productModal">
+    <!-- MODAL TAMBAH & EDIT PRODUK -->
+    <div class="custom-overlay" id="layananModal">
         <div class="modal-body">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h3 id="modalTitleLabel" style="font-weight: 700; font-size: 1.15rem; color: #1E293B; margin: 0; font-family: inherit;">Tambah Produk</h3>
-                <button type="button" onclick="closeProductModal()" style="background: none; border: none; cursor: pointer; color: #94A3B8; padding: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: color 0.15s;" onmouseover="this.style.color='#1E293B'" onmouseout="this.style.color='#94A3B8'">
+                <button type="button" onclick="closeLayananModal()" style="background: none; border: none; cursor: pointer; color: #94A3B8; padding: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: color 0.15s;" onmouseover="this.style.color='#1E293B'" onmouseout="this.style.color='#94A3B8'">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
             </div>
-            <form method="POST" action="{{ route('admin.layanan.store') }}" id="productForm" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.layanan.store') }}" id="layananForm" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_method" id="modalMethod" value="POST">
                 <input type="hidden" name="gambar" id="formGambar">
@@ -342,7 +342,7 @@
                     @error('status')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
-                <!-- Form vertikal 2 kolom untuk Harga dan Satuan -->
+                <!-- Formulir vertikal 2 kolom untuk Harga dan Satuan -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px;">
                     <div class="form-row" style="margin-bottom: 0;">
                         <label>Harga (Rp) <span style="color:#EF4444;">*</span></label>
@@ -363,7 +363,7 @@
                 </div>
 
                 <div class="modal-buttons">
-                    <button type="button" class="btn-cancel-custom" onclick="closeProductModal()">Batal</button>
+                    <button type="button" class="btn-cancel-custom" onclick="closeLayananModal()">Batal</button>
                     <button type="submit" id="btnSubmitLabel" class="btn-submit-custom">Tambah Produk</button>
                 </div>
             </form>
@@ -417,7 +417,7 @@
 
 @section('scripts')
     <script>
-        // Swapping Active block
+        // Mengganti blok tab yang aktif
         function switchBlock(tab) {
             document.querySelectorAll('.tab-block').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
@@ -426,7 +426,7 @@
             document.getElementById('btn-' + tab).classList.add('active');
         }
 
-        // Status filter selection
+        // Pemilihan filter status
         let activeStatusFilter = 'Semua';
 
         function clickStatusFilter(status) {
@@ -436,7 +436,7 @@
             performSearch();
         }
 
-        // Combining search + category select dropdown + status filter logic
+        // Menggabungkan logika pencarian + dropdown kategori + filter status
         function performSearch() {
             const query = document.getElementById('filterSearch').value.toLowerCase().trim();
             const selectedCategory = document.getElementById('filterCategorySelect').value;
@@ -517,21 +517,21 @@
             }
         }
 
-        // Modals control
+        // Kontrol pembukaan dan penutupan modal
         function openAddModal() {
             document.getElementById('modalTitleLabel').textContent = 'Tambah Produk';
             document.getElementById('modalMethod').value = 'POST';
-            document.getElementById('productForm').action = "{{ route('admin.layanan.store') }}";
-            document.getElementById('productForm').reset();
+            document.getElementById('layananForm').action = "{{ route('admin.layanan.store') }}";
+            document.getElementById('layananForm').reset();
             resetUploadArea();
             document.getElementById('btnSubmitLabel').textContent = 'Tambah Produk';
-            document.getElementById('productModal').classList.add('active');
+            document.getElementById('layananModal').classList.add('active');
         }
 
         function openEditModal(data) {
             document.getElementById('modalTitleLabel').textContent = 'Edit Produk';
             document.getElementById('modalMethod').value = 'PUT';
-            document.getElementById('productForm').action = "{{ url('/admin/layanan') }}/" + data.id;
+            document.getElementById('layananForm').action = "{{ url('/admin/layanan') }}/" + data.id;
 
             document.getElementById('formNama').value = data.nama;
             document.getElementById('formKategori').value = data.kategori;
@@ -548,11 +548,11 @@
             }
 
             document.getElementById('btnSubmitLabel').textContent = 'Simpan Perubahan';
-            document.getElementById('productModal').classList.add('active');
+            document.getElementById('layananModal').classList.add('active');
         }
 
-        function closeProductModal() {
-            document.getElementById('productModal').classList.remove('active');
+        function closeLayananModal() {
+            document.getElementById('layananModal').classList.remove('active');
         }
 
         function openCategoryModal() {
@@ -563,7 +563,7 @@
             document.getElementById('categoryAddModal').classList.remove('active');
         }
 
-        // Hapus Modal controller
+        // Pengendali modal konfirmasi hapus
         let _hapusTargetId = null;
         function openHapusModal(id, nama) {
             _hapusTargetId = id;
@@ -582,7 +582,7 @@
             }
         }
 
-        // Featured card checklist toggle — auto-save via AJAX
+        // Pengubah centang produk unggulan — simpan otomatis via AJAX
         const featuredSaveUrl = "{{ route('admin.layanan.featured') }}";
         const featuredCsrfToken = document.querySelector('meta[name="csrf-token"]')?.content
             || "{{ csrf_token() }}";
@@ -636,13 +636,13 @@
                 });
         }
 
-        // Init counter on load
+        // Inisialisasi penghitung saat halaman dimuat
         document.addEventListener('DOMContentLoaded', function() {
             const total = document.querySelectorAll('.featured-item-card.active').length;
             document.getElementById('activeFeaturedLabel').textContent = total + '/3';
         });
 
-        // Table checkbox clicked toggle handler
+        // Penanganan pengubah centang saat kotak centang tabel diklik
         function toggleUnggulanFromTable(id) {
             const card = document.querySelector(`.featured-item-card[data-id="${id}"]`);
             if (card) {
@@ -650,9 +650,9 @@
             }
         }
 
-        // Close when clicking outside modal body
-        document.getElementById('productModal').addEventListener('click', e => {
-            if (e.target === document.getElementById('productModal')) closeProductModal();
+        // Menutup modal saat mengklik di luar area badan modal
+        document.getElementById('layananModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('layananModal')) closeLayananModal();
         });
         document.getElementById('categoryAddModal').addEventListener('click', e => {
             if (e.target === document.getElementById('categoryAddModal')) closeCategoryModal();
@@ -661,14 +661,14 @@
             if (e.target === document.getElementById('hapusModal')) closeHapusModal();
         });
 
-        // Auto-open product modal if validation errors exist on page load
+        // Membuka modal produk secara otomatis jika terdapat error validasi saat halaman dimuat
         @if ($errors->any())
             document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('modalTitleLabel').textContent = 'Tambah Produk';
                 document.getElementById('modalMethod').value = 'POST';
-                document.getElementById('productForm').action = "{{ route('admin.layanan.store') }}";
+                document.getElementById('layananForm').action = "{{ route('admin.layanan.store') }}";
                 document.getElementById('btnSubmitLabel').textContent = 'Tambah Produk';
-                document.getElementById('productModal').classList.add('active');
+                document.getElementById('layananModal').classList.add('active');
             });
         @endif
     </script>

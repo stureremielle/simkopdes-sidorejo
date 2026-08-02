@@ -17,7 +17,7 @@ class Pengumuman extends Model
     ];
 
     /**
-     * Accessor for 'tanggal' to maintain compatibility with the homepage view.
+     * Aksesor atribut 'tanggal' untuk menjaga kompatibilitas dengan tampilan halaman utama.
      */
     public function getTanggalAttribute(): string
     {

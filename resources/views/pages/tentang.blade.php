@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    <!-- HERO BANNER SECTION -->
+    <!-- SEKSI BANNER UTAMA (HERO) -->
     <section class="about-hero-section">
         <div class="container hero-container">
             <h1 class="about-hero-title">Tentang {{ $settings['nama_koperasi'] ?? 'Koperasi Desa Merah Putih' }}</h1>
@@ -26,7 +26,7 @@
         </div>
     </section>
 
-    <!-- FLOATING OVERLAP PROFILE CARD -->
+    <!-- KARTU PROFIL MELAYANG (OVERLAP) -->
     <section class="about-profile-section">
         <div class="container">
             <div class="profile-card">
@@ -36,7 +36,7 @@
         </div>
     </section>
 
-    <!-- VISI 2025 SECTION -->
+    <!-- SEKSI VISI 2025 -->
     <section class="about-vision-section">
         <div class="container">
             <div class="vision-card">
@@ -55,7 +55,7 @@
         </div>
     </section>
 
-    <!-- MISI 2025 SECTION -->
+    <!-- SEKSI MISI 2025 -->
     <section class="about-misi-section" id="misi">
         <div class="container">
             <div class="section-header-centered">
@@ -109,7 +109,7 @@
                         </div>
                     @endforeach
                 @else
-                    <!-- Card 1 -->
+                    <!-- Kartu 1 -->
                     <div class="misi-card">
                         <h3 class="misi-card-title">1. Memperluas Kemitraan dan Pasar</h3>
                         <ul class="misi-list">
@@ -132,7 +132,7 @@
                         </ul>
                     </div>
 
-                    <!-- Card 2 -->
+                    <!-- Kartu 2 -->
                     <div class="misi-card">
                         <h3 class="misi-card-title">2. Penguatan Kelembagaan</h3>
                         <ul class="misi-list">
@@ -155,7 +155,7 @@
                         </ul>
                     </div>
 
-                    <!-- Card 3 -->
+                    <!-- Kartu 3 -->
                     <div class="misi-card">
                         <h3 class="misi-card-title">3. Agrowisata &amp; Pemancingan</h3>
                         <ul class="misi-list">
@@ -178,7 +178,7 @@
                         </ul>
                     </div>
 
-                    <!-- Card 4 (Spans 2 columns) -->
+                    <!-- Kartu 4 (Mencakup 2 Kolom) -->
                     <div class="misi-card card-wide">
                         <h3 class="misi-card-title">4. Pengelolaan Sampah Berkelanjutan</h3>
                         <div class="card-inner-split">
@@ -229,7 +229,7 @@
                         </div>
                     </div>
 
-                    <!-- Card 5 -->
+                    <!-- Kartu 5 -->
                     <div class="misi-card">
                         <h3 class="misi-card-title">5. Klinik Bisnis &amp; Magang</h3>
                         <ul class="misi-list">
@@ -256,7 +256,7 @@
         </div>
     </section>
 
-    <!-- PERSEBARAN ANGGOTA SECTION -->
+    <!-- SEKSI PERSEBARAN ANGGOTA -->
     <section class="about-persebaran-section" id="persebaran">
         <div class="container">
             <div class="section-header-centered">
@@ -272,7 +272,7 @@
                 <p class="section-subtitle">Jumlah dan persebaran anggota Koperasi Desa Merah Putih Sidorejo berdasarkan wilayah RT.</p>
             </div>
 
-            <!-- Summary Metrics -->
+            <!-- Ringkasan Metrik Statistik -->
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-value">{{ $totalAnggota }}</div>
@@ -296,7 +296,7 @@
                 </div>
             </div>
 
-            <!-- RT Progress Grid -->
+            <!-- Kisi-kisi Batang Kemajuan RT -->
             <div class="rt-grid">
                 @foreach($rtData as $rt)
                 <div class="rt-card">
@@ -321,7 +321,7 @@
         </div>
     </section>
 
-    <!-- STRUKTUR ORGANISASI SECTION -->
+    <!-- SEKSI STRUKTUR ORGANISASI -->
     <section class="about-struktur-section" id="struktur">
         <div class="container">
             <div class="struktur-card-container">
@@ -331,7 +331,7 @@
                     <p class="section-teal-subtitle">KECAMATAN PENAJAM</p>
                 </div>
 
-                <!-- Toggle Button -->
+                <!-- Tombol Sakelar Rincian -->
                 @if (empty($settings['org_chart']))
                 <div class="org-toggle-container">
                     <button id="org-toggle-btn" class="org-toggle-btn">PENGURUS</button>
@@ -346,7 +346,7 @@
                     <img src="{{ $orgChartUrl }}" alt="Struktur Organisasi KOPDES" style="max-width: 100%; height: auto; border-radius: 8px;">
                 </div>
                 @else
-                <!-- Tree Pengurus -->
+                <!-- Bagan Hirarki Pengurus -->
                 <div id="tree-pengurus" class="org-tree-view">
                     <!-- Chairman Tier -->
                     <div class="tree-tier tier-chairman">

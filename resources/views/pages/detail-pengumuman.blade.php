@@ -9,7 +9,7 @@
 
 @section('content')
     <div class="detail-page-overlay-wrapper">
-        {{-- ===== BACKGROUND LIST REPLICA (Dimmed) ===== --}}
+        {{-- ===== LATAR BELAKANG REDUP ===== --}}
         <div class="ambient-news-bg">
             <section class="berita-header-section" style="padding-top: 50px;">
                 <div class="container">
@@ -19,14 +19,14 @@
             </section>
         </div>
 
-        {{-- ===== TRANSLUCENT OVERLAY ===== --}}
+        {{-- ===== LAPISAN TRANSPARAN OVERLAY ===== --}}
         <div class="detail-modal-backdrop"></div>
 
-        {{-- ===== MODAL VIEWPORT CONTAINER ===== --}}
+        {{-- ===== WADAH MODAL VIEWPORT ===== --}}
         <div class="detail-modal-viewport">
             <div class="detail-modal-card">
                 
-                {{-- Banner Area --}}
+                {{-- Area Banner --}}
                 <div class="modal-hero-banner-announcement">
                     <div class="announcement-icon-ring">
                         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -39,7 +39,7 @@
                         <div style="font-size: 0.85rem; color: #4A4A4A; margin-top: 5px;">Kop. Merah Putih Sidorejo</div>
                     </div>
 
-                    {{-- Close Button links back to Home page since page was opened from Home --}}
+                    {{-- Tombol Tutup yang mengarahkan kembali ke Beranda --}}
                     <a href="{{ route('home') }}" class="modal-close-x-btn" title="Tutup detail berita">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="modal-content-inner">
-                    {{-- Metadata row --}}
+                    {{-- Baris Metadata --}}
                     <div class="modal-meta-row">
                         <div class="modal-meta-item">
                             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">

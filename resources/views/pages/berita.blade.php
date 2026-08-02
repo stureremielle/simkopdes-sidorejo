@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    {{-- ===== PAGE HEADER ===== --}}
+    {{-- ===== HEADER HALAMAN ===== --}}
     <section class="berita-header-section">
         <div class="container">
             <h1 class="berita-page-title">Berita &amp; Informasi</h1>
@@ -18,52 +18,63 @@
         </div>
     </section>
 
-    {{-- ===== FEATURED ARTICLE CARD ===== --}}
-    @if ($featured)
-    <section class="featured-section">
+
+
+    {{-- ===== BERITA UTAMA ===== --}}
+    @if ($beritaUtama)
+    <section class="berita-utama-section">
         <div class="container">
-            <div class="featured-card">
-                <div class="featured-img-wrapper">
-                    @if ($featured->gambar)
+            <div class="berita-utama-card">
+                {{-- Gambar berita utama --}}
+                <div class="berita-utama-img-wrapper">
+                    @if ($beritaUtama->gambar)
                         @php
-                            $featGambar = $featured->gambar;
-                            $featGambarSrc = Str::startsWith($featGambar, 'http') ? $featGambar : (Str::startsWith($featGambar, 'uploads/') || Str::startsWith($featGambar, 'storage/') || Str::startsWith($featGambar, '/') ? asset(ltrim($featGambar, '/')) : asset('assets/images/' . $featGambar));
+                            $featGambar    = $beritaUtama->gambar;
+                            $featGambarSrc = Str::startsWith($featGambar, 'http')
+                                ? $featGambar
+                                : (Str::startsWith($featGambar, 'uploads/') || Str::startsWith($featGambar, 'storage/') || Str::startsWith($featGambar, '/')
+                                    ? asset(ltrim($featGambar, '/'))
+                                    : asset('assets/images/' . $featGambar));
                         @endphp
-                        <img src="{{ $featGambarSrc }}" alt="{{ $featured->judul }}">
+                        <img src="{{ $featGambarSrc }}" alt="{{ $beritaUtama->judul }}">
                     @endif
-                    <span class="featured-badge">PILIHAN</span>
+                    <span class="berita-utama-badge">{{ $beritaUtama->kategori }}</span>
                 </div>
-                <div class="featured-content">
+                {{-- Konten berita utama --}}
+                <div class="berita-utama-content">
                     <div class="post-meta">
                         <div class="post-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                             </svg>
-                            <span>{{ \App\Helpers\Helper::formatTanggal($featured->tanggal_publikasi ?? ($featured->created_at ? $featured->created_at->toDateString() : date('Y-m-d'))) }}</span>
+                            <span>{{ \App\Helpers\Helper::formatTanggal($beritaUtama->tanggal_publikasi ?? ($beritaUtama->created_at ? $beritaUtama->created_at->toDateString() : date('Y-m-d'))) }}</span>
                         </div>
+                        @if ($beritaUtama->penulis)
                         <div class="post-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                             </svg>
-                            <span>{{ $featured->penulis }}</span>
+                            <span>{{ $beritaUtama->penulis }}</span>
                         </div>
+                        @endif
                     </div>
-                    <h2 class="featured-title">{{ $featured->judul }}</h2>
-                    <p class="featured-desc">{{ Str::limit(strip_tags($featured->isi), 220) }}</p>
-                    <a href="{{ route('berita.detail', $featured->id) }}" class="featured-link">Baca Selengkapnya &rarr;</a>
+                    <h2 class="berita-utama-title">{{ $beritaUtama->judul }}</h2>
+                    <p class="berita-utama-desc">{{ Str::limit(strip_tags($beritaUtama->isi), 200) }}</p>
+                    <a href="{{ route('berita.detail', $beritaUtama->id) }}" class="berita-utama-link">
+                        Baca Selengkapnya &rarr;
+                    </a>
                 </div>
             </div>
         </div>
     </section>
     @endif
 
-    {{-- ===== ARTIKEL TERBARU GRID ===== --}}
+
     <section class="recent-section">
         <div class="container">
             <h2 class="recent-title">Artikel Terbaru</h2>
             <div class="berita-grid" id="beritaGrid">
-                @forelse ($artikel as $a)
+                @forelse ($daftarBerita as $a)
                     <article class="berita-card">
                          <div class="card-img-wrapper">
                              @if ($a->gambar)
@@ -94,7 +105,7 @@
             </div>
 
             {{-- Muat Lebih Banyak Artikel Button --}}
-            @if (count($artikel) >= 6)
+            @if (count($daftarBerita) >= 5)
             <div class="load-more-wrapper">
                 <button class="btn-load-more" id="btnLoadMore">Muat Lebih Banyak Artikel</button>
             </div>

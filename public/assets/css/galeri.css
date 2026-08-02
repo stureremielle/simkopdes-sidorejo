@@ -781,3 +781,32 @@
         transform: translateY(0);
     }
 }
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 600px) {
+    .filter-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        width: 100%;
+        justify-content: flex-start;
+        padding: 4px 16px 12px 16px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .filter-tab {
+        flex-shrink: 0;
+    }
+
+    .gallery-hero-title {
+        font-size: 1.85rem;
+    }
+
+    .gallery-card {
+        border-radius: 12px;
+    }
+
+    .card-media-wrapper {
+        height: 200px;
+    }
+}

@@ -31,7 +31,7 @@ class Layanan extends Model
 
     public function getKategoriAttribute()
     {
-        return $this->kategoriRelation?->nama ?? 'Lainnya';
+        return $this->kategoriRelation?->nama ?? '';
     }
 
     public function setKategoriAttribute($value)

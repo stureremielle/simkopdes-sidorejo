@@ -10,7 +10,7 @@
 @section('content')
 
 
-{{-- Page Header --}}
+{{-- Header Halaman --}}
 <div class="page-header-row">
     <div class="page-heading">
         <h1>Galeri Foto</h1>
@@ -23,12 +23,12 @@
         </button>
         <button onclick="openTambahModal()" class="btn-tambah">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tambah Gallery
+            Tambah Galeri
         </button>
     </div>
 </div>
 
-{{-- Search Bar --}}
+{{-- Bilah Pencarian --}}
 <form method="GET" action="{{ route('admin.galeri') }}">
     @if($kategoriFilter)
         <input type="hidden" name="kategori" value="{{ $kategoriFilter }}">
@@ -39,7 +39,7 @@
     </div>
 </form>
 
-{{-- Filter Pills --}}
+{{-- Tombol Filter --}}
 <div class="filter-scroller">
     <div class="filter-row" id="filterPillsContainer">
         <a href="{{ route('admin.galeri', ['search' => $search]) }}" class="filter-pill {{ empty($kategoriFilter) ? 'active' : '' }}">Semua</a>
@@ -50,24 +50,10 @@
     </div>
 </div>
 
-{{-- Gallery Grid --}}
+{{-- Kisi Galeri --}}
 <div class="galeri-grid">
     @forelse($galeriList as $item)
         @php
-            // Category color for badge & placeholder bg
-            $katLower = strtolower($item->kategori ?? '');
-            if (str_contains($katLower, 'rapat') || str_contains($katLower, 'musyawarah')) {
-                $badgeColor = '#DC2626'; $bgColor = 'linear-gradient(135deg,#DC2626,#991B1B)';
-            } elseif (str_contains($katLower, 'panen') || str_contains($katLower, 'tani') || str_contains($katLower, 'pertanian')) {
-                $badgeColor = '#16A34A'; $bgColor = 'linear-gradient(135deg,#16A34A,#14532D)';
-            } elseif (str_contains($katLower, 'pelatihan') || str_contains($katLower, 'didik')) {
-                $badgeColor = '#7C3AED'; $bgColor = 'linear-gradient(135deg,#7C3AED,#4C1D95)';
-            } elseif (str_contains($katLower, 'sosial')) {
-                $badgeColor = '#0891B2'; $bgColor = 'linear-gradient(135deg,#0891B2,#164E63)';
-            } else {
-                $badgeColor = '#EA580C'; $bgColor = 'linear-gradient(135deg,#EA580C,#9A3412)';
-            }
-
             $hasPhoto = !empty($item->gambar)
                          && !str_starts_with($item->gambar, 'http')
                          && file_exists(public_path($item->gambar));
@@ -75,7 +61,7 @@
 
             try {
                 $formattedDate = $item->created_at
-                    ? \Carbon\Carbon::parse($item->created_at)->translatedFormat('M Y')
+                    ? \App\Helpers\Helper::formatBulanTahun($item->created_at)
                     : '-';
             } catch(\Exception $e) { $formattedDate = '-'; }
         @endphp
@@ -88,13 +74,13 @@
                 @elseif($hasRemotePhoto)
                     <img src="{{ $item->gambar }}" alt="{{ $item->judul }}" loading="lazy">
                 @else
-                    <div class="card-photo-placeholder" style="background: {{ $bgColor }};">
+                    <div class="card-photo-placeholder">
                         {{ strtoupper(substr($item->judul, 0, 1)) }}
                     </div>
                 @endif
 
                 {{-- Category badge --}}
-                <span class="card-badge-kat" style="background: {{ $badgeColor }};">
+                <span class="card-badge-kat">
                     {{ $item->kategori }}
                 </span>
 
@@ -213,7 +199,7 @@
                 {{-- Judul --}}
                 <div class="form-group">
                     <label>Judul <span style="color:#EF4444">*</span></label>
-                    <input type="text" name="judul" required maxlength="50" placeholder="Nama kegiatan..." value="{{ old('judul') }}">
+                    <input type="text" name="judul" required maxlength="80" placeholder="Nama kegiatan..." value="{{ old('judul') }}">
                     @error('judul')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
 
@@ -303,17 +289,24 @@
                 </div>
                 @endif
 
-                <!-- Foto Preview & Ganti Foto -->
+                <!-- Pratinjau Foto & Ganti Foto -->
                 <div class="form-group" style="margin-bottom: 8px;">
                     <label>Foto <span style="color:#EF4444">*</span></label>
                     <div class="edit-photo-preview-container" id="editPhotoPreviewContainer">
-                        <!-- Will be populated dynamically by JS on open or select -->
+                        {{-- Akan diisi secara dinamis oleh JavaScript --}}
+                        <div id="ePhotoPlaceholder" style="text-align: center;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: #F1F5F9; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: #94A3B8;">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            </div>
+                            <span style="font-size: 0.85rem; color: #64748B; font-weight: 500;">Pilih gambar foto...</span>
+                        </div>
+                        <img id="editPhotoPreviewImg" src="" alt="Pratinjau Foto" style="display:none; width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div id="editPhotoError" style="color:#EF4444;font-size:0.78rem;margin-top:4px;margin-bottom:12px;font-weight:600;display:none;">Foto kegiatan wajib diisi.</div>
                     @error('gambar_file')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
                 
-                <!-- Ganti Foto Button container -->
+                <!-- Pembungkus tombol Ganti Foto -->
                 <button type="button" class="btn-ganti-foto" onclick="document.getElementById('editGambarFileInput').click()">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     Ganti Foto
@@ -322,7 +315,7 @@
 
                 <div class="form-group">
                     <label>Judul <span style="color:#EF4444">*</span></label>
-                    <input type="text" name="judul" id="editJudul" required maxlength="50" placeholder="Judul foto...">
+                    <input type="text" name="judul" id="editJudul" required maxlength="80" placeholder="Judul foto...">
                     @error('judul')<div style="color:#EF4444;font-size:0.78rem;margin-top:3px;font-weight:600;">{{ $message }}</div>@enderror
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -524,7 +517,7 @@
         if (box) box.style.display = show ? 'flex' : 'none';
     }
 
-    /* ===== EDIT MODAL HELPERS ===== */
+    /* ===== PENOLONG MODAL EDIT ===== */
     function renderPhotoPreview(url) {
         const container = document.getElementById('editPhotoPreviewContainer');
         if (!container) return;
@@ -614,7 +607,7 @@
         }
     }
 
-    /* ===== IMAGE COMPRESSION & FORM VALIDATION ===== */
+    /* ===== KOMPRESI GAMBAR & VALIDASI FORMULIR ===== */
     function showPhotoFieldError(containerId, errorId, msg) {
         const container = document.getElementById(containerId);
         const errorEl = document.getElementById(errorId);
@@ -698,7 +691,7 @@
             return false;
         }
 
-        // 3. Validate Materi fields if checkbox is checked
+        // 3. Validasi bidang Materi jika kotak centang dicentang
         const hasMateriChk = form.querySelector('input[name="has_materi"]');
         if (hasMateriChk && hasMateriChk.checked) {
             const materiInput = form.querySelector('input[name="materi_file"]');
@@ -781,7 +774,7 @@
         return true;
     }
 
-    /* ===== MODAL CONTROLS ===== */
+    /* ===== KONTROL MODAL ===== */
     function openKategoriModal()  { document.getElementById('kategoriModal').classList.add('active'); }
     function closeKategoriModal() { document.getElementById('kategoriModal').classList.remove('active'); }
 
@@ -792,7 +785,7 @@
         const pInput = document.getElementById('tPeriode');
         if (pInput) pInput.value = `${months[now.getMonth()]} ${now.getFullYear()}`;
         
-        // Reset photo preview to placeholder
+        // Setel ulang pratinjau foto ke gambar pengganti
         renderTambahPhotoPreview(null);
         
         document.getElementById('tGambarFileInput').value = '';

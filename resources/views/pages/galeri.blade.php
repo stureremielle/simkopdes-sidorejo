@@ -102,7 +102,7 @@
         </div>
     </section>
 
-    <!-- Lightbox Modal -->
+    <!-- Modal Tampilan Gambar (Lightbox) -->
     <div class="modal-wrapper" id="lightboxModal">
         <div class="lightbox-box">
             <button class="modal-close" id="closeLightboxModal" aria-label="Tutup modal">&times;</button>
@@ -205,11 +205,11 @@
                     openCardModal(card);
                 });
 
-                // Explicit click on the orange material badge icon also opens modal
+                // Klik pada ikon lencana materi juga membuka modal
                 const badge = card.querySelector('.material-badge');
                 if (badge) {
                     badge.addEventListener('click', (e) => {
-                        e.stopPropagation(); // prevent double-fire
+                        e.stopPropagation(); // mencegah pemanggilan ganda
                         openCardModal(card);
                     });
                 }

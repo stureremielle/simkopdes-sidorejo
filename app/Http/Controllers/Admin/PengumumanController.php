@@ -9,7 +9,7 @@ use App\Models\Pengumuman;
 class PengumumanController extends Controller
 {
     /**
-     * Display a listing of announcements.
+     * Menampilkan daftar data pengumuman.
      */
     public function index()
     {
@@ -18,7 +18,7 @@ class PengumumanController extends Controller
     }
 
     /**
-     * Show the form for creating a new announcement.
+     * Menampilkan formulir penambahan pengumuman baru.
      */
     public function create()
     {
@@ -26,7 +26,7 @@ class PengumumanController extends Controller
     }
 
     /**
-     * Store a newly created announcement in database.
+     * Memproses dan menyimpan data pengumuman baru ke database.
      */
     public function store(Request $request)
     {
@@ -40,11 +40,11 @@ class PengumumanController extends Controller
 
         Pengumuman::create($request->all());
 
-        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil ditambahkan.');
+        return redirect()->route('admin.pengumuman.index');
     }
 
     /**
-     * Show the form for editing the specified announcement.
+     * Menampilkan formulir pembaruan pengumuman.
      */
     public function edit($id)
     {
@@ -52,7 +52,7 @@ class PengumumanController extends Controller
     }
 
     /**
-     * Update the specified announcement in database.
+     * Memproses dan memperbarui data pengumuman di database.
      */
     public function update(Request $request, $id)
     {
@@ -67,17 +67,17 @@ class PengumumanController extends Controller
         $pengumuman = Pengumuman::findOrFail($id);
         $pengumuman->update($request->all());
 
-        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil diperbarui.');
+        return redirect()->route('admin.pengumuman.index');
     }
 
     /**
-     * Remove the specified announcement from database.
+     * Menghapus data pengumuman dari database.
      */
     public function destroy($id)
     {
         $pengumuman = Pengumuman::findOrFail($id);
         $pengumuman->delete();
 
-        return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil dihapus.');
+        return redirect()->route('admin.pengumuman.index');
     }
 }

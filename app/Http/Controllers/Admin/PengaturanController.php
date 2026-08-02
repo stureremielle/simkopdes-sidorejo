@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class PengaturanController extends Controller
 {
     /**
-     * Display settings page.
+     * Menampilkan halaman pengaturan informasi koperasi.
      */
     public function index()
     {
@@ -25,7 +25,7 @@ class PengaturanController extends Controller
     }
 
     /**
-     * Save settings.
+     * Memproses dan menyimpan data pengaturan informasi koperasi.
      */
     public function save(Request $request)
     {
@@ -43,7 +43,7 @@ class PengaturanController extends Controller
             }
         }
 
-        // Handle administrator password change if provided in the unified settings form
+        // Memproses perubahan kata sandi administrator jika diisi pada formulir pengaturan
         if ($request->filled('password_lama') || $request->filled('password_baru') || $request->filled('password_konfirmasi')) {
             $request->validate([
                 'password_lama' => 'required',
@@ -59,7 +59,7 @@ class PengaturanController extends Controller
 
             $admin = Auth::guard('admin')->user();
             
-            // Check old password (using MD5)
+            // Memeriksa kesesuaian kata sandi lama (menggunakan enkripsi MD5)
             if (md5($request->password_lama) !== $admin->password) {
                 return redirect()->route('admin.pengaturan')->withErrors(['password_lama' => 'Password lama tidak sesuai.']);
             }
@@ -68,13 +68,11 @@ class PengaturanController extends Controller
             $admin->save();
         }
 
-
-
-        return redirect()->route('admin.pengaturan')->with('success', 'Pengaturan berhasil disimpan!');
+        return redirect()->route('admin.pengaturan')->with('success', true);
     }
 
     /**
-     * Save hero background image.
+     * Memproses dan menyimpan foto latar belakang hero beranda.
      */
     public function saveHeroBg(Request $request)
     {
@@ -107,7 +105,7 @@ class PengaturanController extends Controller
 
             $safeName = 'hero_' . time() . '.' . $file->getClientOriginalExtension();
 
-            // Delete old file
+            // Memeriksa dan menghapus berkas foto lama jika ada
             $oldValue = Pengaturan::getValue('hero_background', '');
             if ($oldValue && !str_starts_with($oldValue, 'http') && $oldValue !== $safeName) {
                 $oldPath = public_path('uploads/' . $oldValue);
@@ -133,7 +131,7 @@ class PengaturanController extends Controller
                 'hero_url.url' => 'Format URL tidak valid.',
             ]);
 
-            // Delete old file
+            // Memeriksa dan menghapus berkas foto lama jika ada
             $oldValue = Pengaturan::getValue('hero_background', '');
             if ($oldValue && !str_starts_with($oldValue, 'http')) {
                 $oldPath = public_path('uploads/' . $oldValue);
@@ -154,7 +152,7 @@ class PengaturanController extends Controller
     }
 
     /**
-     * Save organizational structure chart image.
+     * Memproses dan menyimpan gambar struktur organisasi.
      */
     public function saveOrgChart(Request $request)
     {
@@ -187,7 +185,7 @@ class PengaturanController extends Controller
 
             $safeName = 'org_' . time() . '.' . $file->getClientOriginalExtension();
 
-            // Delete old file
+            // Memeriksa dan menghapus berkas gambar lama jika ada
             $oldValue = Pengaturan::getValue('org_chart', '');
             if ($oldValue && !str_starts_with($oldValue, 'http') && $oldValue !== $safeName) {
                 $oldPath = public_path('uploads/' . $oldValue);
@@ -213,7 +211,7 @@ class PengaturanController extends Controller
                 'org_url.url' => 'Format URL tidak valid.',
             ]);
 
-            // Delete old file
+            // Memeriksa dan menghapus berkas gambar lama jika ada
             $oldValue = Pengaturan::getValue('org_chart', '');
             if ($oldValue && !str_starts_with($oldValue, 'http')) {
                 $oldPath = public_path('uploads/' . $oldValue);
@@ -234,7 +232,7 @@ class PengaturanController extends Controller
     }
 
     /**
-     * Change admin password.
+     * Memproses pembaruan kata sandi administrator.
      */
     public function changePassword(Request $request)
     {
@@ -252,12 +250,12 @@ class PengaturanController extends Controller
 
         $admin = Auth::guard('admin')->user();
 
-        // Check old password (using MD5)
+        // Memeriksa kesesuaian kata sandi lama (menggunakan enkripsi MD5)
         if (md5($request->old_password) !== $admin->password) {
             return redirect()->route('admin.pengaturan')->withErrors(['old_password' => 'Password lama tidak sesuai.']);
         }
 
-        // Update password (using MD5)
+        // Memperbarui kata sandi (menggunakan enkripsi MD5)
         $admin->password = md5($request->new_password);
         $admin->save();
 
