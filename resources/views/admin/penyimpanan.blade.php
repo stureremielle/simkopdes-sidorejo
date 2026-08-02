@@ -9,6 +9,38 @@
 @endsection
 
 @section('content')
+    <div id="toast-container" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; max-width: 380px; width: calc(100% - 48px);">
+        @if (session('success'))
+            <div class="toast-alert success" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; color: #1E293B; padding: 16px 20px; border-radius: 12px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; transform: translateX(120%); opacity: 0; box-sizing: border-box; width: 100%;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div style="flex: 1; line-height: 1.4; font-weight: 500; word-break: break-word; overflow-wrap: break-word;">
+                    {!! session('success') !!}
+                </div>
+                <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="toast-alert error" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; color: #1E293B; padding: 16px 20px; border-radius: 12px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; transform: translateX(120%); opacity: 0; box-sizing: border-box; width: 100%;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div style="flex: 1; line-height: 1.4; font-weight: 500; word-break: break-word; overflow-wrap: break-word;">
+                    {!! session('error') !!}
+                </div>
+                <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        @endif
+    </div>
+
     <!-- 1. Header Section -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div>
@@ -138,7 +170,7 @@
                         <td style="text-align: center; white-space: nowrap; padding: 16px 4px;">
                             <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
                                 <!-- Ikon unduh -->
-                                <a href="{{ asset('uploads/' . $f->nama_file) }}" download="{{ $f->nama_asli }}" class="btn-icon-action" title="Download">
+                                <a href="{{ route('admin.penyimpanan.download', $f->id) }}" class="btn-icon-action" title="Download">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -146,7 +178,7 @@
                                     </svg>
                                 </a>
                                 <!-- Pemicu pratinjau file -->
-                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ asset('uploads/' . $f->nama_file) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
+                                <button type="button" class="btn-icon-action" onclick="previewFile('{{ route('admin.penyimpanan.preview', $f->id) }}', '{{ addslashes($f->nama_asli) }}')" title="Lihat File">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
@@ -798,6 +830,38 @@
         function toggleDesc(el) {
             el.classList.toggle('collapsed');
             el.classList.toggle('expanded');
+        }
+
+        // Toast notifications logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const toasts = document.querySelectorAll('.toast-alert');
+            toasts.forEach((toast, idx) => {
+                // Slide in with delay
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(0)';
+                    toast.style.opacity = '1';
+                }, 100 + (idx * 200));
+
+                // Auto dismiss after 4 seconds
+                setTimeout(() => {
+                    fadeAndRemoveToast(toast);
+                }, 4000 + (idx * 500));
+            });
+        });
+
+        function dismissToast(button) {
+            const toast = button.closest('.toast-alert');
+            if (toast) {
+                fadeAndRemoveToast(toast);
+            }
+        }
+
+        function fadeAndRemoveToast(toast) {
+            toast.style.transform = 'translateX(120%)';
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
         }
     </script>
 @endsection

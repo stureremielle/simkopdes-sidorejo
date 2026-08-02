@@ -7,11 +7,12 @@ use App\Models\KategoriPenyimpanan;
 use App\Models\PenyimpananFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 class PenyimpananController extends Controller
 {
     /**
-     * Menampilkan daftar penyimpanan berkas beserta statistik.
+     * Display file storage listing with stats.
      */
     public function index(Request $request)
     {
@@ -40,7 +41,7 @@ class PenyimpananController extends Controller
     }
 
     /**
-     * Memproses dan mengunggah berkas baru.
+     * Upload a new file to ZTE NAS.
      */
     public function upload(Request $request)
     {
@@ -73,31 +74,55 @@ class PenyimpananController extends Controller
         $file         = $request->file('file_upload');
         $ext          = $file->getClientOriginalExtension();
         $originalName = $this->resolveOriginalName($file, $request->input('nama_file'), $ext);
-        $safeName     = $this->buildSafeName($originalName, $ext);
-
-        $uploadPath = public_path('uploads');
-        if (!File::isDirectory($uploadPath)) {
-            File::makeDirectory($uploadPath, 0755, true, true);
-        }
-
+        
         $size = $file->getSize();
         $mime = $file->getMimeType();
-        $file->move($uploadPath, $safeName);
 
-        PenyimpananFile::create([
-            'nama_file'  => $safeName,
-            'nama_asli'  => $originalName,
-            'kategori'   => $request->kategori,
-            'ukuran'     => $size,
-            'tipe'       => substr($mime, 0, 80),
-            'keterangan' => $request->keterangan ?? '',
-        ]);
+        // Konfigurasi NAS API dari config
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
 
-        return redirect()->route('admin.penyimpanan');
+        try {
+            // Kirim file ke REST API NAS (ZTE TV Box) via Multipart Form Data
+            $response = Http::withHeaders([
+                'X-API-KEY' => $nasKey
+            ])->attach(
+                'file_upload',
+                file_get_contents($file->getRealPath()),
+                $originalName
+            )->post($nasUrl . '/upload', [
+                'kategori' => $request->kategori,
+                'uploader' => auth()->user()->username ?? 'Admin'
+            ]);
+
+            if ($response->failed()) {
+                $errMsg = $response->json('message') ?? 'Server NAS mengembalikan status error ' . $response->status();
+                return redirect()->back()->withInput()->with('error', "Gagal mengunggah file ke NAS: " . $errMsg);
+            }
+
+            // Dapatkan nama file yang di-sanitize dari respon Node.js NAS
+            $safeName = $response->json('filename');
+
+            // Simpan record metadata di database lokal Alwaysdata
+            PenyimpananFile::create([
+                'nama_file'  => $safeName,
+                'nama_asli'  => $originalName,
+                'kategori'   => $request->kategori,
+                'ukuran'     => $size,
+                'tipe'       => substr($mime, 0, 80),
+                'keterangan' => $request->keterangan ?? '',
+            ]);
+
+            return redirect()->route('admin.penyimpanan')
+                ->with('success', "File \"{$originalName}\" berhasil diunggah ke NAS.");
+
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', "Gagal terhubung ke NAS Server: " . $e->getMessage());
+        }
     }
 
     /**
-     * Memproses dan memperbarui nama, kategori, serta keterangan berkas.
+     * Edit file description and category.
      */
     public function update(Request $request, $id)
     {
@@ -114,24 +139,112 @@ class PenyimpananController extends Controller
             'keterangan' => $request->keterangan ?? '',
         ]);
 
-        return redirect()->route('admin.penyimpanan');
+        return redirect()->route('admin.penyimpanan')
+            ->with('success', 'File berhasil diperbarui.');
     }
 
     /**
-     * Menghapus file dari penyimpanan fisik dan basis data.
+     * Delete file from storage and database.
      */
     public function destroy($id)
     {
         $item     = PenyimpananFile::findOrFail($id);
-        $filePath = public_path('uploads/' . $item->nama_file);
+        
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
 
-        if (File::exists($filePath)) {
-            File::delete($filePath);
+        try {
+            // Hapus file secara fisik dari server NAS
+            $response = Http::withHeaders([
+                'X-API-KEY' => $nasKey
+            ])->delete($nasUrl . '/' . $item->nama_file);
+
+            if ($response->failed()) {
+                logger()->warning("Gagal menghapus file fisik {$item->nama_file} di NAS: " . $response->status());
+            }
+        } catch (\Exception $e) {
+            logger()->error("Koneksi gagal saat menghapus file {$item->nama_file} di NAS: " . $e->getMessage());
         }
 
         $item->delete();
 
-        return redirect()->route('admin.penyimpanan');
+        return redirect()->route('admin.penyimpanan')
+            ->with('success', 'File berhasil dihapus.');
+    }
+
+    /**
+     * Download file via NAS API streaming (Chunked streaming to save RAM).
+     */
+    public function download($id)
+    {
+        $item = PenyimpananFile::findOrFail($id);
+
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
+
+        try {
+            // Gunakan Guzzle client langsung untuk streaming respon
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('GET', $nasUrl . '/download/' . $item->nama_file, [
+                'headers' => [
+                    'X-API-KEY' => $nasKey
+                ],
+                'stream' => true, // Mengaktifkan opsi stream Guzzle
+            ]);
+
+            $body = $response->getBody();
+
+            return response()->stream(function () use ($body) {
+                while (!$body->eof()) {
+                    echo $body->read(1024 * 8); // Mengalirkan data per 8KB
+                    flush();
+                }
+            }, 200, [
+                'Content-Type' => $response->getHeaderLine('Content-Type') ?: ($item->tipe ?: 'application/octet-stream'),
+                'Content-Length' => $response->getHeaderLine('Content-Length') ?: $item->ukuran,
+                'Content-Disposition' => 'attachment; filename="' . rawurlencode($item->nama_asli) . '"',
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal terhubung ke NAS untuk unduh berkas: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Preview file via NAS API streaming (Inline display for PDFs and images).
+     */
+    public function preview($id)
+    {
+        $item = PenyimpananFile::findOrFail($id);
+
+        $nasUrl = config('services.nas.url');
+        $nasKey = config('services.nas.key');
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('GET', $nasUrl . '/download/' . $item->nama_file, [
+                'headers' => [
+                    'X-API-KEY' => $nasKey
+                ],
+                'stream' => true,
+            ]);
+
+            $body = $response->getBody();
+
+            return response()->stream(function () use ($body) {
+                while (!$body->eof()) {
+                    echo $body->read(1024 * 8);
+                    flush();
+                }
+            }, 200, [
+                'Content-Type' => $response->getHeaderLine('Content-Type') ?: ($item->tipe ?: 'application/octet-stream'),
+                'Content-Length' => $response->getHeaderLine('Content-Length') ?: $item->ukuran,
+                'Content-Disposition' => 'inline; filename="' . rawurlencode($item->nama_asli) . '"',
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal terhubung ke NAS untuk pratinjau berkas: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -153,7 +266,7 @@ class PenyimpananController extends Controller
     }
 
     /**
-     * Menghapus kategori penyimpanan berkas yang dipilih.
+     * Remove the specified category.
      */
     public function destroyCategory($kategori)
     {
@@ -173,11 +286,11 @@ class PenyimpananController extends Controller
     }
 
     // -------------------------------------------------------------------------
-    // Fungsi pembantu privat
+    // Private helpers
     // -------------------------------------------------------------------------
 
     /**
-     * Menyusun array statistik per kategori untuk tampilan view.
+     * Build the per-category stats array used by the view.
      *
      * @return array<string, array{c: int, total: int}>
      */
@@ -198,15 +311,15 @@ class PenyimpananController extends Controller
     }
 
     /**
-     * Menentukan nama tampilan untuk berkas yang diunggah.
-     * Menerapkan nama kustom (jika diisi) dan membatasi maksimal 150 karakter.
+     * Resolve the display name for the uploaded file.
+     * Applies the custom name (if given) and enforces the 150-char DB limit.
      */
     private function resolveOriginalName($file, ?string $customName, string $ext): string
     {
         $name = $file->getClientOriginalName();
 
         if ($customName) {
-            // Menambahkan ekstensi jika nama kustom belum memilikinya
+            // Append extension if the custom name is missing it
             if ($ext && !str_ends_with(strtolower($customName), '.' . strtolower($ext))) {
                 $customName .= '.' . $ext;
             }
@@ -217,8 +330,8 @@ class PenyimpananController extends Controller
     }
 
     /**
-     * Menghasilkan nama berkas aman yang disimpan pada direktori fisik.
-     * Membatasi panjang maksimal 255 karakter pada direktori.
+     * Generate the safe (sanitised) filename stored on disk.
+     * Enforces the 255-char on-disk limit.
      */
     private function buildSafeName(string $originalName, string $ext): string
     {
@@ -228,7 +341,7 @@ class PenyimpananController extends Controller
     }
 
     /**
-     * Memotong nama berkas sesuai batas $maxLen karakter dengan tetap mempertahankan ekstensinya.
+     * Truncate a filename to $maxLen characters while preserving its extension.
      */
     private function truncateFilename(string $filename, string $ext, int $maxLen): string
     {
