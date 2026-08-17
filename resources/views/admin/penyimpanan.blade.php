@@ -578,7 +578,7 @@
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
-                    <h3 style="font-weight: 800; font-size: 1.25rem; color: #1E293B; margin: 0;">Riwayat Transaksi Berkas (Benchmark)</h3>
+                    <h3 style="font-weight: 800; font-size: 1.25rem; color: #1E293B; margin: 0;">Riwayat Transaksi Berkas</h3>
                 </div>
                 <button onclick="closeRiwayatModal()" style="background: none; border: none; color: #94A3B8; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; transition: color 0.2s;" onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94A3B8'">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1473,7 +1473,7 @@
 
                 localStorage.setItem('simkopdes_riwayat_berkas', JSON.stringify(riwayat));
             } catch (err) {
-                console.error('Gagal menyimpan riwayat benchmark:', err);
+                console.error('Gagal menyimpan riwayat:', err);
             }
         }
 
