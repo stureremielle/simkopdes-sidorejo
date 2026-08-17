@@ -1133,7 +1133,8 @@
                     // Update UI baris upload
                     document.getElementById('uploadingProgressBar').style.width = percent + '%';
                     document.getElementById('uploadingProgressPercent').textContent = percent + '%';
-                    document.getElementById('uploadingProgressStats').textContent = `${speedStr} - ${timeStr}`;
+                    const elapsedStr = Math.round(elapsedTime) + 's';
+                    document.getElementById('uploadingProgressStats').textContent = `${speedStr} - ${elapsedStr} berlalu (${timeStr})`;
                 }
             };
 
@@ -1272,7 +1273,8 @@
                     // Update UI Panel
                     pBar.style.width = percent + '%';
                     pPercent.textContent = percent + '%';
-                    pStats.textContent = `${speedStr} - ${timeStr}`;
+                    const elapsedStr = Math.round(elapsedTime) + 's';
+                    pStats.textContent = `${speedStr} - ${elapsedStr} berlalu (${timeStr})`;
                 } else {
                     const elapsedTime = (Date.now() - startTime) / 1000;
                     const loadedStr = formatBytes(e.loaded);
