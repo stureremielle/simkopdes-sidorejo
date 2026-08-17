@@ -121,6 +121,15 @@
                 <span>Kategori</span>
             </button>
 
+            <!-- Tombol Riwayat -->
+            <button onclick="openRiwayatModal()" style="background-color: #FFFFFF; color: #475569; border: 1.5px solid #E2E8F0; border-radius: 8px; padding: 10px 20px; font-size: 0.88rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; height: 42px; box-sizing: border-box;" onmouseover="this.style.backgroundColor='#F8FAFC'; this.style.borderColor='#CBD5E1';" onmouseout="this.style.backgroundColor='#FFFFFF'; this.style.borderColor='#E2E8F0';">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Riwayat</span>
+            </button>
+
             <!-- Tombol Unggah File -->
             <button onclick="openUploadModal()" class="btn-upload-file" style="height: 42px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 8px; padding: 0 20px;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -556,6 +565,66 @@
         <div style="font-size: 0.73rem; color: #64748B; display: flex; justify-content: space-between;">
             <span id="downloadProgressPercent">0%</span>
             <span id="downloadProgressStats">0 KB/s - Sisa -- detik</span>
+        </div>
+    </div>
+
+    <!-- MODAL 5: RIWAYAT TRANSAKSI (UPLOAD & DOWNLOAD) -->
+    <div class="custom-overlay" id="riwayatModal">
+        <div class="modal-body" style="position: relative; max-width: 850px; width: 90%; max-height: 85vh; display: flex; flex-direction: column; padding: 24px; border-radius: 20px; box-sizing: border-box;">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <h3 style="font-weight: 800; font-size: 1.25rem; color: #1E293B; margin: 0;">Riwayat Transaksi Berkas (Benchmark)</h3>
+                </div>
+                <button onclick="closeRiwayatModal()" style="background: none; border: none; color: #94A3B8; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; transition: color 0.2s;" onmouseover="this.style.color='#475569'" onmouseout="this.style.color='#94A3B8'">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Tabel Data Riwayat -->
+            <div style="flex: 1; overflow-y: auto; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; min-height: 200px; max-height: 50vh; box-sizing: border-box;">
+                <table class="clean-file-table" style="width: 100%; border-collapse: collapse; margin: 0;" id="riwayatTable">
+                    <thead>
+                        <tr style="background-color: #F8FAFC; border-bottom: 1.5px solid #E2E8F0;">
+                            <th style="padding: 12px 16px; font-weight: 700; text-align: center; width: 6%; color: #1E293B; font-size: 0.88rem;">No.</th>
+                            <th style="padding: 12px 16px; font-weight: 700; text-align: left; width: 34%; color: #1E293B; font-size: 0.88rem;">Nama Berkas</th>
+                            <th style="padding: 12px 16px; font-weight: 700; text-align: center; width: 12%; color: #1E293B; font-size: 0.88rem;">Aksi</th>
+                            <th style="padding: 12px 16px; font-weight: 700; text-align: right; width: 14%; color: #1E293B; font-size: 0.88rem;">Ukuran</th>
+                            <th style="padding: 12px 16px; font-weight: 700; text-align: right; width: 12%; color: #1E293B; font-size: 0.88rem;">Durasi</th>
+                            <th style="padding: 12px 16px; font-weight: 700; text-align: right; width: 22%; color: #1E293B; font-size: 0.88rem;">Kec. Rata-Rata</th>
+                        </tr>
+                    </thead>
+                    <tbody id="riwayatTbody">
+                        <!-- Diisi via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div style="border-top: 1px solid #F1F5F9; padding-top: 16px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                <div>
+                    <button type="button" onclick="clearRiwayat()" class="btn-cancel-custom" style="padding: 10px 20px; background-color: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; font-weight: 700; width: auto; flex: none; margin: 0; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#FCA5A5'; this.style.color='#FFFFFF';" onmouseout="this.style.backgroundColor='#FEE2E2'; this.style.color='#DC2626';">
+                        Bersihkan Riwayat
+                    </button>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="copyRiwayatToClipboard()" style="padding: 10px 24px; background-color: #10B981; color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#059669'" onmouseout="this.style.backgroundColor='#10B981'">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span>Salin Tabel (ke Word/Excel)</span>
+                    </button>
+                    <button type="button" onclick="closeRiwayatModal()" class="btn-cancel-custom" style="padding: 10px 32px; width: auto; flex: none; margin: 0;">Tutup</button>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -1133,7 +1202,8 @@
                     // Update UI baris upload
                     document.getElementById('uploadingProgressBar').style.width = percent + '%';
                     document.getElementById('uploadingProgressPercent').textContent = percent + '%';
-                    document.getElementById('uploadingProgressStats').textContent = `${speedStr} - ${timeStr}`;
+                    const elapsedStr = Math.round(elapsedTime) + 's';
+                    document.getElementById('uploadingProgressStats').textContent = `${speedStr} - ${elapsedStr} berlalu (${timeStr})`;
                 }
             };
 
@@ -1144,6 +1214,11 @@
                         document.getElementById('uploadingProgressBar').style.backgroundColor = '#10B981';
                         document.getElementById('uploadingProgressStats').textContent = 'Selesai diunggah. Menyelaraskan halaman...';
                         
+                        // Catat ke Riwayat
+                        const elapsedTime = (Date.now() - startTime) / 1000;
+                        const avgSpeed = file.size / (elapsedTime > 0 ? elapsedTime : 1);
+                        saveRiwayatItem(originalName, 'Upload', file.size, elapsedTime, avgSpeed);
+
                         showDynamicToast('success', `Berkas "${originalName}" berhasil diunggah ke server NAS.`);
                         
                         setTimeout(() => {
@@ -1272,7 +1347,8 @@
                     // Update UI Panel
                     pBar.style.width = percent + '%';
                     pPercent.textContent = percent + '%';
-                    pStats.textContent = `${speedStr} - ${timeStr}`;
+                    const elapsedStr = Math.round(elapsedTime) + 's';
+                    pStats.textContent = `${speedStr} - ${elapsedStr} berlalu (${timeStr})`;
                 } else {
                     const elapsedTime = (Date.now() - startTime) / 1000;
                     const loadedStr = formatBytes(e.loaded);
@@ -1304,6 +1380,9 @@
                     const avgSpeed = blob.size / (elapsedTime > 0 ? elapsedTime : 1);
                     pStats.textContent = `Tuntas dalam ${Math.round(elapsedTime)} dtk (${formatBytes(avgSpeed)}/s)`;
                     
+                    // Catat ke Riwayat
+                    saveRiwayatItem(fileName, 'Download', blob.size, elapsedTime, avgSpeed);
+
                     cancelBtn.style.display = 'none';
                     icon.className = '';
                     icon.setAttribute('stroke', '#10B981');
@@ -1349,6 +1428,173 @@
                 activeDownloadXhr = null;
                 document.getElementById('downloadProgressPanel').classList.remove('active');
                 showDynamicToast('error', 'Proses unduhan dibatalkan.');
+            }
+        }
+
+        // =========================================================================
+        // --- MANAJEMEN RIWAYAT TRANSAKSI (LOCAL STORAGE & SALIN FORMAT WORD) ---
+        // =========================================================================
+
+        function openRiwayatModal() {
+            renderRiwayatTable();
+            document.getElementById('riwayatModal').classList.add('active');
+        }
+
+        function closeRiwayatModal() {
+            document.getElementById('riwayatModal').classList.remove('active');
+        }
+
+        // Simpan data log transaksi ke Local Storage
+        function saveRiwayatItem(namaFile, aksi, ukuran, durasi, kecepatan) {
+            try {
+                const riwayat = JSON.parse(localStorage.getItem('simkopdes_riwayat_berkas') || '[]');
+                
+                // Buat string format waktu WIB/WITA lokal
+                const date = new Date();
+                const pad = (num) => String(num).padStart(2, '0');
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                const waktuStr = `${pad(date.getDate())} ${months[date.getMonth()]} ${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+
+                const newItem = {
+                    nama: namaFile,
+                    aksi: aksi,
+                    ukuran: ukuran,
+                    durasi: parseFloat(durasi.toFixed(2)),
+                    kecepatan: Math.round(kecepatan),
+                    waktu: waktuStr
+                };
+
+                riwayat.unshift(newItem);
+
+                // Batasi riwayat maksimal 50 transaksi agar memori aman
+                if (riwayat.length > 50) {
+                    riwayat.pop();
+                }
+
+                localStorage.setItem('simkopdes_riwayat_berkas', JSON.stringify(riwayat));
+            } catch (err) {
+                console.error('Gagal menyimpan riwayat benchmark:', err);
+            }
+        }
+
+        // Gambar tabel riwayat secara dinamis
+        function renderRiwayatTable() {
+            const tbody = document.getElementById('riwayatTbody');
+            if (!tbody) return;
+
+            const riwayat = JSON.parse(localStorage.getItem('simkopdes_riwayat_berkas') || '[]');
+
+            if (riwayat.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #94A3B8; font-weight: 500;">
+                            Belum ada riwayat transaksi pengujian berkas.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = riwayat.map((item, index) => {
+                const badgeColor = item.aksi === 'Upload' ? '#E0F2FE' : '#DCFCE7';
+                const badgeTextColor = item.aksi === 'Upload' ? '#0369A1' : '#15803D';
+                const speedFormatted = formatBytes(item.kecepatan) + '/s';
+
+                return `
+                    <tr style="border-bottom: 1px solid #F1F5F9;">
+                        <td style="padding: 14px 16px; text-align: center; color: #475569; font-size: 0.85rem;">${index + 1}</td>
+                        <td style="padding: 14px 16px; font-weight: 600; color: #1E293B; font-size: 0.85rem; word-break: break-all;">${item.nama}</td>
+                        <td style="padding: 14px 16px; text-align: center;">
+                            <span style="background-color: ${badgeColor}; color: ${badgeTextColor}; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+                                ${item.aksi}
+                            </span>
+                        </td>
+                        <td style="padding: 14px 16px; text-align: right; color: #1E293B; font-size: 0.85rem; font-weight: 500;">${formatBytes(item.ukuran)}</td>
+                        <td style="padding: 14px 16px; text-align: right; color: #1E293B; font-size: 0.85rem; font-weight: 500;">${item.durasi} dtk</td>
+                        <td style="padding: 14px 16px; text-align: right; color: #1E293B; font-size: 0.85rem; font-weight: 500;">${speedFormatted}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Hapus semua riwayat
+        function clearRiwayat() {
+            if (confirm('Apakah Anda yakin ingin menghapus seluruh riwayat pengujian?')) {
+                localStorage.removeItem('simkopdes_riwayat_berkas');
+                renderRiwayatTable();
+                showDynamicToast('success', 'Riwayat transaksi berhasil dibersihkan.');
+            }
+        }
+
+        // Salin riwayat ke Clipboard dalam format HTML (tabel kaya Word/Excel) + Plaintext (TSV)
+        function copyRiwayatToClipboard() {
+            const riwayat = JSON.parse(localStorage.getItem('simkopdes_riwayat_berkas') || '[]');
+            if (riwayat.length === 0) {
+                showDynamicToast('error', 'Tidak ada data riwayat untuk disalin.');
+                return;
+            }
+
+            // Format 1: Plaintext TSV (Tab Separated) untuk Excel dasar
+            let plainText = 'No\tNama Berkas\tAksi\tUkuran\tDurasi (detik)\tKecepatan Rata-Rata\tWaktu Transaksi\n';
+            riwayat.forEach((item, index) => {
+                plainText += `${index + 1}\t${item.nama}\t${item.aksi}\t${formatBytes(item.ukuran)}\t${item.durasi}\t${formatBytes(item.kecepatan)}/s\t${item.waktu}\n`;
+            });
+
+            // Format 2: HTML Table agar saat di-paste ke Word/Excel otomatis membentuk GRID TABEL rapi
+            let htmlTable = `
+                <table border="1" style="border-collapse: collapse; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 10.5pt; width: 100%;">
+                    <thead>
+                        <tr style="background-color: #F3F4F6; font-weight: bold;">
+                            <th style="padding: 8px; border: 1px solid #D1D5DB; text-align: center;">No</th>
+                            <th style="padding: 8px; border: 1px solid #D1D5DB; text-align: left;">Nama Berkas</th>
+                            <th style="padding: 8px; border: 1px solid #D1D5DB; text-align: center;">Aksi</th>
+                            <th style="padding: 8px; border: 1px solid #D1D5DB; text-align: right;">Ukuran</th>
+                            <th style="padding: 8px; border: 1px solid #D1D5DB; text-align: right;">Durasi (detik)</th>
+                            <th style="padding: 8px; border: 1px solid #D1D5DB; text-align: right;">Kecepatan Rata-Rata</th>
+                            <th style="padding: 8px; border: 1px solid #D1D5DB; text-align: center;">Waktu Transaksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            riwayat.forEach((item, index) => {
+                htmlTable += `
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; text-align: center;">${index + 1}</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; text-align: left;">${item.nama}</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; text-align: center;">${item.aksi}</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; text-align: right;">${formatBytes(item.ukuran)}</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; text-align: right;">${item.durasi}</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; text-align: right;">${formatBytes(item.kecepatan)}/s</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; text-align: center;">${item.waktu}</td>
+                    </tr>
+                `;
+            });
+            htmlTable += '</tbody></table>';
+
+            // Menulis tipe data ganda ke clipboard
+            try {
+                const blobHtml = new Blob([htmlTable], { type: 'text/html' });
+                const blobText = new Blob([plainText], { type: 'text/plain' });
+                
+                const item = new ClipboardItem({
+                    'text/html': blobHtml,
+                    'text/plain': blobText
+                });
+
+                navigator.clipboard.write([item]).then(() => {
+                    showDynamicToast('success', 'Tabel riwayat sukses disalin! Tempel (Ctrl+V) langsung ke Word/Excel.');
+                }).catch(() => {
+                    // Fallback jika ClipboardItem ditolak browser
+                    navigator.clipboard.writeText(plainText).then(() => {
+                        showDynamicToast('success', 'Riwayat disalin sebagai teks kolom.');
+                    });
+                });
+            } catch (err) {
+                // Fallback kedua
+                navigator.clipboard.writeText(plainText).then(() => {
+                    showDynamicToast('success', 'Riwayat disalin sebagai teks kolom.');
+                });
             }
         }
     </script>
