@@ -97,6 +97,9 @@ class PenyimpananController extends Controller
 
             if ($response->failed()) {
                 $errMsg = $response->json('message') ?? 'Server NAS mengembalikan status error ' . $response->status();
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['success' => false, 'message' => "Gagal mengunggah file ke NAS: " . $errMsg], 400);
+                }
                 return redirect()->back()->withInput()->with('error', "Gagal mengunggah file ke NAS: " . $errMsg);
             }
 
@@ -113,10 +116,20 @@ class PenyimpananController extends Controller
                 'keterangan' => $request->keterangan ?? '',
             ]);
 
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "File \"{$originalName}\" berhasil diunggah ke NAS."
+                ]);
+            }
+
             return redirect()->route('admin.penyimpanan')
                 ->with('success', "File \"{$originalName}\" berhasil diunggah ke NAS.");
 
         } catch (\Exception $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => "Gagal terhubung ke NAS Server: " . $e->getMessage()], 500);
+            }
             return redirect()->back()->withInput()->with('error', "Gagal terhubung ke NAS Server: " . $e->getMessage());
         }
     }

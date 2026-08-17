@@ -6,6 +6,70 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/admin/penyimpanan.css') }}?v={{ filemtime(public_path('assets/css/admin/penyimpanan.css')) }}">
+    <style>
+        .upload-progress-container {
+            width: 100%;
+            background-color: #E2E8F0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 6px;
+            border: 1px solid #CBD5E1;
+        }
+        .upload-progress-bar {
+            height: 10px;
+            background-color: #10B981;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        .uploading-row {
+            background-color: #F8FAFC !important;
+            border-left: 4px solid #3B82F6 !important;
+            transition: all 0.3s ease;
+        }
+        .download-progress-panel {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10000;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+            transform: translateY(120%);
+            opacity: 0;
+            box-sizing: border-box;
+        }
+        .download-progress-panel.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .download-progress-container {
+            width: 100%;
+            background-color: #E2E8F0;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #CBD5E1;
+        }
+        .download-progress-bar {
+            height: 10px;
+            background-color: #3B82F6;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1.5s linear infinite;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -170,7 +234,7 @@
                         <td style="text-align: center; white-space: nowrap; padding: 16px 4px;">
                             <div style="display: flex; gap: 6px; justify-content: center; align-items: center;">
                                 <!-- Ikon unduh -->
-                                <a href="{{ route('admin.penyimpanan.download', $f->id) }}" class="btn-icon-action" title="Download">
+                                <a href="javascript:void(0)" onclick="triggerSecureDownload(event, '{{ route('admin.penyimpanan.download', $f->id) }}', '{{ addslashes($f->nama_asli) }}')" class="btn-icon-action" title="Download">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -229,7 +293,7 @@
                 </button>
             </div>
             
-            <form method="POST" action="{{ route('admin.penyimpanan.upload') }}" enctype="multipart/form-data" onsubmit="return validatePenyimpananUnggahForm(this)" style="margin: 0; display: flex; flex-direction: column; gap: 16px;">
+            <form id="uploadFileForm" method="POST" action="{{ route('admin.penyimpanan.upload') }}" enctype="multipart/form-data" onsubmit="return validatePenyimpananUnggahForm(this)" style="margin: 0; display: flex; flex-direction: column; gap: 16px;">
                 @csrf
                 <div class="form-row" style="margin: 0;">
                     <label style="font-size: 0.88rem; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">File <span style="color: #EF4444;">*</span></label>
@@ -469,6 +533,29 @@
             <div style="border-top: 1px solid #F1F5F9; padding-top: 16px; margin-top: 20px; display: flex; justify-content: flex-end; flex-shrink: 0;">
                 <button type="button" onclick="closePreviewModal()" class="btn-cancel-custom" style="padding: 10px 32px; width: auto; flex: none; margin: 0;">Tutup</button>
             </div>
+        </div>
+    </div>
+
+    <!-- PANEL: UNDUH PROGRESS (FLOATING) -->
+    <div class="download-progress-panel" id="downloadProgressPanel">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px; margin-bottom: 4px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="animate-spin" id="downloadingIcon">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg>
+                <strong style="font-size: 0.88rem; color: #1E293B;" id="downloadPanelTitle">Mengunduh Berkas...</strong>
+            </div>
+            <button onclick="cancelDownload()" style="background: none; border: none; color: #94A3B8; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; outline: none;" id="downloadCancelBtn" title="Batalkan">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div style="font-size: 0.83rem; font-weight: 700; color: #1E293B; word-break: break-all; overflow-wrap: break-word; line-height: 1.3;" id="downloadFileNameText">nama_file.pdf</div>
+        <div class="download-progress-container">
+            <div class="download-progress-bar" id="downloadProgressBar" style="width: 0%"></div>
+        </div>
+        <div style="font-size: 0.73rem; color: #64748B; display: flex; justify-content: space-between;">
+            <span id="downloadProgressPercent">0%</span>
+            <span id="downloadProgressStats">0 KB/s - Sisa -- detik</span>
         </div>
     </div>
 @endsection
@@ -862,6 +949,407 @@
             setTimeout(() => {
                 toast.remove();
             }, 300);
+        }
+
+        // =========================================================================
+        // --- FITUR TERBARU: AJAX UPLOAD & DOWNLOAD PROGRESS DENGAN INDIKATOR KECEPATAN ---
+        // =========================================================================
+
+        // Format Byte menjadi standar ukuran file (KB, MB, GB)
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        // Format perkiraan sisa waktu download/upload
+        function formatTimeRemaining(seconds) {
+            if (seconds === Infinity || isNaN(seconds)) return 'sisa -- detik';
+            if (seconds < 1) return 'sisa <1 detik';
+            const s = Math.round(seconds);
+            if (s >= 60) {
+                const m = Math.floor(s / 60);
+                const remS = s % 60;
+                return `sisa ${m}m ${remS}s`;
+            }
+            return `sisa ${s} detik`;
+        }
+
+        // Tampilkan notifikasi toast dinamis lewat Javascript
+        function showDynamicToast(type, message) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast-alert ${type}`;
+            toast.style.cssText = `
+                background-color: #FFFFFF;
+                border: 1px solid #E2E8F0;
+                color: #1E293B;
+                padding: 16px 20px;
+                border-radius: 12px;
+                font-weight: 600;
+                font-size: 0.88rem;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+                transform: translateX(120%);
+                opacity: 0;
+                box-sizing: border-box;
+                width: 100%;
+            `;
+
+            const iconSvg = type === 'success' ? 
+                `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"></polyline></svg>` :
+                `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+
+            toast.innerHTML = `
+                ${iconSvg}
+                <div style="flex: 1; line-height: 1.4; font-weight: 500; word-break: break-word; overflow-wrap: break-word;">
+                    ${message}
+                </div>
+                <button onclick="dismissToast(this)" style="background: none; border: none; color: #94A3B8; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; outline: none;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+                toast.style.opacity = '1';
+            }, 50);
+
+            setTimeout(() => {
+                fadeAndRemoveToast(toast);
+            }, 4500);
+        }
+
+        // Cegah submit normal form upload & jalankan via AJAX
+        document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validatePenyimpananUnggahForm(this)) {
+                return false;
+            }
+
+            closeUploadModal();
+            performAjaxUpload(this);
+        });
+
+        // EKSEKUSI PROSES UPLOAD VIA AJAX (XHR)
+        function performAjaxUpload(form) {
+            const formData = new FormData(form);
+            const fileInput = document.getElementById('fileUploadInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const originalName = document.getElementById('namaFileDragInput').value || file.name;
+            const sizeStr = formatBytes(file.size);
+            const categorySelect = document.getElementById('uploadKategoriSelect');
+            const categoryName = categorySelect.options[categorySelect.selectedIndex].text;
+
+            const filesTbody = document.getElementById('filesTbody');
+            
+            // Hapus baris 'belum ada file' jika tabel kosong
+            const emptyRow = filesTbody.querySelector('tr td[colspan="6"]');
+            if (emptyRow) {
+                emptyRow.parentElement.remove();
+            }
+
+            // Sisipkan baris animasi loading upload di paling atas daftar tabel
+            const tempRow = document.createElement('tr');
+            tempRow.className = 'file-row uploading-row';
+            tempRow.innerHTML = `
+                <td>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="animate-spin" style="flex-shrink: 0;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span style="font-weight: 700; color: #1E293B;" id="uploadingFileName">${originalName}</span>
+                        </div>
+                        <div class="upload-progress-container">
+                            <div class="upload-progress-bar" id="uploadingProgressBar" style="width: 0%"></div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #64748B; display: flex; justify-content: space-between; margin-top: 2px;">
+                            <span id="uploadingProgressPercent">0%</span>
+                            <span id="uploadingProgressStats">0 KB/s - Sisa -- detik</span>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="category-item-badge">${categoryName}</span></td>
+                <td style="color: #64748B;">Sedang mengunggah berkas...</td>
+                <td>${sizeStr}</td>
+                <td style="color: #64748B;">Saat ini</td>
+                <td style="text-align: center;">
+                    <button type="button" class="btn-icon-action" style="cursor: not-allowed;" title="Sedang mengunggah">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94A3B8" stroke-width="2.5" class="animate-spin">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                        </svg>
+                    </button>
+                </td>
+            `;
+            filesTbody.insertBefore(tempRow, filesTbody.firstChild);
+
+            // AJAX Request
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action, true);
+            xhr.setRequestHeader('Accept', 'application/json');
+
+            // Header CSRF
+            const csrfToken = document.querySelector('input[name="_token"]').value;
+            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            const startTime = Date.now();
+
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const loaded = event.loaded;
+                    const total = event.total;
+                    const percent = Math.round((loaded / total) * 100);
+
+                    // Hitung kecepatan transfer rata-rata (Bytes/detik)
+                    const elapsedTime = (Date.now() - startTime) / 1000;
+                    let speed = 0;
+                    let speedStr = '0 KB/s';
+                    if (elapsedTime > 0) {
+                        speed = loaded / elapsedTime;
+                        speedStr = formatBytes(speed) + '/s';
+                    }
+
+                    // Sisa waktu upload
+                    const remainingBytes = total - loaded;
+                    const timeRemaining = speed > 0 ? (remainingBytes / speed) : Infinity;
+                    const timeStr = formatTimeRemaining(timeRemaining);
+
+                    // Update UI baris upload
+                    document.getElementById('uploadingProgressBar').style.width = percent + '%';
+                    document.getElementById('uploadingProgressPercent').textContent = percent + '%';
+                    document.getElementById('uploadingProgressStats').textContent = `${speedStr} - ${timeStr}`;
+                }
+            };
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        document.getElementById('uploadingProgressBar').style.backgroundColor = '#10B981';
+                        document.getElementById('uploadingProgressStats').textContent = 'Selesai diunggah. Menyelaraskan halaman...';
+                        
+                        showDynamicToast('success', `Berkas "${originalName}" berhasil diunggah ke server NAS.`);
+                        
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1200);
+                    } catch (err) {
+                        handleUploadFailure('Respon dari server tidak valid.');
+                    }
+                } else {
+                    let errMsg = 'Terjadi kesalahan tidak dikenal saat mengunggah.';
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        errMsg = res.message || errMsg;
+                    } catch (e) {}
+                    handleUploadFailure(errMsg);
+                }
+            };
+
+            xhr.onerror = function() {
+                handleUploadFailure('Koneksi jaringan terputus.');
+            };
+
+            xhr.send(formData);
+
+            function handleUploadFailure(msg) {
+                tempRow.remove();
+                if (filesTbody.children.length === 0) {
+                    const fallbackRow = document.createElement('tr');
+                    fallbackRow.innerHTML = `
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #94A3B8; font-weight: 500;">
+                            Belum ada file terarsip dalam kategori ini.
+                        </td>
+                    `;
+                    filesTbody.appendChild(fallbackRow);
+                }
+                showDynamicToast('error', `Gagal mengunggah file: ${msg}`);
+                form.reset();
+                resetFileDragZone();
+            }
+        }
+
+        // Bersihkan zona drop file
+        function resetFileDragZone() {
+            document.getElementById('fileUploadInput').value = '';
+            document.getElementById('namaFileDragInput').value = '';
+            document.getElementById('namaFileDragInput').style.display = 'none';
+            const dropZone = document.getElementById('dropZone');
+            if (dropZone) {
+                dropZone.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <div style="font-weight: 600; color: #64748B; font-size: 0.88rem; margin-top: 4px;">Klik atau seret file ke sini</div>
+                    <div style="color: #94A3B8; font-size: 0.78rem;">PDF, DOCX, XLSX, JPG, PNG, dsb.</div>
+                    <input type="file" name="file_upload" id="fileUploadInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.webp" required style="display: none;" onchange="handleFileUploadChange(this)">
+                    <input type="text" name="nama_file" id="namaFileDragInput" placeholder="Nama file (mis. dokumen.pdf)" maxlength="150" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();" style="display: none; width: 80%; padding: 8px 12px; margin-top: 10px; border: 1.5px solid #E2E8F0; border-radius: 8px; font-size: 0.85rem; outline: none; text-align: center; color: #1E293B; font-weight: 600; background: #FAFAFA;">
+                    <div id="error-fileUploadInput" class="custom-invalid-feedback" style="display: none; margin-top: 4px;"></div>
+                `;
+            }
+        }
+
+        // EKSEKUSI PROSES DOWNLOAD VIA AJAX DENGAN PROGRESS PANEL FLOATING
+        let activeDownloadXhr = null;
+
+        function triggerSecureDownload(event, url, fileName) {
+            event.preventDefault();
+
+            // Batalkan unduhan aktif jika ada
+            if (activeDownloadXhr) {
+                activeDownloadXhr.abort();
+            }
+
+            const panel = document.getElementById('downloadProgressPanel');
+            const title = document.getElementById('downloadPanelTitle');
+            const fileNameText = document.getElementById('downloadFileNameText');
+            const pBar = document.getElementById('downloadProgressBar');
+            const pPercent = document.getElementById('downloadProgressPercent');
+            const pStats = document.getElementById('downloadProgressStats');
+            const cancelBtn = document.getElementById('downloadCancelBtn');
+            const icon = document.getElementById('downloadingIcon');
+
+            // Reset status tampilan panel
+            title.textContent = 'Mengunduh Berkas...';
+            fileNameText.textContent = fileName;
+            pBar.style.width = '0%';
+            pBar.style.backgroundColor = '#3B82F6';
+            pPercent.textContent = '0%';
+            pStats.textContent = 'Menghubungkan ke server NAS...';
+            cancelBtn.style.display = 'flex';
+            icon.className = 'animate-spin';
+            icon.innerHTML = '<path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>';
+            icon.setAttribute('stroke', '#3B82F6');
+
+            // Tampilkan Panel Progress (Slide up)
+            panel.classList.add('active');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'blob';
+            activeDownloadXhr = xhr;
+
+            const startTime = Date.now();
+
+            xhr.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const loaded = e.loaded;
+                    const total = e.total;
+                    const percent = Math.round((loaded / total) * 100);
+
+                    // Hitung Kecepatan Download
+                    const elapsedTime = (Date.now() - startTime) / 1000;
+                    let speed = 0;
+                    let speedStr = '0 KB/s';
+                    if (elapsedTime > 0) {
+                        speed = loaded / elapsedTime;
+                        speedStr = formatBytes(speed) + '/s';
+                    }
+
+                    // Sisa Waktu Download
+                    const remainingBytes = total - loaded;
+                    const timeRemaining = speed > 0 ? (remainingBytes / speed) : Infinity;
+                    const timeStr = formatTimeRemaining(timeRemaining);
+
+                    // Update UI Panel
+                    pBar.style.width = percent + '%';
+                    pPercent.textContent = percent + '%';
+                    pStats.textContent = `${speedStr} - ${timeStr}`;
+                } else {
+                    const elapsedTime = (Date.now() - startTime) / 1000;
+                    const loadedStr = formatBytes(e.loaded);
+                    pStats.textContent = `Mengunduh: ${loadedStr} (${Math.round(elapsedTime)}s)`;
+                }
+            };
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const blob = xhr.response;
+                    const downloadUrl = window.URL.createObjectURL(blob);
+                    
+                    // Simulasikan anchor tag untuk menyimpan berkas
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(downloadUrl);
+
+                    // Update UI Sukses
+                    title.textContent = 'Unduhan Selesai!';
+                    pBar.style.width = '100%';
+                    pBar.style.backgroundColor = '#10B981';
+                    pPercent.textContent = '100%';
+                    
+                    const elapsedTime = (Date.now() - startTime) / 1000;
+                    const avgSpeed = blob.size / (elapsedTime > 0 ? elapsedTime : 1);
+                    pStats.textContent = `Tuntas dalam ${Math.round(elapsedTime)} dtk (${formatBytes(avgSpeed)}/s)`;
+                    
+                    cancelBtn.style.display = 'none';
+                    icon.className = '';
+                    icon.setAttribute('stroke', '#10B981');
+                    icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+
+                    activeDownloadXhr = null;
+
+                    // Hilangkan panel otomatis setelah 3 detik
+                    setTimeout(() => {
+                        panel.classList.remove('active');
+                    }, 3500);
+                } else {
+                    handleDownloadFailure('Berkas gagal diunduh.');
+                }
+            };
+
+            xhr.onerror = function() {
+                handleDownloadFailure('Masalah koneksi jaringan.');
+            };
+
+            xhr.send();
+
+            function handleDownloadFailure(msg) {
+                title.textContent = 'Gagal Mengunduh';
+                pStats.textContent = msg;
+                pBar.style.backgroundColor = '#EF4444';
+                icon.className = '';
+                icon.setAttribute('stroke', '#EF4444');
+                icon.innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+                cancelBtn.style.display = 'none';
+                activeDownloadXhr = null;
+
+                setTimeout(() => {
+                    panel.classList.remove('active');
+                }, 4000);
+            }
+        }
+
+        // Pembatalan proses download aktif
+        function cancelDownload() {
+            if (activeDownloadXhr) {
+                activeDownloadXhr.abort();
+                activeDownloadXhr = null;
+                document.getElementById('downloadProgressPanel').classList.remove('active');
+                showDynamicToast('error', 'Proses unduhan dibatalkan.');
+            }
         }
     </script>
 @endsection
